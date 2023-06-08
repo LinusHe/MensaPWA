@@ -1,0 +1,248 @@
+[
+    {
+        "title": "Schweinerückensteak mit Honig Senfsoße | dazu Zuckerschoten | & Kroketten",
+        "category": "Schneller Teller",
+        "imageUrl": null,
+        "prices": {
+            "guest": "6.70 €",
+            "employee": "4.90 €",
+            "student": "3.05 €"
+        },
+        "selections": [
+            "pork"
+        ],
+        "additives": null,
+        "allergens": [
+            "cereals containing gluten",
+            "milk/lactose",
+            "mustard"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 42%\nProteine: 34%\nFette: 24%"
+    },
+    {
+        "title": "Fischstäbchen | mit Remoulade | oder Spinatsoße",
+        "category": "Hauptkomponente",
+        "imageUrl": null,
+        "prices": {
+            "guest": "3.35 €",
+            "employee": "2.50 €",
+            "student": "1.75 €"
+        },
+        "selections": [
+            "fish/seafood"
+        ],
+        "additives": [
+            "sweetener"
+        ],
+        "allergens": [
+            "cereals containing gluten",
+            "egg",
+            "fish",
+            "soy",
+            "milk/lactose",
+            "mustard"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 24%\nProteine: 31%\nFette: 45%"
+    },
+    {
+        "title": "Marinierter Hering | mit Remouladensoße",
+        "category": "Hauptkomponente",
+        "imageUrl": null,
+        "prices": {
+            "guest": "3.35 €",
+            "employee": "2.50 €",
+            "student": "1.75 €"
+        },
+        "selections": [
+            "fish/seafood"
+        ],
+        "additives": [
+            "antioxidants",
+            "sweetener"
+        ],
+        "allergens": [
+            "cereals containing gluten",
+            "egg",
+            "fish",
+            "soy",
+            "milk/lactose",
+            "mustard"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 4%\nProteine: 23%\nFette: 73%"
+    },
+    {
+        "title": "Gurken-Bohnensalat mit Dill",
+        "category": "Gemüsebeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.30 €",
+            "employee": "0.95 €",
+            "student": "0.55 €"
+        },
+        "selections": null,
+        "additives": [
+            "sweetener"
+        ],
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 8%\nProteine: 4%\nFette: 3%"
+    },
+    {
+        "title": "Zuckerschoten",
+        "category": "Gemüsebeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.50 €",
+            "employee": "1.13 €",
+            "student": "0.75 €"
+        },
+        "selections": [
+            "vegan"
+        ],
+        "additives": null,
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 40%\nProteine: 20%\nFette: 0%"
+    },
+    {
+        "title": "Tomatenreis | Kartoffelstampf",
+        "category": "Sättigungsbeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.30 €",
+            "employee": "0.95 €",
+            "student": "0.55 €"
+        },
+        "selections": [
+            "vegetarian",
+            "vegan"
+        ],
+        "additives": null,
+        "allergens": [
+            "milk/lactose"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Tomatenreis:\n- Kohlenhydrate: 83%\n- Proteine: 9%\n- Fette: 8%\n\nKartoffelstampf:\n- Kohlenhydrate: 77%\n- Proteine: 6%\n- Fette: 17%"
+    },
+    {
+        "title": "Bratkartoffeln | Pommes frites | Kroketten",
+        "category": "Sättigungsbeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.50 €",
+            "employee": "1.13 €",
+            "student": "0.75 €"
+        },
+        "selections": [
+            "vegan"
+        ],
+        "additives": null,
+        "allergens": [
+            "cereals containing gluten"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 40%\nProteine: 5%\nFette: 55%"
+    },
+    {
+        "title": "Quarkkeulchen mit oder ohne Rosinen, Zucker /Zimt & Apfelmus",
+        "category": "Vegetarisches Gericht",
+        "imageUrl": null,
+        "prices": {
+            "guest": "5.70 €",
+            "employee": "4.00 €",
+            "student": "2.15 €"
+        },
+        "selections": [
+            "vegetarian"
+        ],
+        "additives": [
+            "antioxidants"
+        ],
+        "allergens": [
+            "cereals containing gluten",
+            "egg",
+            "milk/lactose"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Ohne Rosinen, Zucker/Zimt & Apfelmus:\n\n- Kohlenhydrate: 20%\n- Proteine: 40%\n- Fette: 40%"
+    },
+    {
+        "title": "Like Meat Döner mit 2erlei Soßen zur Wahl | dazu Pommes frites",
+        "category": "Veganes Gericht",
+        "imageUrl": null,
+        "prices": {
+            "guest": "7.00 €",
+            "employee": "5.50 €",
+            "student": "4.20 €"
+        },
+        "selections": [
+            "vegan"
+        ],
+        "additives": [
+            "preservatives",
+            "antioxidants"
+        ],
+        "allergens": [
+            "cereals containing gluten",
+            "soy",
+            "sesame"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 46%\nProteine: 16%\nFette: 38%"
+    },
+    {
+        "title": "Sahnesoße mit Paprika & Hühnchen | Seitan-Bolognese | Tomatensoße mit Pesto",
+        "category": "Pastateller",
+        "imageUrl": null,
+        "prices": {
+            "guest": "5.50 €",
+            "employee": "3.90 €",
+            "student": "2.10 €"
+        },
+        "selections": [
+            "chicken"
+        ],
+        "additives": [
+            "colouring",
+            "antioxidants"
+        ],
+        "allergens": [
+            "cereals containing gluten",
+            "milk/lactose",
+            "nuts",
+            "celery",
+            "mustard"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 20%\nProteine: 40%\nFette: 40%"
+    },
+    {
+        "title": "Entdecken sie unsertäglich wechselndes Angebot an Smoothies!",
+        "category": "Smoothie",
+        "imageUrl": null,
+        "prices": {
+            "guest": "2.95 €",
+            "employee": "2.20 €",
+            "student": "1.80 €"
+        },
+        "selections": null,
+        "additives": null,
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-08T00:00:00+02:00",
+        "chat_completion": "- Kohlenhydrate: variiert \n- Proteine: variiert \n- Fette: variiert"
+    }
+]
