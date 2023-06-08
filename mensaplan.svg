@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1155.79 539.59">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Unbenannter_Verlauf_5-20);
+      }
+
+      .cls-2 {
+        fill: url(#Unbenannter_Verlauf_5-21);
+      }
+
+      .cls-3 {
+        fill: url(#Unbenannter_Verlauf_5-10);
+      }
+
+      .cls-4 {
+        fill: url(#Unbenannter_Verlauf_5-13);
+      }
+
+      .cls-5 {
+        fill: url(#Unbenannter_Verlauf_5-12);
+      }
+
+      .cls-6 {
+        fill: url(#Unbenannter_Verlauf_5-16);
+      }
+
+      .cls-7 {
+        fill: url(#Unbenannter_Verlauf_5-17);
+      }
+
+      .cls-8 {
+        fill: url(#Unbenannter_Verlauf_5-14);
+      }
+
+      .cls-9 {
+        fill: url(#Unbenannter_Verlauf_5-18);
+      }
+
+      .cls-10 {
+        fill: url(#Unbenannter_Verlauf_5-19);
+      }
+
+      .cls-11 {
+        fill: url(#Unbenannter_Verlauf_5-15);
+      }
+
+      .cls-12 {
+        fill: url(#Unbenannter_Verlauf_5-11);
+      }
+
+      .cls-13 {
+        fill: rgba(255, 255, 255, .45);
+      }
+
+      .cls-13, .cls-14 {
+        fill-rule: evenodd;
+      }
+
+      .cls-15 {
+        fill: #a9b1c5;
+      }
+
+      .cls-16, .cls-14 {
+        fill: #cfcfcf;
+      }
+
+      .cls-17 {
+        fill: rgba(255, 255, 255, .8);
+      }
+
+      .cls-18 {
+        fill: rgba(255, 255, 255, .65);
+      }
+
+      .cls-19 {
+        fill: rgba(255, 255, 255, .5);
+      }
+
+      .cls-20 {
+        fill: rgba(255, 255, 255, .35);
+      }
+
+      .cls-21 {
+        fill: rgba(255, 255, 255, .2);
+      }
+
+      .cls-22 {
+        fill: url(#Unbenannter_Verlauf_5-3);
+      }
+
+      .cls-23 {
+        fill: url(#Unbenannter_Verlauf_5-6);
+      }
+
+      .cls-24 {
+        fill: url(#Unbenannter_Verlauf_5-5);
+      }
+
+      .cls-25 {
+        fill: url(#Unbenannter_Verlauf_5-2);
+      }
+
+      .cls-26 {
+        fill: url(#Unbenannter_Verlauf_5-7);
+      }
+
+      .cls-27 {
+        fill: url(#Unbenannter_Verlauf_5-4);
+      }
+
+      .cls-28 {
+        fill: url(#Unbenannter_Verlauf_5-9);
+      }
+
+      .cls-29 {
+        fill: url(#Unbenannter_Verlauf_5-8);
+      }
+
+      .cls-30 {
+        fill: rgba(255, 255, 255, .1);
+      }
+
+      .cls-31 {
+        fill: rgba(255, 255, 255, .05);
+      }
+
+      .cls-32 {
+        fill: none;
+        stroke: #c1c1c1;
+        stroke-width: 6px;
+      }
+
+      .cls-33 {
+        fill: url(#Unbenannter_Verlauf_5);
+      }
+    </style>
+    <linearGradient id="Unbenannter_Verlauf_5" data-name="Unbenannter Verlauf 5" x1="577.6" y1="24.95" x2="577.6" y2="22.49" gradientTransform="translate(-.04 -6.01)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="Unbenannter_Verlauf_5-2" data-name="Unbenannter Verlauf 5" x1="577.57" y1="-487.03" x2="577.57" y2="-489.49" gradientTransform="translate(0 1017.96)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-3" data-name="Unbenannter Verlauf 5" x1="961.59" y1="-79.07" x2="961.59" y2="-81.53" gradientTransform="translate(-768.03 202.04)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-4" data-name="Unbenannter Verlauf 5" x1="193.53" y1="-79.07" x2="193.53" y2="-81.53" gradientTransform="translate(768.09 202.04)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-5" data-name="Unbenannter Verlauf 5" x1="965.57" y1="-435.05" x2="965.57" y2="-437.51" gradientTransform="translate(-776 913.99)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-6" data-name="Unbenannter Verlauf 5" x1="189.56" y1="-435.02" x2="189.56" y2="-437.54" gradientTransform="translate(776.03 913.99)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-7" data-name="Unbenannter Verlauf 5" x1="577.57" y1="447.93" x2="577.57" y2="445.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-8" data-name="Unbenannter Verlauf 5" x1="575.54" y1="359.99" x2="575.54" y2="357.5" gradientTransform="translate(2.04 15.02)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-9" data-name="Unbenannter Verlauf 5" x1="577.57" y1="287.06" x2="577.57" y2="284.6" gradientTransform="translate(0 14.87)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-10" data-name="Unbenannter Verlauf 5" x1="456.07" y1="460.47" x2="456.07" y2="458" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-11" data-name="Unbenannter Verlauf 5" x1="456.07" y1="450.47" x2="456.07" y2="448" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-12" data-name="Unbenannter Verlauf 5" x1="699.07" y1="450.47" x2="699.07" y2="445.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-13" data-name="Unbenannter Verlauf 5" x1="699.07" y1="460.47" x2="699.07" y2="455.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-14" data-name="Unbenannter Verlauf 5" x1="456.23" y1="387.47" x2="456.23" y2="382.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-15" data-name="Unbenannter Verlauf 5" x1="456.23" y1="377.47" x2="456.23" y2="372.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-16" data-name="Unbenannter Verlauf 5" x1="699.07" y1="387.47" x2="699.07" y2="382.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-17" data-name="Unbenannter Verlauf 5" x1="699.07" y1="377.47" x2="699.07" y2="372.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-18" data-name="Unbenannter Verlauf 5" x1="456.07" y1="314.47" x2="456.07" y2="309.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-19" data-name="Unbenannter Verlauf 5" x1="456.07" y1="304.47" x2="456.07" y2="299.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-20" data-name="Unbenannter Verlauf 5" x1="699.07" y1="314.47" x2="699.07" y2="309.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+    <linearGradient id="Unbenannter_Verlauf_5-21" data-name="Unbenannter Verlauf 5" x1="699.07" y1="304.47" x2="699.07" y2="299.47" gradientTransform="matrix(1,0,0,1,0,0)" xlink:href="#Unbenannter_Verlauf_5"/>
+  </defs>
+  <g id="FloorPlan">
+    <path id="BG_Main" class="cls-13" d="m371.26,13.8h412.76v104h356.98v354.48h-354.1v53.52h-420v-53.85l-350.54-2.54V115.26l354.9,2.54V13.8Zm-98.36,278c0,44.18-35.82,80-80,80s-80-35.82-80-80,35.82-80,80-80,80,35.82,80,80Zm692,80c44.18,0,80-35.82,80-80s-35.82-80-80-80-80,35.82-80,80,35.82,80,80,80Z"/>
+    <polygon id="BG_M3" class="cls-17" points="678.57 470.47 678.57 440.44 476.57 440.44 476.57 470.47 430.57 470.47 430.57 528.47 724.57 528.47 724.57 470.47 678.57 470.47"/>
+    <polygon id="BG_M2" class="cls-19" points="678.57 397.47 678.57 367.47 476.57 367.47 476.57 397.47 430.57 397.47 430.57 440.47 724.57 440.47 724.57 397.47 678.57 397.47"/>
+    <polygon id="BG_M1" class="cls-21" points="678.57 324.5 678.57 294.5 476.57 294.5 476.57 324.5 430.57 324.5 430.57 367.47 724.57 367.47 724.57 324.5 678.57 324.5"/>
+    <g id="Shadow_Out">
+      <rect id="shadow" class="cls-33" x="375.55" y="16.48" width="404" height="2.46" transform="translate(1155.1 35.43) rotate(180)"/>
+      <rect id="shadow-2" data-name="shadow" class="cls-25" x="367.57" y="528.47" width="420" height="2.46" transform="translate(1155.15 1059.4) rotate(180)"/>
+      <rect id="shadow-3" data-name="shadow" class="cls-22" x="19.54" y="120.51" width="348.03" height="2.46" transform="translate(387.11 243.48) rotate(180)"/>
+      <rect id="shadow-4" data-name="shadow" class="cls-27" x="787.6" y="120.51" width="348.03" height="2.46" transform="translate(1923.24 243.48) rotate(180)"/>
+      <rect id="shadow-5" data-name="shadow" class="cls-24" x="11.57" y="476.48" width="356" height="2.46" transform="translate(379.15 955.43) rotate(180)"/>
+      <rect id="shadow-6" data-name="shadow" class="cls-23" x="787.6" y="476.46" width="355.97" height="2.52" transform="translate(1931.18 955.43) rotate(180)"/>
+    </g>
+    <path id="Walls_Out" class="cls-14" d="m377.57,16.47h400c1.1,0,2,.9,2,2v136c0,1.1.9,2,2,2h4c1.1,0,2-.9,2-2v-32c0-1.1.9-2,2-2h344c1.1,0,2,.9,2,2v344c0,1.1-.9,2-2,2h-344c-1.1,0-2-.9-2-2v-205c0-1.1-.9-2-2-2h-4c-1.1,0-2,.9-2,2v257c0,1.1-.9,2-2,2h-69c-1.1,0-2,.9-2,2v4c0,1.1.9,2,2,2h77c1.1,0,2-.9,2-2v-48c0-1.1.9-2,2-2h352c1.1,0,2-.9,2-2V114.47c0-1.1-.9-2-2-2h-352c-1.1,0-2-.9-2-2V10.47c0-1.1-.9-2-2-2h-410s-6,0-6,0c-1.1,0-2,.9-2,2v100c0,1.1-.9,2-2,2H13.57c-1.1,0-2,.9-2,2v360c0,1.1.9,2,2,2h352c1.1,0,2,.9,2,2v48c0,1.1.9,2,2,2h77c1.1,0,2-.9,2-2v-4c0-1.1-.9-2-2-2h-69c-1.1,0-2-.9-2-2v-257c0-1.1-.9-2-2-2h-4c-1.1,0-2,.9-2,2v205c0,1.1-.9,2-2,2H21.57c-1.1,0-2-.9-2-2V122.47c0-1.1.9-2,2-2h344c1.1,0,2,.9,2,2v32c0,1.1.9,2,2,2h4c1.1,0,2-.9,2-2V18.47c0-1.1.9-2,2-2Z"/>
+    <circle id="Walls_LCircle" class="cls-32" cx="193.57" cy="291.8" r="80" shape-rendering="crispEdges"/>
+    <circle id="Walls_RCircle" class="cls-32" cx="965.57" cy="291.8" r="80" shape-rendering="crispEdges"/>
+    <path id="Wall_Middle" class="cls-14" d="m577.57,499.47c-41.11,0-77.52,8.05-99.98,20.43-.64.35-1.02,1.03-1.02,1.75v4.82c0,1.1.9,2,2,2h198c1.1,0,2-.9,2-2v-4.82c0-.73-.39-1.4-1.02-1.75-22.45-12.38-58.87-20.43-99.98-20.43Z"/>
+    <rect id="shadow-7" data-name="shadow" class="cls-26" x="481.57" y="445.47" width="192" height="2.46" transform="translate(1155.15 893.4) rotate(180)"/>
+    <path id="Wall_M3" class="cls-14" d="m481.57,440.47h195c1.1,0,2,.9,2,2v26c0,1.1-.9,2-2,2h-1c-1.1,0-2-.9-2-2v-21c0-1.1-.9-2-2-2h-188c-1.1,0-2,.9-2,2v21c0,1.1-.9,2-2,2h-1c-1.1,0-2-.9-2-2v-26c0-1.1.9-2,2-2h3Z"/>
+    <rect id="shadow-8" data-name="shadow" class="cls-29" x="481.57" y="372.51" width="192" height="2.49" transform="translate(1155.15 747.52) rotate(180)"/>
+    <path id="Wall_M2" class="cls-14" d="m481.89,367.47h194.68c1.1,0,2,.9,2,2v26c0,1.1-.9,2-2,2h-1c-1.1,0-2-.9-2-2v-21c0-1.1-.9-2-2-2h-187.68c-1.1,0-2,.9-2,2v21c0,1.1-.9,2-2,2h-1c-1.1,0-2-.9-2-2v-26c0-1.1.9-2,2-2h3Z"/>
+    <rect id="shadow-9" data-name="shadow" class="cls-28" x="481.57" y="299.47" width="192" height="2.46" transform="translate(1155.15 601.4) rotate(180)"/>
+    <path id="Wall_M1" class="cls-14" d="m481.57,294.5h195c1.1,0,2,.9,2,2v26c0,1.1-.9,2-2,2h-1c-1.1,0-2-.9-2-2v-21c0-1.1-.9-2-2-2h-188c-1.1,0-2,.9-2,2v21c0,1.1-.9,2-2,2h-1c-1.1,0-2-.9-2-2v-26c0-1.1.9-2,2-2h3Z"/>
+    <path id="Wall_MR" class="cls-16" d="m721.57,266.42h1c1.1,0,2,.9,2,2v252h-5v-252c0-1.1.9-2,2-2Z"/>
+    <path id="Wall_ML" class="cls-16" d="m432.57,266.42h1c1.1,0,2,.9,2,2v252.09h-5v-252.09c0-1.1.9-2,2-2Z"/>
+    <g id="Stair_M3L">
+      <rect id="Stair" class="cls-17" x="435.57" y="460.47" width="41" height="10"/>
+      <rect id="Stair-2" data-name="Stair" class="cls-18" x="435.57" y="450.47" width="41" height="10"/>
+      <rect id="Stair-3" data-name="Stair" class="cls-19" x="435.57" y="440.47" width="41" height="10"/>
+      <rect id="shadow-10" data-name="shadow" class="cls-3" x="435.57" y="458" width="41" height="2.46"/>
+      <rect id="shadow-11" data-name="shadow" class="cls-12" x="435.57" y="448" width="41" height="2.46"/>
+    </g>
+    <g id="Stair_M3R">
+      <rect id="Stair-4" data-name="Stair" class="cls-17" x="678.57" y="460.47" width="41" height="10"/>
+      <rect id="Stair-5" data-name="Stair" class="cls-18" x="678.57" y="450.47" width="41" height="10"/>
+      <rect id="Stair-6" data-name="Stair" class="cls-19" x="678.57" y="440.47" width="41" height="10"/>
+      <rect id="shadow-12" data-name="shadow" class="cls-5" x="678.57" y="445.47" width="41" height="5"/>
+      <rect id="shadow-13" data-name="shadow" class="cls-4" x="678.57" y="455.47" width="41" height="5"/>
+    </g>
+    <g id="Stair_M2L">
+      <rect id="Stair-7" data-name="Stair" class="cls-19" x="435.57" y="387.47" width="41" height="10"/>
+      <rect id="Stair-8" data-name="Stair" class="cls-20" x="435.57" y="377.47" width="41" height="10"/>
+      <rect id="shadow-14" data-name="shadow" class="cls-8" x="435.57" y="382.47" width="41.32" height="5"/>
+      <rect id="shadow-15" data-name="shadow" class="cls-11" x="435.57" y="372.47" width="41.32" height="5"/>
+    </g>
+    <g id="Stair_M2R">
+      <rect id="Stair-9" data-name="Stair" class="cls-19" x="678.57" y="387.47" width="41" height="10"/>
+      <rect id="Stair-10" data-name="Stair" class="cls-20" x="678.57" y="377.47" width="41" height="10"/>
+      <rect id="Stair-11" data-name="Stair" class="cls-21" x="678.57" y="367.47" width="41" height="10"/>
+      <rect id="shadow-16" data-name="shadow" class="cls-6" x="678.57" y="382.47" width="41" height="5"/>
+      <rect id="shadow-17" data-name="shadow" class="cls-7" x="678.57" y="372.47" width="41" height="5"/>
+    </g>
+    <g id="Stair_M1L">
+      <rect id="Stair-12" data-name="Stair" class="cls-21" x="435.57" y="314.47" width="41" height="10"/>
+      <rect id="Stair-13" data-name="Stair" class="cls-30" x="435.57" y="304.47" width="41" height="10"/>
+      <rect id="Stair-14" data-name="Stair" class="cls-31" x="435.57" y="294.47" width="41" height="10"/>
+      <rect id="shadow-18" data-name="shadow" class="cls-9" x="435.57" y="309.47" width="41" height="5"/>
+      <rect id="shadow-19" data-name="shadow" class="cls-10" x="435.57" y="299.47" width="41" height="5"/>
+    </g>
+    <g id="Stair_M1R">
+      <rect id="Stair-15" data-name="Stair" class="cls-21" x="678.57" y="314.47" width="41" height="10"/>
+      <rect id="Stair-16" data-name="Stair" class="cls-30" x="678.57" y="304.47" width="41" height="10"/>
+      <rect id="Stair-17" data-name="Stair" class="cls-31" x="678.57" y="294.47" width="41" height="10"/>
+      <rect id="shadow-20" data-name="shadow" class="cls-1" x="678.57" y="309.47" width="41" height="5"/>
+      <rect id="shadow-21" data-name="shadow" class="cls-2" x="678.57" y="299.47" width="41" height="5"/>
+    </g>
+  </g>
+  <g id="Tables">
+    <rect id="Table_02" class="cls-15" x="624.54" y="450.47" width="42" height="24" rx="2" ry="2"/>
+    <rect id="Table_01" class="cls-15" x="566.13" y="450.47" width="42" height="24" rx="2" ry="2"/>
+    <rect id="Table_01-2" data-name="Table_01" class="cls-15" x="487.95" y="450.47" width="24" height="24" rx="2" ry="2"/>
+    <rect id="Table_01-3" data-name="Table_01" class="cls-15" x="525.73" y="450.47" width="24" height="24" rx="2" ry="2"/>
+  </g>
+</svg>
