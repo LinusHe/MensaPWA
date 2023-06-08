@@ -5,7 +5,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1.0, width=device-width" />
   <title>Interactive Map</title>
-  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script> -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Yanone+Kaffeesatz:200" rel="stylesheet">
@@ -18,6 +17,9 @@
     body {
       margin: 0;
       background-color: #f2f4ff;
+      background-image: url('bgPattern.svg');
+      background-size: 30px;
+      background-repeat: repeat;
       font-family: 'Yanone Kaffeesatz', sans-serif;
       font-weight: 200;
       font-size: 17px;
@@ -28,31 +30,35 @@
       height: calc(100vh);
       overflow: hidden;
     }
+
+    .table {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .table-on {
+      fill: #424588 !important;
+    }
   </style>
 </head>
 
 <body>
-  <div id="map-holder">
-    <svg id="map" width="100%" height="100%">
-      <image id="image" href="mensaplan.svg">
-    </svg>
-  </div>
+  <div id="map-holder"></div>
+
+
 
   <script type="text/javascript">
-    // create a D3 selection of the SVG itself - https://github.com/d3/d3-selection
-    const svg = d3.select("#map");
-    // create a D3 selection of the image element
-    const image = svg.selectChild("#image");
-
-    var minZoom;
-    var maxZoom;
-    var bounds = 500;
+    // configuration settings //
+    var minZoom = 0.8;
+    var maxZoom = 10;
+    var bounds = 200;
     var initialScaleFactor = 1.8;
+    ////////////////////////////
 
-    // Define map zoom behaviour
-    var zoom = d3
-      .zoom()
-      .on("zoom", zoomed);
+    var image;
+    var tables = [];
+    var w = $("#map-holder").width();
+    var h = $("#map-holder").height();
 
     function zoomed(event) {
       const { transform } = event;
@@ -60,52 +66,149 @@
       image.attr("transform", transform.toString());
     }
 
-    // Wait until image is loaded
-    image.node().addEventListener("load", function () {
-      var w = image.node().getBoundingClientRect().width;
-      var h = image.node().getBoundingClientRect().height;
-
-      // Function that calculates zoom/pan limits and sets zoom to default value 
-      function initiateZoom() {
-        minZoom = $("#map").width() / w
-        maxZoom = 10 * minZoom;
-
-        zoom
-          .scaleExtent([minZoom, maxZoom])
-          .translateExtent([[-bounds / 2, -bounds / 2], [w + bounds / 2, h + bounds / 2]]);
-
-        // Calculate the desired smaller scale value
-        var initialScale = minZoom * initialScaleFactor;
-        var startScale = initialScale / 2;
-
-        initialCenterX = ($("#map-holder").width() - initialScale * w) / 2;
-        initialCenterY = ($("#map-holder").height() - initialScale * h) / 2;
-        startCenterX = ($("#map-holder").width() - startScale * w) / 2;
-        startCenterY = ($("#map-holder").height() - startScale * h) / 2;
-
-        svg.call(zoom.transform, d3.zoomIdentity.translate(startCenterX, startCenterY).scale(startScale));
-
-        // Start Animation
-        svg.transition()
-          .duration(1000)
-          .call(
-            zoom.transform,
-            d3.zoomIdentity.translate(initialCenterX, initialCenterY).scale(initialScale)
-          );
-
-        // Enable Zoom Functionality
-        svg.call(zoom);
+    // Define map zoom behaviour
+    var zoom = d3
+      .zoom()
+      .on("zoom", zoomed);
 
 
-        // get SVG Elements
-        const svgDocument = image
+    function initiateZoom() {
+      zoom
+        .scaleExtent([minZoom, maxZoom])
+        .translateExtent([[-bounds / 2, -bounds / 2], [w + bounds / 2, h + bounds / 2]]);
 
-        console.log(svgDocument);
-      }
+      // Calculate the desired smaller scale value
+      var initialScale = minZoom * initialScaleFactor;
+      var startScale = initialScale / 2;
+
+      initialCenterX = (w - initialScale * w) / 2;
+      initialCenterY = (h - initialScale * h) / 2;
+      startCenterX = (w - startScale * w) / 2;
+      startCenterY = (h - startScale * h) / 2;
+
+      // first view
+      svg.call(zoom.transform, d3.zoomIdentity.translate(startCenterX, startCenterY).scale(startScale));
+
+      // Start zoom in Animation
+      svg.transition()
+        .duration(1000)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(initialCenterX, initialCenterY).scale(initialScale)
+        );
+    }
+
+
+    // create an SVG
+    var svg = d3
+      .select("#map-holder")
+      .append("svg")
+      .attr("id", "image")
+      // set to the same size as the "map-holder" div
+      .attr("width", w)
+      .attr("height", h)
+      // add zoom functionality
+      .call(zoom);
+
+
+    // Load SVG file and manipulate elements
+    d3.xml("mensaplan.svg").then(function (xml) {
+      const importedNode = document.importNode(xml.documentElement, true);
+
+      // add empty group 
+      image = svg.append("g").attr("id", "map");
+      // add svg element to group
+      image.node().appendChild(importedNode);
+
+      // tables = // TODO: find svg elements that contain "Table" in ID name in image and save to array
+      tables = Array.from(image.selectAll("g > *[id*='Table']").nodes());
+
+      // Add click listener and CSS class to tables
+      tables.forEach(function (table) {
+        d3.select(table)
+          .classed("table", true)
+          .on("click", function (d) {
+            // Handle table click event
+            console.log("Table clicked:", table.id, d);
+            d3.selectAll(".table").classed("table-on", false);
+            d3.select(this).classed("table-on", true);
+
+            // Rufe die boxZoom-Funktion auf und übergebe die erforderlichen Parameter
+            var boundingBox = getBoundingBox(table); // Berechne den begrenzenden Kasten für den Tisch
+            var centroid = getCentroid(table); // Berechne das Zentrum des Tisches
+            var paddingPercentage = 0; // Setze den gewünschten Padding-Prozentsatz
+
+            // boxZoom(boundingBox, centroid, paddingPercentage);
+          });
+      });
+      console.log(tables);
+
 
       initiateZoom();
     });
 
+    // zoom to show a bounding box, with optional additional padding as percentage of box size
+    function boxZoom(box, centroid, paddingPerc) {
+      var [[x1, y1], [x2, y2]] = box; // extract the coordinates of the bounding box
+
+      // calculate the dimensions of the box
+      var boxWidth = x2 - x1;
+      var boxHeight = y2 - y1;
+
+      // calculate the padding values
+      var paddingX = (paddingPerc / 100) * boxWidth;
+      var paddingY = (paddingPerc / 100) * boxHeight;
+
+      // calculate the new bounding box coordinates with padding
+      var newX1 = x1 - paddingX;
+      var newY1 = y1 - paddingY;
+      var newX2 = x2 + paddingX;
+      var newY2 = y2 + paddingY;
+
+      // calculate the new center point of the box
+      var newCenterX = (newX1 + newX2) / 2;
+      var newCenterY = (newY1 + newY2) / 2;
+
+      // calculate the zoom scale based on the box dimensions and the available space
+      var scaleX = w / (newX2 - newX1);
+      var scaleY = h / (newY2 - newY1);
+      var zoomScale = Math.min(scaleX, scaleY);
+
+      // calculate the translation values to center the box
+      var translateX = -(newCenterX * zoomScale - w / 2);
+      var translateY = -(newCenterY * zoomScale - h / 2);
+
+      // apply the zoom transform with animation
+      svg
+        .transition()
+        .duration(1000)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(translateX, translateY).scale(zoomScale)
+        );
+    }
+
+    function getBoundingBox(table) {
+      var rect = table.getBBox();
+
+      // Berechne die Koordinaten des begrenzenden Kastens
+      var x1 = rect.x;
+      var y1 = rect.y;
+      var x2 = rect.x + rect.width;
+      var y2 = rect.y + rect.height;
+
+      return [[x1, y1], [x2, y2]]; // Gib die Koordinaten des begrenzenden Kastens als Array zurück
+    }
+
+    function getCentroid(table) {
+      var rect = table.getBBox();
+
+      // Berechne das Zentrum des Rechtecks
+      var cx = rect.x + rect.width / 2;
+      var cy = rect.y + rect.height / 2;
+
+      return [cx, cy]; // Gib die Koordinaten des Zentrums als Array zurück
+    }
   </script>
 </body>
 
