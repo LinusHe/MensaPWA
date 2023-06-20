@@ -1,6 +1,7 @@
 // react imports
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 
 // mui imports
 import { ThemeProvider } from '@mui/material/styles';
@@ -14,13 +15,19 @@ import reportWebVitals from './reportWebVitals';
 import App from './App';
 import theme from './theme';
 
+// font imports
+import '@fontsource-variable/jost';
+import '@fontsource/roboto';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
