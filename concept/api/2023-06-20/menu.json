@@ -1,0 +1,156 @@
+[
+    {
+        "title": "Kalbsgeschnetzeltes in Käserahm | dazu Spinat-Gnocchis | & Salatbuket",
+        "category": "Schneller Teller",
+        "imageUrl": null,
+        "prices": {
+            "guest": "7.20 €",
+            "employee": "5.20 €",
+            "student": "3.35 €"
+        },
+        "selections": [
+            "beef"
+        ],
+        "additives": null,
+        "allergens": [
+            "cereals containing gluten",
+            "soy",
+            "milk/lactose"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-20T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 35%\nProteine: 30%\nFette: 35%"
+    },
+    {
+        "title": "Rotes Zwiebelgemüse | Buntes Paprikagemüse",
+        "category": "Gemüsebeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.50 €",
+            "employee": "1.13 €",
+            "student": "0.75 €"
+        },
+        "selections": [
+            "vegan"
+        ],
+        "additives": [
+            "colouring"
+        ],
+        "allergens": [
+            "sulfite/sulfur dioxide"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-20T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 10%\nProteine: 3%\nFette: 0.5% (bei Beigabe von Öl erhöht sich der Fettanteil entsprechend)"
+    },
+    {
+        "title": "Kartoffelpüree",
+        "category": "Sättigungsbeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.30 €",
+            "employee": "0.95 €",
+            "student": "0.55 €"
+        },
+        "selections": [
+            "vegetarian"
+        ],
+        "additives": null,
+        "allergens": [
+            "milk/lactose"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-20T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 85%\nProteine: 6%\nFette: 9%"
+    },
+    {
+        "title": "Rustico frites | asiatischer Glasnudelsalat mit Sesam | Spinat-Gnocchis",
+        "category": "Sättigungsbeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.50 €",
+            "employee": "1.13 €",
+            "student": "0.75 €"
+        },
+        "selections": [
+            "vegetarian",
+            "vegan"
+        ],
+        "additives": [
+            "preservatives",
+            "sweetener"
+        ],
+        "allergens": [
+            "cereals containing gluten",
+            "egg",
+            "soy",
+            "sesame"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-20T00:00:00+02:00",
+        "chat_completion": "Rustico frites: Kohlenhydrate: 47% | Proteine: 6% | Fette: 47%\nasiatischer Glasnudelsalat mit Sesam: Kohlenhydrate: 62% | Proteine: 10% | Fette: 28%\nSpinat-Gnocchis: Kohlenhydrate: 61% | Proteine: 10% | Fette: 29%"
+    },
+    {
+        "title": "Thailändische Reispfanne mit Gemüse & Sprossen",
+        "category": "Veganes Gericht",
+        "imageUrl": null,
+        "prices": {
+            "guest": "5.50 €",
+            "employee": "4.00 €",
+            "student": "2.40 €"
+        },
+        "selections": [
+            "vegan"
+        ],
+        "additives": [
+            "preservatives"
+        ],
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-20T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 60%\nProteine: 10%\nFette: 30%"
+    },
+    {
+        "title": "Käse-Sahnesoße mit Schinken & Erbsen | Tomaten- Frischkäsesoße mit Bärlauch | Tomatensoße mit Seitan-Schawarma",
+        "category": "Pastateller",
+        "imageUrl": null,
+        "prices": {
+            "guest": "5.50 €",
+            "employee": "3.90 €",
+            "student": "2.10 €"
+        },
+        "selections": [
+            "pork"
+        ],
+        "additives": [
+            "preservatives",
+            "antioxidants",
+            "phosphate"
+        ],
+        "allergens": [
+            "cereals containing gluten",
+            "soy",
+            "milk/lactose",
+            "mustard"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-20T00:00:00+02:00",
+        "chat_completion": "Käse-Sahnesoße mit Schinken & Erbsen:\n- Kohlenhydrate: 24%\n- Proteine: 15%\n- Fette: 61%\n\nTomaten-Frischkäsesoße mit Bärlauch:\n- Kohlenhydrate: 12%\n- Proteine: 8%\n- Fette: 80%\n\nTomatensoße mit Seitan-Schawarma:\n- Kohlenhydrate: 23%\n- Proteine: 15%\n- Fette: 62%"
+    },
+    {
+        "title": "Entdecken sie unsertäglich wechselndes Angebot an Smoothies!",
+        "category": "Smoothie",
+        "imageUrl": null,
+        "prices": {
+            "guest": "2.95 €",
+            "employee": "2.20 €",
+            "student": "1.80 €"
+        },
+        "selections": null,
+        "additives": null,
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-06-20T00:00:00+02:00",
+        "chat_completion": "- Kohlenhydrate: variiert je nach Smoothie\n- Proteine: variiert je nach Smoothie\n- Fette: variiert je nach Smoothie"
+    }
+]

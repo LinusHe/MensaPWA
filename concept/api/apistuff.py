@@ -13,7 +13,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # Define URL and headers
 url = f"https://app.htwk-leipzig.de/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4/menus/{date.today().isoformat()}?page=1&itemsPerPage=30"
 headers = {'accept': 'application/json'}
-with open('prompt.txt', 'r') as file:
+with open('nutritionalPrompt.txt', 'r') as file:
     systemPrompt = file.read()
 
 
@@ -45,12 +45,17 @@ def generate_chat_completion(title, current_date, safe_title):
 
 
 def generate_image(title, current_date, safe_title):
+    # open prompt file and replace {{title}}
+    with open("imagePrompt.txt", "r") as prompt_file:
+        prompt_text = prompt_file.read()
+        prompt_with_title = prompt_text.replace("{{title}}", title)
+
     print(f"Generating image for item '{title}'")
     with open("plateMask.png", "rb") as image_file:
         image_response = openai.Image.create_edit(
           image=image_file,
-          prompt="plate with food " + title,
-          size="512x512"
+          prompt=prompt_with_title,
+          size="256x256"
         )
     if image_response:
         image_url = image_response["data"][0]["url"]
@@ -95,4 +100,8 @@ if response.status_code == 200:
         generate_chat_completion(title, current_date, safe_title)
         
         # Call the function to generate image and save it
-        generate_image(title, current_date, safe_title)
+        try:
+            generate_image(title, current_date, safe_title)
+        except openai.error.InvalidRequestError as e:
+            # skip image, if there is an OpenAI Error
+            print(f"Skipping item '{title}' due to error: {str(e)}")
