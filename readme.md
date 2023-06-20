@@ -5,17 +5,22 @@ Mensa PWA ist eine Progressive Web App, die den Studierenden der HTWK Leipzig da
 ## Installation und Ausführung
 
 ### Voraussetzungen
-
+* npm (Node.js)
 
 ### Installation
+Mit `cd mensa-pwa-react` in den Ordner navigieren und folgenden Befehl ausführen:
+* `npm install`
 
 ### Entwicklung
 Mit `cd mensa-pwa-react` in den Ordner navigieren und folgenden Befehl ausführen:
 
-`npm start`: zum starten des development server.
+* `npm start`
+
+Development Server ist nach kurzer Zeit gestartet und kann unter http://localhost:3000 im Browser aufgerufen werden
 
 ### Deployment
-`npm run build`: um die app in statische dateien für die produktion zu packen.
+* `npm run build`
+App wird im build Ordner in in statische dateien für die Produktivumgebung konvertiert
 
 
 ## Autoren
