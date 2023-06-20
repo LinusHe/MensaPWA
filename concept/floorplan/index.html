@@ -1,244 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>Interactive Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style>
+      html,
+      body {
+        overflow: hidden;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-  <title>Interactive Map</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet">
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <style>
-    html,
-    body {
-      overflow: hidden;
-    }
+      body {
+        margin: 0;
+        background-color: #f2f4ff;
+        background-image: url("bgPattern.svg");
+        background-size: 30px;
+        background-repeat: repeat;
+        font-weight: 200;
+        font-size: 17px;
+        font-family: "Jost", sans-serif;
+      }
 
-    body {
-      margin: 0;
-      background-color: #f2f4ff;
-      background-image: url('bgPattern.svg');
-      background-size: 30px;
-      background-repeat: repeat;
-      font-weight: 200;
-      font-size: 17px;
-      font-family: 'Jost', sans-serif;
-    }
+      h1#LocationCode {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        bottom: 10px;
+        text-align: center;
+        font-weight: bold;
+      }
 
-    h1#LocationCode {
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      bottom: 10px;
-      text-align: center;
-      font-weight: bold;
-    }
+      #map-holder {
+        width: 100%;
+        height: calc(100vh);
+        overflow: hidden;
+      }
 
-    #map-holder {
-      width: 100%;
-      height: calc(100vh);
-      overflow: hidden;
-    }
+      .table {
+        cursor: pointer;
+        transition: all 0.2s;
+      }
 
-    .table {
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+      .table-on {
+        fill: #424588 !important;
+      }
+    </style>
+  </head>
 
-    .table-on {
-      fill: #424588 !important;
-    }
-  </style>
-</head>
+  <body>
+    <div id="map-holder">
+      <h1 id="LocationCode"></h1>
+    </div>
 
-<body>
-  <div id="map-holder">
-    <h1 id="LocationCode"></h1>
-  </div>
+    <script type="text/javascript">
+      // configuration settings //
+      var minZoom = 0.8;
+      var maxZoom = 10;
+      var bounds = 200;
+      var initialScaleFactor = 3.2;
+      ////////////////////////////
 
+      var image;
+      var tables = [];
+      var w = $("#map-holder").width();
+      var h = $("#map-holder").height();
 
+      function zoomed(event) {
+        console.log(event);
+        const { transform } = event;
+        // apply calculated transform to the image
+        image.attr("transform", transform.toString());
+      }
 
-  <script type="text/javascript">
-    // configuration settings //
-    var minZoom = 0.8;
-    var maxZoom = 10;
-    var bounds = 200;
-    var initialScaleFactor = 3.2;
-    ////////////////////////////
+      // Define map zoom behaviour
+      var zoom = d3.zoom().on("zoom", zoomed);
 
-    var image;
-    var tables = [];
-    var w = $("#map-holder").width();
-    var h = $("#map-holder").height();
+      function initiateZoom() {
+        zoom.scaleExtent([minZoom, maxZoom]).translateExtent([
+          [-bounds / 2, -bounds / 2],
+          [w + bounds / 2, h + bounds / 2],
+        ]);
 
-    function zoomed(event) {
-      console.log(event)
-      const { transform } = event;
-      // apply calculated transform to the image
-      image.attr("transform", transform.toString());
-    }
+        // Calculate the desired smaller scale value
+        var initialScale = minZoom * initialScaleFactor;
+        var startScale = initialScale / 2;
 
-    // Define map zoom behaviour
-    var zoom = d3
-      .zoom()
-      .on("zoom", zoomed);
+        initialCenterX = (w - initialScale * w) / 2;
+        initialCenterY = (h - initialScale * h) / 2;
+        startCenterX = (w - startScale * w) / 2;
+        startCenterY = (h - startScale * h) / 2;
 
+        // first view
+        svg.call(zoom.transform, d3.zoomIdentity.translate(startCenterX, startCenterY).scale(startScale));
 
-    function initiateZoom() {
-      zoom
-        .scaleExtent([minZoom, maxZoom])
-        .translateExtent([[-bounds / 2, -bounds / 2], [w + bounds / 2, h + bounds / 2]]);
+        // Start zoom in Animation
+        svg.transition().duration(1000).call(zoom.transform, d3.zoomIdentity.translate(initialCenterX, initialCenterY).scale(initialScale));
+      }
 
-      // Calculate the desired smaller scale value
-      var initialScale = minZoom * initialScaleFactor;
-      var startScale = initialScale / 2;
+      // create an SVG
+      var svg = d3
+        .select("#map-holder")
+        .append("svg")
+        .attr("id", "image")
+        // set to the same size as the "map-holder" div
+        .attr("width", w)
+        .attr("height", h)
+        // add zoom functionality
+        .call(zoom);
 
-      initialCenterX = (w - initialScale * w) / 2;
-      initialCenterY = (h - initialScale * h) / 2;
-      startCenterX = (w - startScale * w) / 2;
-      startCenterY = (h - startScale * h) / 2;
+      // Load SVG file and manipulate elements
+      d3.xml("mensaplan.svg").then(function (xml) {
+        const importedNode = document.importNode(xml.documentElement, true);
 
-      // first view
-      svg.call(zoom.transform, d3.zoomIdentity.translate(startCenterX, startCenterY).scale(startScale));
+        // add empty group
+        image = svg.append("g").attr("id", "map");
+        // add svg element to group
+        image.node().appendChild(importedNode);
 
-      // Start zoom in Animation
-      svg.transition()
-        .duration(1000)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(initialCenterX, initialCenterY).scale(initialScale)
-        );
-    }
+        // Hide Pin icon
+        var pinIcon = d3.select("#pin");
+        pinIcon.attr("opacity", 0);
 
+        // tables = // TODO: find svg elements that contain "Table" in ID name in image and save to array
+        tables = Array.from(image.selectAll("g > *[id*='Table']").nodes());
 
-    // create an SVG
-    var svg = d3
-      .select("#map-holder")
-      .append("svg")
-      .attr("id", "image")
-      // set to the same size as the "map-holder" div
-      .attr("width", w)
-      .attr("height", h)
-      // add zoom functionality
-      .call(zoom);
+        // Add click listener and CSS class to tables
+        tables.forEach(function (table) {
+          d3.select(table)
+            .classed("table", true)
+            .on("click", function (d) {
+              // Handle table click event
+              $("#LocationCode").text(getLocationCode(table.id));
+              d3.selectAll(".table").classed("table-on", false);
+              d3.select(this).classed("table-on", true);
 
+              // Rufe die boxZoom-Funktion auf und übergebe die erforderlichen Parameter
+              var centroid = getCentroid(table); // Berechne das Zentrum des Tisches
+              // zoomOn(centroid); 
 
-    // Load SVG file and manipulate elements
-    d3.xml("mensaplan.svg").then(function (xml) {
-      const importedNode = document.importNode(xml.documentElement, true);
+              // Animate the pin icon
+              pinTable(table, pinIcon);
+            });
+        });
 
-      // add empty group 
-      image = svg.append("g").attr("id", "map");
-      // add svg element to group
-      image.node().appendChild(importedNode);
-
-      // Hide Pin icon
-      var pinIcon = d3.select("#pin");
-      pinIcon.attr("opacity", 0);
-
-
-      // tables = // TODO: find svg elements that contain "Table" in ID name in image and save to array
-      tables = Array.from(image.selectAll("g > *[id*='Table']").nodes());
-
-      // Add click listener and CSS class to tables
-      tables.forEach(function (table) {
-        d3.select(table)
-          .classed("table", true)
-          .on("click", function (d) {
-            // Handle table click event
-            $('#LocationCode').text(getLocationCode(table.id));
-            d3.selectAll(".table").classed("table-on", false);
-            d3.select(this).classed("table-on", true);
-
-            // Rufe die boxZoom-Funktion auf und übergebe die erforderlichen Parameter
-            var centroid = getCentroid(table); // Berechne das Zentrum des Tisches
-            // zoomOn(centroid); // not working
-
-            // Animate the pin icon
-            pinTable(table, pinIcon);
-          });
+        initiateZoom();
       });
 
+      function pinTable(table, pinIcon) {
+        var centroid = getCentroid(table);
+        var centerX = centroid[0] - pinIcon.node().getBBox().width / 2;
+        var centerY = centroid[1] - pinIcon.node().getBBox().height;
 
-      initiateZoom();
-    });
+        // Set initial position and opacity
+        pinIcon
+          .attr("transform", "translate(" + (centerX - 0) + "," + (centerY - 10) + ")") // Offset the icon to center it properly
+          .attr("opacity", 0);
 
-    function pinTable(table, pinIcon) {
-      var centroid = getCentroid(table);
-      var centerX = centroid[0] - pinIcon.node().getBBox().width / 2;
-      var centerY = centroid[1] - pinIcon.node().getBBox().height;
-
-      // Set initial position and opacity
-      pinIcon.attr("transform", "translate(" + (centerX - 0) + "," + (centerY - 10) + ")") // Offset the icon to center it properly
-        .attr("opacity", 0);
-
-      // Apply fade-down animation
-      pinIcon.transition()
-        .duration(500)
-        .attr("transform", "translate(" + centerX + "," + centerY + ")")
-        .attr("opacity", 1);
-    }
-
-    function getLocationCode(id) {
-      const segments = id.split('_');
-      if (segments.length >= 2) {
-        let locationCode = segments[1];
-        locationCode = locationCode.replace(/R/g, 'S');
-        locationCode = locationCode.replace(/L/g, 'N');
-        return locationCode;
-      } else {
-        return '';
+        // Apply fade-down animation
+        pinIcon
+          .transition()
+          .duration(500)
+          .attr("transform", "translate(" + centerX + "," + centerY + ")")
+          .attr("opacity", 1);
       }
-    }
 
+      function getLocationCode(id) {
+        const segments = id.split("_");
+        if (segments.length >= 2) {
+          let locationCode = segments[1];
+          locationCode = locationCode.replace(/R/g, "S");
+          locationCode = locationCode.replace(/L/g, "N");
+          return locationCode;
+        } else {
+          return "";
+        }
+      }
 
-    function zoomOn(centroid) {
-      // Definiere den Zoomfaktor und den Übergangsdauer
-      var zoomFactor = 5;
-      var transitionDuration = 1000;
+      function zoomOn(centroid) {
+        // Definiere den Zoomfaktor und den Übergangsdauer
+        var zoomFactor = 5;
+        var transitionDuration = 1000;
 
-      // Berechne die Zielposition des Zooms
-      var targetX = w / 2 - centroid[0] * zoomFactor;
-      var targetY = h / 2 - centroid[1] * zoomFactor;
-      var targetScale = zoomFactor;
+        // Berechne die Zielposition des Zooms
+        var targetX = w / 2 - centroid[0] * zoomFactor;
+        var targetY = h / 2 - centroid[1] * zoomFactor;
+        var targetScale = zoomFactor;
 
-      // Wende den Zoom an
-      svg.transition()
-        .duration(transitionDuration)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(targetX, targetY).scale(targetScale)
-        );
-    }
+        // Wende den Zoom an
+        svg.transition().duration(transitionDuration).call(zoom.transform, d3.zoomIdentity.translate(targetX, targetY).scale(targetScale));
+      }
 
+      function getBoundingBox(table) {
+        var rect = table.getBBox();
 
+        // Berechne die Koordinaten des begrenzenden Kastens
+        var x1 = rect.x;
+        var y1 = rect.y;
+        var x2 = rect.x + rect.width;
+        var y2 = rect.y + rect.height;
 
-    function getBoundingBox(table) {
-      var rect = table.getBBox();
+        return [
+          [x1, y1],
+          [x2, y2],
+        ]; // Gib die Koordinaten des begrenzenden Kastens als Array zurück
+      }
 
-      // Berechne die Koordinaten des begrenzenden Kastens
-      var x1 = rect.x;
-      var y1 = rect.y;
-      var x2 = rect.x + rect.width;
-      var y2 = rect.y + rect.height;
+      function getCentroid(table) {
+        var rect = table.getBBox();
 
-      return [[x1, y1], [x2, y2]]; // Gib die Koordinaten des begrenzenden Kastens als Array zurück
-    }
+        // Berechne das Zentrum des Rechtecks
+        var cx = rect.x + rect.width / 2;
+        var cy = rect.y + rect.height / 2;
 
-    function getCentroid(table) {
-      var rect = table.getBBox();
-
-      // Berechne das Zentrum des Rechtecks
-      var cx = rect.x + rect.width / 2;
-      var cy = rect.y + rect.height / 2;
-
-      return [cx, cy]; // Gib die Koordinaten des Zentrums als Array zurück
-    }
-  </script>
-</body>
-
+        return [cx, cy]; // Gib die Koordinaten des Zentrums als Array zurück
+      }
+    </script>
+  </body>
 </html>
