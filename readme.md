@@ -24,7 +24,7 @@ Development Server ist nach kurzer Zeit gestartet und kann unter http://localhos
 App wird im build Ordner in in statische dateien für die Produktivumgebung konvertiert
 
 ### Serverskript
-Unter https://platform.openai.com/account/api-keys einen API Key anlegen und als Environmentvariable setzen (Anleitung siehe [hier für Windows]((https://learn.microsoft.com/de-de/sql/integration-services/lesson-1-1-creating-working-folders-and-environment-variables?view=sql-server-ver16)https://learn.microsoft.com/de-de/sql/integration-services/lesson-1-1-creating-working-folders-and-environment-variables?view=sql-server-ver16)).
+Unter https://platform.openai.com/account/api-keys einen API Key anlegen und als Environmentvariable setzen (Anleitung siehe [hier für Windows](https://learn.microsoft.com/de-de/sql/integration-services/lesson-1-1-creating-working-folders-and-environment-variables?view=sql-server-ver16)).
 Name der Umgebungsvariable: `OPENAI_API_KEY`
 
 Skript ausführen:
