@@ -1,0 +1,26 @@
+h1#LocationCode {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#map-holder {
+  width: 100%;
+  height: calc(100vh);
+  overflow: hidden;
+  background-image: url("bgPattern.svg");
+  background-size: 30px;
+  background-repeat: repeat;
+}
+
+.table {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.table-on {
+  fill: #424588 !important;
+}

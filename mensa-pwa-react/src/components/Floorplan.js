@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import FloorplanSelector from './FloorplanSelector';
 
 function Floorplan() {
   return (
@@ -11,9 +12,9 @@ function Floorplan() {
       alignItems="flex-start"
       rowSpacing={0}
       columnSpacing={0}
-      sx={{ p: 2 }}
+      sx={{height: "100vh", overflow: "hidden"}}
     >
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{ p: 2}}>
         <Typography variant="screenHeading">
           Sitzplatz{' '}
           <Typography component="span" variant="span" fontWeight="300">
@@ -23,7 +24,8 @@ function Floorplan() {
       </Grid>
       <Grid item xs={12}>
         <Typography variant="p" fontWeight="light">
-          Floorplan Engine comes here
+          {/* Floorplan Engine comes here */}
+          <FloorplanSelector />
         </Typography>
       </Grid>
     </Grid>
