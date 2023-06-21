@@ -27,7 +27,7 @@ function NavigationBar() {
   }, []);
 
   return (
-    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)' }}>
+    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)' }} style={{padding: "0 0 env(safe-area-inset-bottom) 0"}}>
       <BottomNavigation showLabels
         sx={{ height: 80, backgroundColor: 'unset' }}
         value={value}
