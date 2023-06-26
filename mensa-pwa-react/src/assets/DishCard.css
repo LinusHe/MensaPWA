@@ -1,0 +1,77 @@
+.dish-card {
+    display: flex;
+    border-radius: 15px;
+    overflow: hidden;
+    width: 500px;
+    min-height: 190px;
+    max-height: max-content;
+    background: #ffffff;
+    box-shadow: 0px 3px 6px #00000029;
+    margin: 10px;
+    position: relative;
+}
+
+
+.dish-image {
+    
+    width: 200px; 
+    height: 150px; /* Set height of the image to half of the card */
+    object-fit: contain;
+    margin: auto 0; /* Center the image vertically */
+}
+
+.text-section {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1; 
+}
+
+.orange-text {
+    font-weight: bold;
+    color: rgba(233, 108, 96, 1);
+    font-size: 16px;
+}
+
+.main-text {
+    font-size: 25px;
+}
+
+.small-text {
+    font-size: 12px;
+}
+
+.price-section {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 25px;
+    background: rgb(236, 238, 243);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    display: flex;          
+    justify-content: center;
+    align-items: center;    
+}
+
+
+
+.price-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.bottom-section {
+    position: absolute;
+    bottom: 0px;
+    color: yellowgreen;
+    left: 50px;
+    width: 100px; 
+    text-align: center; 
+}
+
+.bottom-text {
+    font-size: 12px;
+}
