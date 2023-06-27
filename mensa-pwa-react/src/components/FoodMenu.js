@@ -8,26 +8,25 @@ import testFoodPic from '../assets/test_foodpic.jpg';
 function FoodMenu() {
   return (
     <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      alignItems="flex-start"
-      rowSpacing={0}
-      columnSpacing={0}
-      sx={{ p: 2 }}
+    container
+    direction="row"
+    justifyContent="center"
+    alignItems="flex-start"
+    alignContent="flex-start"
+    rowSpacing={0}
+    columnSpacing={0}
+    sx={{ maxHeight: 'calc(100vh - 80px)', overflow: 'scroll' }}
     >
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{ p: 2, flexGrow: 1 }}>
         <Typography variant="screenHeading">
           Speiseplan
         </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ pb: 3 }}>
         <Typography variant="p" fontWeight="regular" textTransform="uppercase">
           Heutige Gerichte
         </Typography>
       </Grid>
-      <Grid item xs={12}>
-      <Typography variant="p" fontWeight="light">
+      <Grid item xs={12} sx={{ flexGrow: 1 }}>
+      
         <DishCard 
           dishImage={testFoodPic}
           orangeText="Vorspeise" 
@@ -60,7 +59,6 @@ function FoodMenu() {
           price="1,50 €" 
           bottomText="vegetarisch"
         />
-      </Typography>
 
       </Grid>
     </Grid>
