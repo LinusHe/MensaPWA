@@ -1,9 +1,12 @@
 import React from 'react'
 import { Grid } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import FloorplanSelector from './FloorplanSelector';
 
 function Floorplan() {
+  const { code } = useParams();
+
   return (
     <Grid
       container
@@ -23,10 +26,7 @@ function Floorplan() {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography variant="p" fontWeight="light">
-          {/* Floorplan Engine comes here */}
-          <FloorplanSelector />
-        </Typography>
+          <FloorplanSelector code={code} />
       </Grid>
     </Grid>
   )

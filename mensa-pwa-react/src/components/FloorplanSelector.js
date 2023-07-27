@@ -31,9 +31,9 @@ function FloorplanSelector() {
       const initialScale = minZoom * initialScaleFactor;
       const startScale = initialScale / 2;
       const initialCenterX = (mapHolderWidth - initialScale * mapHolderWidth) / 2;
-      const initialCenterY = (mapHolderHeight - initialScale * mapHolderHeight) / 2 -130;
+      const initialCenterY = (mapHolderHeight - initialScale * mapHolderHeight) / 2 - 130;
       const startCenterX = (mapHolderWidth - startScale * mapHolderWidth) / 2;
-      const startCenterY = (mapHolderHeight - startScale * mapHolderHeight) / 2 -130;
+      const startCenterY = (mapHolderHeight - startScale * mapHolderHeight) / 2 - 130;
 
       svg
         .call(zoom.transform, d3.zoomIdentity.translate(startCenterX, startCenterY).scale(startScale))
@@ -51,11 +51,30 @@ function FloorplanSelector() {
       .call(zoom);
 
     function handleTableClick(table, pinIcon) {
-      alert(getLocationCode(table.id));
+      console.log(getLocationCode(table.id));
       d3.selectAll(".table").classed("table-on", false);
       d3.select(table).classed("table-on", true);
 
       pinTable(table, pinIcon);
+
+      // Add zoom in to table functionality
+      // zoomToTable(table);
+    }
+
+    // New function to handle zooming to the clicked table
+    function zoomToTable(table) {
+      const bounds = table.getBBox();
+      const dx = bounds.width;
+      const dy = bounds.height;
+      const x = bounds.x + dx / 2;
+      const y = bounds.y + dy / 2;
+      const scale = Math.max(1, Math.min(maxZoom, 0.9 / Math.max(dx / mapHolderWidth, dy / mapHolderHeight)));
+      const translate = [mapHolderWidth / 2 - scale * x, mapHolderHeight / 2 - scale * y];
+
+      svg
+        .transition()
+        .duration(750)
+        .call(zoom.transform, d => d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
     }
 
     function pinTable(table, pinIcon) {
