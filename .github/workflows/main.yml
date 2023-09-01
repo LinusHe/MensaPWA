@@ -37,4 +37,4 @@ jobs:
           cd ~/MensaPWA
           git pull origin docker
           docker-compose -f docker-compose.prod.yml pull
-          docker-compose -f docker-compose.prod.yml up --build -d -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }}
+          docker-compose -f docker-compose.prod.yml up --build -d
