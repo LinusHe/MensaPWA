@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  client:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.client.dev
+    volumes:
+      - ./client:/app
+      - public-data:/app/public/data
+    ports:
+      - "3000:3000"
+
+  app:
+    restart: unless-stopped
+    image: node:18
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    command: npm start
+    environment:
+      - DB_URL=mongodb://db:27017/mydatabase
+    depends_on:
+      - db
+
+  db:
+    restart: unless-stopped
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+
+  nightly:
+    restart: unless-stopped
+    environment:
+      - OPENAI_API_KEY
+    build:
+      context: .
+      dockerfile: Dockerfile.nightly
+    volumes:
+      - public-data:/app/out
+
+volumes:
+  mongo-data:
+  public-data:

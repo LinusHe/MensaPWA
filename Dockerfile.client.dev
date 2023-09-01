@@ -1,0 +1,15 @@
+# Base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY client/package*.json ./
+RUN npm install
+
+# Copy all files
+COPY client/ ./
+
+# Start app
+CMD ["npm", "start"]

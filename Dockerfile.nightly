@@ -1,0 +1,20 @@
+# Base image
+FROM python:3.8
+
+# Set working directory
+WORKDIR /app
+
+# Install Python packages
+RUN pip install requests openai Pillow
+
+# Copy files
+COPY nightly_task/ ./
+
+# Install cron and set it up
+RUN apt-get update && apt-get install -y cron
+ADD nightly_task/crontab /etc/cron.d/nightly-task-cron
+RUN chmod 0644 /etc/cron.d/nightly-task-cron
+RUN crontab /etc/cron.d/nightly-task-cron
+
+# Run the script once and start cron
+CMD python script.py && cron -f
