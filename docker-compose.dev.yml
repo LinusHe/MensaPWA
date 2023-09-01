@@ -6,6 +6,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.client.dev
+    env_file:
+      - .env
+    environment:
+      - VAPID_PUBLIC_KEY
+      - VAPID_PRIVATE_KEY
     volumes:
       - ./client:/app
       - public-data:/app/public/data
@@ -14,6 +19,8 @@ services:
 
   app:
     restart: unless-stopped
+    env_file:
+      - .env
     image: node:18
     volumes:
       - ./server:/app
@@ -21,8 +28,12 @@ services:
     command: npm start
     environment:
       - DB_URL=mongodb://db:27017/mydatabase
+      - VAPID_PUBLIC_KEY
+      - VAPID_PRIVATE_KEY
     depends_on:
       - db
+    ports:
+      - "4000:4000"
 
   db:
     restart: unless-stopped
