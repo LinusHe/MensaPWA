@@ -24,8 +24,8 @@ jobs:
 
     - name: Build and Push Docker Images
       run: |
-        docker-compose build
-        docker-compose push
+        docker-compose -f docker-compose.prod.yml build
+        docker-compose -f docker-compose.prod.yml push
 
     - name: SSH and Deploy
       uses: appleboy/ssh-action@master
@@ -35,5 +35,5 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           cd /root/mensapwa
-          docker-compose pull
-          docker-compose up --build -d -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }}
+          docker-compose -f docker-compose.prod.yml pull
+          docker-compose -f docker-compose.prod.yml up --build -d -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }}
