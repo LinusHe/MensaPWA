@@ -1,0 +1,141 @@
+[
+    {
+        "title": "Hähnchen-Crossies | mit gebratenem Gemüse | dazu Kräuter-Nudeln",
+        "category": "mensaVital",
+        "imageUrl": null,
+        "prices": {
+            "guest": "6.10 €",
+            "employee": "4.40 €",
+            "student": "2.65 €"
+        },
+        "selections": [
+            "chicken"
+        ],
+        "additives": null,
+        "allergens": [
+            "cereals containing gluten",
+            "milk/lactose"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-09-01T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 50%\nProteine: 30%\nFette: 20%"
+    },
+    {
+        "title": "Pastinaken-Steckrüben-Rösti | mit Käse-Kräutersoße",
+        "category": "Hauptkomponente",
+        "imageUrl": null,
+        "prices": {
+            "guest": "3.35 €",
+            "employee": "2.50 €",
+            "student": "1.75 €"
+        },
+        "selections": [
+            "vegetarian"
+        ],
+        "additives": null,
+        "allergens": [
+            "cereals containing gluten",
+            "egg",
+            "milk/lactose"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-09-01T00:00:00+02:00",
+        "chat_completion": "- Kohlenhydrate: 60%\n- Proteine: 10%\n- Fette: 30%"
+    },
+    {
+        "title": "Buntes Paprikagemüse | Romanesco",
+        "category": "Gemüsebeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.50 €",
+            "employee": "1.13 €",
+            "student": "0.75 €"
+        },
+        "selections": [
+            "vegan"
+        ],
+        "additives": null,
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-09-01T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 10%\nProteine: 3%\nFette: 0%"
+    },
+    {
+        "title": "Kräuter-Bandnudeln | Kartoffelpüree",
+        "category": "Sättigungsbeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.30 €",
+            "employee": "0.95 €",
+            "student": "0.55 €"
+        },
+        "selections": [
+            "vegetarian",
+            "vegan"
+        ],
+        "additives": null,
+        "allergens": [
+            "cereals containing gluten",
+            "milk/lactose"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-09-01T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 70%\nProteine: 10%\nFette: 20%"
+    },
+    {
+        "title": "Pommes frites",
+        "category": "Sättigungsbeilage",
+        "imageUrl": null,
+        "prices": {
+            "guest": "1.50 €",
+            "employee": "1.13 €",
+            "student": "0.75 €"
+        },
+        "selections": [
+            "vegan"
+        ],
+        "additives": null,
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-09-01T00:00:00+02:00",
+        "chat_completion": "- Kohlenhydrate: 75%\n- Proteine: 8%\n- Fette: 17%"
+    },
+    {
+        "title": "Buchweizenpfanne mit Karotten, Zucchini & Pastinaken | dazu eine Erbsen-Mandel-Guacamole",
+        "category": "Veganes Gericht",
+        "imageUrl": null,
+        "prices": {
+            "guest": "5.50 €",
+            "employee": "4.00 €",
+            "student": "2.40 €"
+        },
+        "selections": [
+            "vegan",
+            "bio"
+        ],
+        "additives": null,
+        "allergens": [
+            "soy",
+            "nuts"
+        ],
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-09-01T00:00:00+02:00",
+        "chat_completion": "Kohlenhydrate: 50%\nProteine: 15%\nFette: 35%"
+    },
+    {
+        "title": "Entdecken sie unsertäglich wechselndes Angebot an Smoothies!",
+        "category": "Smoothie",
+        "imageUrl": null,
+        "prices": {
+            "guest": "2.95 €",
+            "employee": "2.20 €",
+            "student": "1.80 €"
+        },
+        "selections": null,
+        "additives": null,
+        "allergens": null,
+        "canteen": "/api/canteens/01FG1RPGG52ZKR7QABF75DCEP4",
+        "date": "2023-09-01T00:00:00+02:00",
+        "chat_completion": "- Kohlenhydrate: 60%\n- Proteine: 10%\n- Fette: 30%"
+    }
+]

@@ -1,0 +1,6 @@
+# ignore python cache folders
+global-exclude __pycache__
+
+# ignore content of out folder exept one example (2023-09-01)
+out/*
+!out/2023-09-01
