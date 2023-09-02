@@ -1,10 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ResponsiveLine, defs } from '@nivo/line';
 
-const CapacityGraph = ({ data }) => {
+const CapacityGraph = ({ data, currentCapa }) => {
   const containerRef = useRef(null);
   const bigElementRef = useRef(null);
-  const scrollMultiplier = 0.8; // Anpassbare Variable zur Multiplikation der Abweichung
+  let debugHour = "14";
+  let debugMinute = "00";
+  const currentTime = new Date();
+
+  const startHour = 11;
+  const endHour = 15;
+  const currentHour = currentTime.getHours();
+  const currentMinute = currentTime.getMinutes();
+  const scrollMultiplier = ((currentHour - startHour) / (endHour - startHour)) * 2.2; // Value between 0 and 1 representing the current time between 10:00 and 15:00
+  
+  let currencyCapacity = currentCapa;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -17,6 +27,8 @@ const CapacityGraph = ({ data }) => {
     const scrollOffset = (available / 2) * scrollMultiplier;
     container.scrollLeft = scrollOffset;
   };
+
+
 
   const format = v => `${v}%`
 
@@ -87,8 +99,8 @@ const CapacityGraph = ({ data }) => {
           markers={[
             {
               axis: 'x',
-              legend: new Date().getDate(),
-              legendPosition: 'top',
+              legend: currencyCapacity,
+              legendPosition: 'left',
               lineStyle: {
                 stroke: '#424588',
                 strokeWidth: 2,
@@ -97,15 +109,16 @@ const CapacityGraph = ({ data }) => {
               },
               legendOrientation: 'horizontal',
               textStyle: {
-                fill: '#424588',
-                fontSize: 12,
+                fill: '#fcb23b',
+                fontSize: 22,
                 fontWeight: 600,
 
-            },
-              value: new Date("1900-01-01T12:45:30")
+              },
+              // value: new Date(`1900-01-01T${new Date().toTimeString().slice(0, 8)}`)
+              value: new Date(`1900-01-01T${currentHour}:${currentMinute}:00`)
             }
           ]}
-          layers={['grid', 'axes', 'areas',  'markers', 'crosshair', 'lines', 'points', 'slices', 'mesh', 'legends']}
+          layers={['grid', 'axes', 'areas', 'markers', 'crosshair', 'lines', 'points', 'slices', 'mesh', 'legends']}
         />
       </div>
     </div>
