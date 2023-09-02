@@ -11,7 +11,7 @@ const CapacityGraph = ({ data, currentCapa }) => {
   const startHour = 11;
   const endHour = 15;
   const currentHour = currentTime.getHours();
-  const currentMinute = currentTime.getMinutes();
+  const currentMinute = currentTime.getMinutes() < 10 ? `0${currentTime.getMinutes()}` : currentTime.getMinutes().toString();
   const scrollMultiplier = ((currentHour - startHour) / (endHour - startHour)) * 2.2; // Value between 0 and 1 representing the current time between 10:00 and 15:00
   
   let currencyCapacity = currentCapa;
@@ -100,7 +100,7 @@ const CapacityGraph = ({ data, currentCapa }) => {
             {
               axis: 'x',
               legend: currencyCapacity,
-              legendPosition: 'left',
+              legendPosition: 'top',
               lineStyle: {
                 stroke: '#424588',
                 strokeWidth: 2,
