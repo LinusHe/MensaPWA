@@ -35,6 +35,6 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
         SCRIPT_AFTER: |
           cd ~/MensaPWA
-          git pull origin docker
+          git pull origin production
           docker-compose -f docker-compose.prod.yml pull
-          docker-compose -f docker-compose.prod.yml up --build -d
+          docker-compose -f docker-compose.prod.yml up --build -d --remove-orphans
