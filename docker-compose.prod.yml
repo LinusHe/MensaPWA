@@ -1,4 +1,7 @@
 version: '3'
+networks:
+  traefiknet:
+    external: true
 
 services:
   client:
@@ -6,12 +9,20 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.client.prod
+    networks:
+      - traefiknet
     volumes:
       - ./client:/app
       - public-data:/app/public/data
-    ports:
-      - "80:80"
-      - "443:443"
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mensapwarouter.entrypoints=web, websecure"
+      - "traefik.http.routers.mensapwarouter.rule=Host(`mensa.heylinus.de`)"
+      - "traefik.http.routers.mensapwarouter.tls=true" 
+      - "traefik.http.routers.mensapwarouter.tls.certresolver=production"
 
   app:
     restart: unless-stopped
@@ -46,3 +57,4 @@ services:
 volumes:
   mongo-data:
   public-data:
+  
