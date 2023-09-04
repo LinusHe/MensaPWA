@@ -1,6 +1,8 @@
 # Mensa PWA
 
-Mensa PWA is a Progressive Web App that helps students at HTWK Leipzig navigate and arrange meetings in the Mensa Academica.
+The Mensa PWA is an progressive web application designed to assist HTWK Leipzig students in locating their friends at the Mensa Academica and exploring the day's meal offerings.
+
+![Mockup Image](.github/preview-images/mockup.png)
 
 ## Installation and Execution
 
