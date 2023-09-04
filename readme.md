@@ -56,3 +56,4 @@ The application is automatically deployed to a server defined in the environment
 
 ## License
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
