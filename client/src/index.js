@@ -35,7 +35,7 @@ const Root = () => {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <div style={{ '--navBarHeight': `${navBarHeight}px` }}>
+          <div style={{ '--navBarHeight': 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)' }}>
             <App />
           </div>
         </ThemeProvider>
