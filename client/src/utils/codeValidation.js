@@ -16,7 +16,7 @@ export const generateValidCodes = () => {
   const lastLetters = {
     'N': ['A', 'I'],
     'S': ['A', 'I'],
-    'M': ['N', 'S'],
+    'M': ['N', 'M', 'S'],
   };
 
   let combinations = [];

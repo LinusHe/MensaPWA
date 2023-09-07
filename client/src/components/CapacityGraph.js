@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ResponsiveLine, defs } from '@nivo/line';
+import React, { useEffect, useRef } from 'react';
+import { ResponsiveLine } from '@nivo/line';
 
 const CapacityGraph = ({ data, currentCapa }) => {
   const containerRef = useRef(null);
   const bigElementRef = useRef(null);
-  let debugHour = "14";
-  let debugMinute = "00";
+  // let debugHour = "14";
+  // let debugMinute = "00";
   const currentTime = new Date();
 
   const startHour = 11;

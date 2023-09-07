@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux';
 
 function NavigationBar() {
   const navBarRef = useRef(null);
-  const [navBarHeight, setNavBarHeight] = useState(0);
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();

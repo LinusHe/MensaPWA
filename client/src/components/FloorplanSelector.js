@@ -3,9 +3,11 @@ import * as d3 from 'd3'
 import $ from 'jquery'
 import floorPlanImage from '../assets/mensaplan.svg'
 import '../assets/floorplan.css'
+import { useNavigate } from 'react-router-dom';
 
 // FloorplanSelector component
 function FloorplanSelector() {
+  const navigate = useNavigate();
 
   // Constants for zooming
   const minZoom = 0.8;
@@ -44,28 +46,30 @@ function FloorplanSelector() {
 
   // Function to handle table click
   function handleTableClick(table, pinIcon) {
-    console.log(getLocationCode(table.id));
+    const locationCode = getLocationCode(table.id);
+    console.log(locationCode);
     d3.selectAll(".table").classed("table-on", false);
     d3.select(table).classed("table-on", true);
 
     pinTable(table, pinIcon);
+    navigate(`/${locationCode}`);
   }
 
   // Function to zoom to a specific table
-  function zoomToTable(table, mapHolderWidth, mapHolderHeight, svg, zoom) {
-    const bounds = table.getBBox();
-    const dx = bounds.width;
-    const dy = bounds.height;
-    const x = bounds.x + dx / 2;
-    const y = bounds.y + dy / 2;
-    const scale = Math.max(1, Math.min(maxZoom, 0.9 / Math.max(dx / mapHolderWidth, dy / mapHolderHeight)));
-    const translate = [mapHolderWidth / 2 - scale * x, mapHolderHeight / 2 - scale * y];
+  // function zoomToTable(table, mapHolderWidth, mapHolderHeight, svg, zoom) {
+  //   const bounds = table.getBBox();
+  //   const dx = bounds.width;
+  //   const dy = bounds.height;
+  //   const x = bounds.x + dx / 2;
+  //   const y = bounds.y + dy / 2;
+  //   const scale = Math.max(1, Math.min(maxZoom, 0.9 / Math.max(dx / mapHolderWidth, dy / mapHolderHeight)));
+  //   const translate = [mapHolderWidth / 2 - scale * x, mapHolderHeight / 2 - scale * y];
 
-    svg
-      .transition()
-      .duration(750)
-      .call(zoom.transform, d => d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
-  }
+  //   svg
+  //     .transition()
+  //     .duration(750)
+  //     .call(zoom.transform, d => d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+  // }
 
   // Function to pin a table
   function pinTable(table, pinIcon) {
