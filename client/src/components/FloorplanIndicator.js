@@ -45,6 +45,7 @@ function FloorplanIndicator() {
   };
 
   return (
+    // <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)', backgroundColor: theme.palette.primary.main, paddingBottom: 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)', transition: 'padding 0.5s' }}>
     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)', backgroundColor: theme.palette.primary.main, paddingBottom: bottomPadding + 'px', transition: 'padding 0.5s' }}>
       <Grid container alignItems="center" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
         <Grid item sx={{ mr: 2 }}>
