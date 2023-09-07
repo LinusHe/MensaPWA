@@ -15,7 +15,7 @@ function FloorplanSelector() {
   const minZoom = 0.8;
   const maxZoom = 10;
   const bounds = 200;
-  const initialScaleFactor = 2.5;
+  const initialScaleFactor = 2.1;
 
   // Array to hold table elements
   let tables = [];
@@ -27,14 +27,24 @@ function FloorplanSelector() {
   }
 
   // Function to initiate zooming
-  function initiateZoom(zoom, mapHolderWidth, mapHolderHeight, svg) {
+  function initiateZoom(zoom, mapHolderWidth, mapHolderHeight, svg, zoomDirection) {
     zoom
       .scaleExtent([minZoom, maxZoom])
       .translateExtent([[-bounds / 2, -bounds / 2], [mapHolderWidth + bounds / 2, mapHolderHeight + bounds / 2]]);
 
     const initialScale = minZoom * initialScaleFactor;
     const startScale = initialScale / 2;
-    const initialCenterX = (mapHolderWidth - initialScale * mapHolderWidth) / 2;
+    let initialCenterX = (mapHolderWidth - initialScale * mapHolderWidth) / 2;
+    switch (zoomDirection) {
+      case 'N':
+        initialCenterX = 0;
+        break;
+      case 'S':
+        initialCenterX = (mapHolderWidth - initialScale * mapHolderWidth)
+        break;
+      default:
+        break;
+    }
     const initialCenterY = (mapHolderHeight - initialScale * mapHolderHeight) / 2 - 130;
     const startCenterX = (mapHolderWidth - startScale * mapHolderWidth) / 2;
     const startCenterY = (mapHolderHeight - startScale * mapHolderHeight) / 2 - 130;
@@ -47,7 +57,7 @@ function FloorplanSelector() {
   }
 
   // Function to handle table click
-  function handleTableClick(table, pinIcon) {
+  function handleTableClick(table, pinIcon, zoom, mapHolderWidth, mapHolderHeight, svg) {
     const locationCode = getLocationCode(table.id);
     console.log(locationCode);
     d3.selectAll(".table").classed("table-on", false);
@@ -56,24 +66,41 @@ function FloorplanSelector() {
     console.log(table)
 
     pinTable(table, pinIcon);
+
+    let zoomDirection = getLocationCode(table.id).charAt(0).toUpperCase();
+    zoomToTable(zoom, svg, zoomDirection, mapHolderWidth, mapHolderHeight,);
     navigate(`/${locationCode}`);
   }
 
   // Function to zoom to a specific table
-  // function zoomToTable(table, mapHolderWidth, mapHolderHeight, svg, zoom) {
-  //   const bounds = table.getBBox();
-  //   const dx = bounds.width;
-  //   const dy = bounds.height;
-  //   const x = bounds.x + dx / 2;
-  //   const y = bounds.y + dy / 2;
-  //   const scale = Math.max(1, Math.min(maxZoom, 0.9 / Math.max(dx / mapHolderWidth, dy / mapHolderHeight)));
-  //   const translate = [mapHolderWidth / 2 - scale * x, mapHolderHeight / 2 - scale * y];
+  function zoomToTable(zoom, svg, zoomDirection, mapHolderWidth, mapHolderHeight) {
+    const currentTransform = d3.zoomTransform(svg.node());
+    const currentScale = currentTransform.k;
+    const currentCenterX = currentTransform.x;
+    const currentCenterY = currentTransform.y;
+    console.log("Current Zoom: " + currentScale);
 
-  //   svg
-  //     .transition()
-  //     .duration(750)
-  //     .call(zoom.transform, d => d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
-  // }
+    const newScale = currentScale * 1.2 < 2.1 ? currentScale * 1.2 : currentScale;
+    const newCenterY = (mapHolderHeight - newScale * mapHolderHeight) / 2 - 130;
+    let newCenterX = (mapHolderWidth - currentScale * mapHolderWidth) / 2;
+    switch (zoomDirection) {
+      case 'N':
+        newCenterX = 0;
+        break;
+      case 'S':
+        newCenterX = (mapHolderWidth - newScale * mapHolderWidth);
+        break;
+      default:
+        break;
+    }
+
+    svg
+      .transition()
+      .duration(1000)
+      .call(zoom.transform, d3.zoomIdentity.translate(newCenterX, newCenterY).scale(newScale));
+
+
+  }
 
   // Function to pin a table
   function pinTable(table, pinIcon) {
@@ -123,6 +150,8 @@ function FloorplanSelector() {
 
     const svgContainer = d3.select("#map-holder");
 
+    let zoomDirection = 'M';
+
     // Check if svg element is already present
     if (svgContainer.select("svg").empty()) {
 
@@ -147,7 +176,7 @@ function FloorplanSelector() {
           d3.select(table)
             .classed("table", true)
             .on("click", function (d) {
-              handleTableClick(table, pinIcon);
+              handleTableClick(table, pinIcon, zoom, mapHolderWidth, mapHolderHeight, svg);
             });
         });
 
@@ -155,12 +184,12 @@ function FloorplanSelector() {
         if (code) {
           const table = tables.find(t => getLocationCode(t.id) === code);
           if (table) {
-            setTimeout(() => handleTableClick(table, pinIcon), 500);
-            // d3.select(table).dispatch('click');
+            zoomDirection = getLocationCode(table.id).charAt(0).toUpperCase();
+            setTimeout(() => handleTableClick(table, pinIcon, zoom, mapHolderWidth, mapHolderHeight, svg), 1000);
           }
         }
 
-        initiateZoom(zoom, mapHolderWidth, mapHolderHeight, svg);
+        initiateZoom(zoom, mapHolderWidth, mapHolderHeight, svg, zoomDirection);
 
 
       });
