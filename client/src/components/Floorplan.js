@@ -7,24 +7,22 @@ import FloorplanIndicator from './FloorplanIndicator';
 import { isValidCode } from '../utils/codeValidation';
 
 function Floorplan() {
-  // const [code, setCode] = React.useState('000');
-  // const { params } = useParams();
   let { code } = useParams();
-  const [navigate, setNavigate] = useState(false);
+  const [invalidCode, setInvalidCode] = useState(false);
 
   React.useEffect(() => {
     if (code && !isValidCode(code)) {
       // Redirect to home page if the code is not valid and the url is not / 
       console.warn(`Code ${code} is not valid`);
-      setNavigate(true);
+      setInvalidCode(true);
     }
     else {
       console.log(`Code ${code} is valid`);
-      setNavigate(false);
+      setInvalidCode(false);
     }
   }, [code]);
 
-  if (navigate) {
+  if (invalidCode) {
     return <Navigate to="/" />;
   }
 

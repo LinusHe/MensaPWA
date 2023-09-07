@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
@@ -7,13 +7,21 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 function NavigationBar() {
+  const navBarRef = useRef(null);
+  const [navBarHeight, setNavBarHeight] = useState(0);
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // set Buttom Navigation based on Path
   React.useEffect(() => {
+    const height = navBarRef.current?.clientHeight || 0;
+    console.log(`NavBar height: ${height}`);
+    dispatch({ type: 'SET_NAVBAR_HEIGHT', payload: height });
+
     const pathname = window.location.pathname;
     if (pathname.endsWith("/menu")) {
       setValue("menu");
@@ -27,7 +35,7 @@ function NavigationBar() {
   }, []);
 
   return (
-    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)' }} style={{padding: "0 0 env(safe-area-inset-bottom) 0"}}>
+    <Paper ref={navBarRef} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)' }} style={{padding: "0 0 env(safe-area-inset-bottom) 0"}}>
       <BottomNavigation showLabels
         sx={{ height: 80, backgroundColor: 'unset' }}
         value={value}
