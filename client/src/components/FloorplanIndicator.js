@@ -3,12 +3,15 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Paper, Typography, Grid, Fab } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
+import FileCopyIcon from '@mui/icons-material/ContentCopy';
 import theme from '../theme';
+import { useSnackbar } from 'notistack';
 
 function FloorplanIndicator() {
   let { code } = useParams();
   let navBarHeight = useSelector(state => state.navBarHeight);
   const [bottomPadding, setBottomPadding] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setBottomPadding(navBarHeight);
@@ -21,13 +24,24 @@ function FloorplanIndicator() {
 
   const shareData = {
     title: 'Teile deinen Sitzplatz (' + code + ')',
-    text: 'Ich bin in der Mensa und Sitze bei:' + code + ': ' + window.location.href,
+    text: 'Ich bin in der Mensa und Sitze bei "' + code + '". \n' + window.location.href,
   };
 
   const shareUrl = () => {
-    navigator.share(shareData)
-      .then(() => console.log('URL shared successfully'))
-      .catch((err) => console.log('Error: ' + err));
+    if (navigator.share) {
+      navigator.share(shareData)
+        .then(() => console.log('URL shared successfully'))
+        .catch((err) => console.log('Error: ' + err));
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareData.text)
+        .then(() => {
+          console.log('Text copied to clipboard');
+          enqueueSnackbar('Sitzplan-Code "' + code + '" wurde erfolgreich in die Zwischenablage kopiert.', { variant: 'success' });
+        })
+        .catch((err) => console.log('Error: ' + err));
+    } else {
+      console.log('Share and clipboard functions are not supported');
+    }
   };
 
   return (
@@ -43,7 +57,7 @@ function FloorplanIndicator() {
         </Grid>
         <Grid item>
           <Fab size="small" sx={{ bgcolor: 'background.paper' }} aria-label="share" onClick={shareUrl}>
-            <ShareIcon color="primary" />
+            {navigator.share ? <ShareIcon color="primary" /> : <FileCopyIcon color="primary" />}
           </Fab>
         </Grid>
       </Grid>

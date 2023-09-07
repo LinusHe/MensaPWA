@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams } from 'react-router-dom';
 import * as d3 from 'd3'
 import $ from 'jquery'
 import floorPlanImage from '../assets/mensaplan.svg'
@@ -7,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 // FloorplanSelector component
 function FloorplanSelector() {
+  let { code } = useParams();
   const navigate = useNavigate();
 
   // Constants for zooming
@@ -50,6 +52,8 @@ function FloorplanSelector() {
     console.log(locationCode);
     d3.selectAll(".table").classed("table-on", false);
     d3.select(table).classed("table-on", true);
+
+    console.log(table)
 
     pinTable(table, pinIcon);
     navigate(`/${locationCode}`);
@@ -117,34 +121,51 @@ function FloorplanSelector() {
 
     const zoom = d3.zoom().on("zoom", (event) => zoomed(event, image));
 
-    const svg = d3
-      .select("#map-holder")
-      .append("svg")
-      .attr("id", "image")
-      .attr("width", mapHolderWidth)
-      .attr("height", mapHolderHeight)
-      .call(zoom);
+    const svgContainer = d3.select("#map-holder");
 
-    d3.xml(floorPlanImage).then(function (xml) {
-      const importedNode = document.importNode(xml.documentElement, true);
+    // Check if svg element is already present
+    if (svgContainer.select("svg").empty()) {
 
-      image = svg.append("g").attr("id", "map");
-      image.node().appendChild(importedNode);
+      const svg = d3
+        .select("#map-holder")
+        .append("svg")
+        .attr("id", "image")
+        .attr("width", mapHolderWidth)
+        .attr("height", mapHolderHeight)
+        .call(zoom);
 
-      const pinIcon = d3.select("#pin").attr("opacity", 0);
-      tables = Array.from(image.selectAll("g > *[id*='Table']").nodes());
+      d3.xml(floorPlanImage).then(function (xml) {
+        const importedNode = document.importNode(xml.documentElement, true);
 
-      tables.forEach(function (table) {
-        d3.select(table)
-          .classed("table", true)
-          .on("click", function (d) {
-            handleTableClick(table, pinIcon);
-          });
+        image = svg.append("g").attr("id", "map");
+        image.node().appendChild(importedNode);
+
+        const pinIcon = d3.select("#pin").attr("opacity", 0);
+        tables = Array.from(image.selectAll("g > *[id*='Table']").nodes());
+
+        tables.forEach(function (table) {
+          d3.select(table)
+            .classed("table", true)
+            .on("click", function (d) {
+              handleTableClick(table, pinIcon);
+            });
+        });
+
+        // Check if code prop is provided and matches any table id
+        if (code) {
+          const table = tables.find(t => getLocationCode(t.id) === code);
+          if (table) {
+            setTimeout(() => handleTableClick(table, pinIcon), 500);
+            // d3.select(table).dispatch('click');
+          }
+        }
+
+        initiateZoom(zoom, mapHolderWidth, mapHolderHeight, svg);
+
+
       });
-
-      initiateZoom(zoom, mapHolderWidth, mapHolderHeight, svg);
-    });
-  }, []);
+    }
+  }, [code]);
 
   // Render the component
   return (

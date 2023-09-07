@@ -1,7 +1,7 @@
 // react imports
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from './store';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -20,21 +20,34 @@ import theme from './theme';
 // font imports
 import '@fontsource-variable/jost';
 import '@fontsource/roboto';
-import { SnackbarProvider } from 'notistack';
+
+
+const Root = () => {
+  const [bottomPadding, setBottomPadding] = useState(0);
+  const navBarHeight = useSelector(state => state.navBarHeight);
+
+  useEffect(() => {
+    setBottomPadding(navBarHeight);
+  }, [navBarHeight]);
+
+  return (
+    <React.StrictMode >
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div style={{ '--navBarHeight': `${navBarHeight}px` }}>
+            <App />
+          </div>
+        </ThemeProvider>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <SnackbarProvider>
-            <App />
-          </SnackbarProvider>
-        </ThemeProvider>
-      </BrowserRouter>
-    </React.StrictMode>
+    <Root />
   </Provider>
 );
 
