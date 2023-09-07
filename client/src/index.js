@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './store';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 // mui imports
 import { ThemeProvider } from '@mui/material/styles';
@@ -33,12 +34,14 @@ const Root = () => {
   return (
     <React.StrictMode >
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <div style={{ '--navBarHeight': 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)' }}>
-            <App />
-          </div>
-        </ThemeProvider>
+        <HelmetProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <div style={{ '--navBarHeight': 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)' }}>
+              <App />
+            </div>
+          </ThemeProvider>
+        </HelmetProvider>
       </BrowserRouter>
     </React.StrictMode>
   );
