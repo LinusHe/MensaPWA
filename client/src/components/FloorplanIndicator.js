@@ -24,7 +24,7 @@ function FloorplanIndicator() {
 
   const shareData = {
     title: 'Teile deinen Sitzplatz (' + code + ')',
-    text: 'Ich bin in der Mensa und Sitze bei "' + code + '". \n' + window.location.href,
+    text: 'Ich bin in der Mensa und sitze bei "' + code + '". \n' + window.location.href,
   };
 
   const shareUrl = () => {
