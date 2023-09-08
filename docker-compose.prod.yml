@@ -33,8 +33,8 @@ services:
     command: npm start
     environment:
       - DB_URL=mongodb://db:27017/mydatabase
-      - VAPID_PUBLIC_KEY
-      - VAPID_PRIVATE_KEY
+      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
+      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
     depends_on:
       - db
 
@@ -47,7 +47,7 @@ services:
   nightly:
     restart: unless-stopped
     environment:
-      - OPENAI_API_KEY
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     build:
       context: .
       dockerfile: Dockerfile.nightly
