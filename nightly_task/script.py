@@ -2,11 +2,10 @@ import os
 import requests
 import logging
 import time
-from datetime import date
-from datetime import timedelta
+import shutil
+from datetime import date, datetime, timedelta
 import json
 import re  # import the regex module
-import sys
 from image_generator.image_generator import generate_image
 from nutrition_generator.nutrition_generator import generate_chat_completion
 
@@ -31,13 +30,36 @@ logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctim
 # Add a StreamHandler to the logger to print messages to the console
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 console_handler.setFormatter(formatter)
 logging.getLogger().addHandler(console_handler)
 
 # Define output directory
 relativeOutputDir = "./out"
 output_dir = os.path.join(script_dir, relativeOutputDir)
+
+def delete_old_dirs(output_dir):
+    # Get yesterday's date
+    yesterday = date.today() - timedelta(days=1)
+    logging.info(f"Yesterday's date: {yesterday}")
+
+    # Loop over all directories in the output directory
+    for dir_name in os.listdir(output_dir):
+        # Try to parse the directory name as a date
+        try:
+            dir_date = datetime.strptime(dir_name, "%Y-%m-%d").date()
+            logging.info(f"Parsed directory date: {dir_date}")
+            # If the directory date is older than yesterday, delete the directory
+            if dir_date < yesterday:
+                shutil.rmtree(os.path.join(output_dir, dir_name))
+                logging.info(f"Deleted directory: {dir_name}")
+        except ValueError:
+            # If the directory name can't be parsed as a date, ignore it
+            logging.warning(f"Directory name {dir_name} can't be parsed as a date, ignoring it")
+            pass
+
+# Call the function at the start of your script
+delete_old_dirs(output_dir)
 
 # Get today's date
 today = date.today()
@@ -127,3 +149,6 @@ for i in range(5):
 
     else:
         logging.error(f"Error: Request failed with status code {response.status_code}")
+
+logging.info("End of script execution.")
+

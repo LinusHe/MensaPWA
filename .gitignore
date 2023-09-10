@@ -2,3 +2,4 @@
 global-exclude .DS_Store
 .env
 logs
+*/.DS_Store
