@@ -1,19 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { ResponsiveLine } from '@nivo/line';
 
-const CapacityGraph = ({ data, currentCapa }) => {
+const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
   const containerRef = useRef(null);
   const bigElementRef = useRef(null);
-  // let debugHour = "14";
-  // let debugMinute = "00";
-  const currentTime = new Date();
+  const currentTime = currentTimeString;
 
   const startHour = 11;
   const endHour = 15;
-  const currentHour = currentTime.getHours();
-  const currentMinute = currentTime.getMinutes() < 10 ? `0${currentTime.getMinutes()}` : currentTime.getMinutes().toString();
-  const scrollMultiplier = ((currentHour - startHour) / (endHour - startHour)) * 2.2; // Value between 0 and 1 representing the current time between 10:00 and 15:00
-  
+  const currentHour = currentTime.split(':')[0];
+  const currentMinute = currentTime.split(':')[1];
+  let scrollMultiplier = greyed?0.4:(((parseInt(currentHour) + parseInt(currentMinute) / 60) - startHour) / (endHour - startHour)) + 0.5 * (currentHour - startHour);
+
+
   let currencyCapacity = currentCapa;
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const CapacityGraph = ({ data, currentCapa }) => {
   return (
     <div
       style={{
-        height: '50vh',
+        height: greyed?'calc(100vh - 380px)':'calc(100vh - 396px)', // TODO Make this relative to sizes of other elements
         overflowX: 'scroll',
         overflowY: 'hidden',
       }}
@@ -44,7 +43,7 @@ const CapacityGraph = ({ data, currentCapa }) => {
       <div
         style={{
           height: '100%',
-          width: '300vw',
+          width: greyed ? '150vw' : '200vw',
         }}
         ref={bigElementRef}
       >
@@ -59,19 +58,32 @@ const CapacityGraph = ({ data, currentCapa }) => {
           }}
           yScale={{
             type: 'linear',
+            max: 100,
           }}
-          margin={{ top: 30, right: 0, bottom: 35, left: 0 }}
+          margin={{ top: 30, right: 0, bottom: 50, left: 0 }}
           curve="natural"
           yFormat={format}
           axisBottom={{
             orient: 'bottom',
             format: '%H:%M',
-            tickValues: 'every 15 minutes',
+            tickValues: greyed? 'every 30 minutes':'every 30 minutes',
             legendOffset: 36,
             legendPosition: 'middle',
           }}
+          theme={
+            {
+              grid: {
+                line: {
+                  stroke: '#424588',
+                  strokeWidth: 1,
+                  strokeDasharray: '10 10',
+                  opacity: 0.2,
+                }
+              }
+            }
+          }
           axisLeft={null}
-          colors={['#424588']}
+          colors={[greyed?'#B9BCBF':'#424588']}
           lineWidth={3}
           pointSize={10}
           pointColor={{ theme: 'background' }}
@@ -82,16 +94,16 @@ const CapacityGraph = ({ data, currentCapa }) => {
           areaOpacity={1}
           enablePoints={false}
           enableSlices="x"
-          // enableGridX={false}
+          enableGridX={false}
           enableGridY
-          gridYValues={[0, 25, 50, 75]}
+          gridYValues={[10, 30, 50, 70, 90]}
           defs={[
             {
               id: 'gradient',
               type: 'linearGradient',
               colors: [
-                { offset: 0, color: '#BEACEC', opacity: 1 },
-                { offset: 100, color: '#BEACEC', opacity: 0 },
+                { offset: 0, color: greyed?'#B9BCBF':'#BEACEC', opacity: 1 },
+                { offset: 100, color: greyed?'#FFFFFF':'#BEACEC', opacity: 0 },
               ],
             },
           ]}
