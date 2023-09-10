@@ -12,9 +12,9 @@ function CapacityIndicator() {
   // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
   let currentDay = new Date().getDay();
   // DEBUG
-  currentHour = '12';
-  currentMinute = '44';
-  currentDay = 0;
+  // currentHour = '12';
+  // currentMinute = '44';
+  // currentDay = 0;
   const currentTime = `${currentHour}:${currentMinute}`;
   const openingTime = '09:00';
   const closingTime = '14:00';
