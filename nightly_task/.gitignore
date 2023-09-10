@@ -1,7 +1,9 @@
 # ignore python cache folders
-global-exclude __pycache__
+__pycache__
 # also from subfolders
-global-exclude */__pycache__
+*/__pycache__
+
+logs/*
 
 # ignore content of out folder exept one example (2023-09-01)
 out/*

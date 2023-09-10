@@ -49,6 +49,7 @@ services:
       context: .
       dockerfile: Dockerfile.nightly
     volumes:
+      - ./logs/nightly:/app/logs
       - public-data:/app/out
 
 volumes:

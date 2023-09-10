@@ -1,3 +1,4 @@
 # ignore global DS Store
 global-exclude .DS_Store
 .env
+logs
