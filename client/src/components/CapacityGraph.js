@@ -10,10 +10,31 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
   const endHour = 15;
   const currentHour = currentTime.split(':')[0];
   const currentMinute = currentTime.split(':')[1];
-  let scrollMultiplier = greyed?0.4:(((parseInt(currentHour) + parseInt(currentMinute) / 60) - startHour) / (endHour - startHour)) + 0.5 * (currentHour - startHour);
+  let scrollMultiplier = greyed?1.5:(((parseInt(currentHour) + parseInt(currentMinute) / 60) - startHour) / (endHour - startHour)) + 0.5 * (currentHour - startHour);
 
 
   let currencyCapacity = currentCapa;
+
+  const markers = greyed?[]:[
+    {
+      axis: 'x',
+      legend: currencyCapacity,
+      legendPosition: 'top',
+      lineStyle: {
+        stroke: '#424588',
+        strokeWidth: 2,
+        strokeDasharray: '10 5',
+        opacity: 0.5,
+      },
+      legendOrientation: 'horizontal',
+      textStyle: {
+        fill: '#fcb23b',
+        fontSize: 22,
+        fontWeight: 600,
+      },
+      value: new Date(`1900-01-01T${currentHour}:${currentMinute}:00`)
+    }
+  ];
 
   useEffect(() => {
     const container = containerRef.current;
@@ -34,7 +55,7 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
   return (
     <div
       style={{
-        height: greyed?'calc(100vh - 380px)':'calc(100vh - 396px)', // TODO Make this relative to sizes of other elements
+        height: greyed?'calc(90vh - 380px)':'calc(90vh - 396px)', // TODO Make this relative to sizes of other elements
         overflowX: 'scroll',
         overflowY: 'hidden',
       }}
@@ -108,28 +129,7 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
             },
           ]}
           fill={[{ match: '*', id: 'gradient' }]}
-          markers={[
-            {
-              axis: 'x',
-              legend: currencyCapacity,
-              legendPosition: 'top',
-              lineStyle: {
-                stroke: '#424588',
-                strokeWidth: 2,
-                strokeDasharray: '10 5',
-                opacity: 0.5,
-              },
-              legendOrientation: 'horizontal',
-              textStyle: {
-                fill: '#fcb23b',
-                fontSize: 22,
-                fontWeight: 600,
-
-              },
-              // value: new Date(`1900-01-01T${new Date().toTimeString().slice(0, 8)}`)
-              value: new Date(`1900-01-01T${currentHour}:${currentMinute}:00`)
-            }
-          ]}
+          markers={markers}
           layers={['grid', 'axes', 'areas', 'markers', 'crosshair', 'lines', 'points', 'slices', 'mesh', 'legends']}
         />
       </div>

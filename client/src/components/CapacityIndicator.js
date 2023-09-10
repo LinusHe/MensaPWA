@@ -12,12 +12,12 @@ function CapacityIndicator() {
   // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
   let currentDay = new Date().getDay();
   // DEBUG
-  // currentHour = '12';
-  // currentMinute = '44';
-  // currentDay = 0;
+  currentHour = '12';
+  currentMinute = '44';
+  currentDay = 0;
   const currentTime = `${currentHour}:${currentMinute}`;
-  const openingTime = '10:00';
-  const closingTime = '15:00';
+  const openingTime = '09:00';
+  const closingTime = '14:00';
   const mensaCapacity = require('../assets/mensaCapacity.json');
   let greyed = false;
 
@@ -51,6 +51,11 @@ function CapacityIndicator() {
 
   // Calculate peak times
   const calculatePeaks = () => {
+    // If it's Saturday or Sunday, return an empty array
+    if (currentDay === 6 || currentDay === 0) {
+      return [];
+    }
+
     let peaks = [];
     let max = mensaCapacity[0].data[0].y;
     for (let i = 1; i < mensaCapacity[0].data.length - 1; i++) {
@@ -93,14 +98,19 @@ function CapacityIndicator() {
     if (currentTimeInMinutes > timeToMinutes(closingTime)) {
       diff += 24 * 60;
     }
-  
+
     // If it's Friday, add 48 hours (2880 minutes) to the difference
     if (currentDay === 5) {
       diff += 48 * 60;
     }
-  
+
     // If it's Saturday, add 24 hours (1440 minutes) to the difference
     if (currentDay === 6) {
+      diff += 24 * 60;
+    }
+
+    // If it's Sunday and the current time is before the closing time, add 24 hours (1440 minutes) to the difference
+    if (currentDay === 0 && currentTimeInMinutes < timeToMinutes(closingTime)) {
       diff += 24 * 60;
     }
 
@@ -117,7 +127,11 @@ function CapacityIndicator() {
   let bottomString = 'In ca. '.toUpperCase() + calculateTimeToNextPeak();
 
   // Only show "Mensa schließt" after the last peak
-  if (currentTimeInMinutes < openingTimeInMinutes) {
+  if (currentDay === 6 || currentDay === 0) {
+    topString = 'Mensa geschlossen'.toUpperCase();
+    bottomString = 'Öffnet in '.toUpperCase() + calculateTimeToOpening();
+    greyed = true;
+  } else if (currentTimeInMinutes < openingTimeInMinutes) {
     topString = 'Mensa öffnet'.toUpperCase();
     bottomString = 'In ca. '.toUpperCase() + calculateTimeToOpening();
     greyed = true;
@@ -149,7 +163,7 @@ function CapacityIndicator() {
           Schätzung nach Erfahrungswerten
         </Typography>
       </Grid>
-      <Grid item xs={12} sx={{ flexGrow: 1, pt:greyed?0:2 }}>
+      <Grid item xs={12} sx={{ flexGrow: 1, pt: greyed ? 0 : 2 }}>
         <CapacityGraph data={CapacityData} currentTimeString={currentTime} currentCapa={calculateCurentCapacity()} greyed={greyed}></CapacityGraph>
       </Grid>
       <Grid item sx={{ pt: 3, flexGrow: 0, display: 'flex', justifyContent: 'center' }}>
