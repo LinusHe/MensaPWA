@@ -22,6 +22,7 @@ RUN chmod 0644 /etc/cron.d/nightly-task-cron
 RUN crontab /etc/cron.d/nightly-task-cron
 
 # run the script
+RUN mkdir -p /app/out
 RUN python script.py
 
 CMD cron -f
