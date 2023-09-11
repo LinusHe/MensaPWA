@@ -19,15 +19,6 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: Semantic Release
-      run: |
-        cd client
-        npm install
-        export GH_TOKEN=${{ secrets.GH_TOKEN }}
-        npx semantic-release
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
     - name: Login to Docker Hub
       uses: docker/login-action@v1
       with:
@@ -44,15 +35,23 @@ jobs:
 
     - name: ssh deploy
       uses: easingthemes/ssh-deploy@v4.1.8
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         REMOTE_HOST: ${{ secrets.SERVER_HOST }}
         REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
         SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
         SCRIPT_AFTER: |
           cd ~/MensaPWA
-          git pull origin production
+          git fetch origin production
+          git reset --hard origin/production
           export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           export VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
           export VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}
+          cd client
+          npm install
+          export GH_TOKEN=${{ secrets.GH_TOKEN }}
+          npx semantic-release
+          cd ..
           docker-compose -f docker-compose.prod.yml pull
           docker-compose -f docker-compose.prod.yml up --build -d --remove-orphans
