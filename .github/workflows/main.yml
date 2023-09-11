@@ -43,8 +43,7 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
         SCRIPT_AFTER: |
           cd ~/MensaPWA
-          git fetch origin production
-          git reset --hard origin/production
+          git pull origin production
           export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           export VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
           export VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}
