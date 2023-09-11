@@ -2,7 +2,7 @@
     display: flex;
     border-radius: 15px;
     overflow: hidden;
-    width: 500px;
+    width: 95%; /* Make the width responsive */
     min-height: 190px;
     max-height: max-content;
     background: #ffffff;
@@ -11,13 +11,10 @@
     position: relative;
 }
 
-
 .dish-image {
-    
-    width: 200px; 
-    height: 150px; /* Set height of the image to half of the card */
-    object-fit: contain;
-    margin: auto 0; /* Center the image vertically */
+    width: 40%; /* Adjust the image width */
+    height: 100%; /* Adjust the height to fill the container */
+    object-fit: cover; /* Cover the space without distorting the image */
 }
 
 .text-section {
@@ -42,6 +39,15 @@
     font-size: 12px;
 }
 
+@media (max-width: 600px) {
+    .main-text {
+        font-size: 20px; /* Decrease the font size on small screens */
+    }
+    .small-text {
+        font-size: 10px; /* Decrease the font size on small screens */
+    }
+}
+
 .price-section {
     position: absolute;
     top: 10px;
@@ -55,8 +61,6 @@
     justify-content: center;
     align-items: center;    
 }
-
-
 
 .price-text {
     font-size: 16px;
