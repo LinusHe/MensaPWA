@@ -3,10 +3,12 @@ import { Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useSnackbar } from 'notistack';
+import packageJson from '../../package.json';
 
 function Settings() {
   const { enqueueSnackbar } = useSnackbar();
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const version = packageJson.version;
 
   const subscribeToPush = async () => {
     const permission = await Notification.requestPermission();
@@ -81,6 +83,11 @@ function Settings() {
           You are subscribed to notifications
         </Typography>}
         <button onClick={() => enqueueSnackbar('That was easy!')}>Show snackbar</button>
+      </Grid>
+      <Grid item>
+        <Typography variant="p" fontWeight="light">
+          App Version: {version}
+        </Typography>
       </Grid>
     </Grid>
   )
