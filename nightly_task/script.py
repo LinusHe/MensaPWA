@@ -64,7 +64,7 @@ delete_old_dirs(output_dir)
 # Get today's date
 today = date.today()
 # Loop over the next five days
-for i in range(5):
+for i in range(1):
     # Get the date for the current iteration
     current_date = (today + timedelta(days=i)).isoformat()
     logging.info(f"Processing data for date: {current_date}")
@@ -124,7 +124,7 @@ for i in range(5):
             json.dump(new_data, f, ensure_ascii=False, indent=4)
 
         # Iterate over all food items in the new data
-        for item in new_data:
+        for index, item in enumerate(new_data):
             # Extract the item title
             title = item["title"]
 
@@ -142,13 +142,12 @@ for i in range(5):
             # Call the function to generate image and save it
             try:
                 logging.info(f"Generating image for item: {title}")
-                generate_image(title, current_date, safe_title, script_dir, output_dir)
+                generate_image(title, current_date, safe_title, script_dir, output_dir, index)
             except Exception as e:
                 # skip image, if there is an Error
                 logging.error(f"Skipping item '{title}' due to error: {str(e)}")
-
-    else:
-        logging.error(f"Error: Request failed with status code {response.status_code}")
+            else:
+                logging.info(f"Image generated successfully for item: {title}")
 
 logging.info("End of script execution.")
 
