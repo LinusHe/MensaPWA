@@ -13,7 +13,7 @@ COPY nightly_task/ ./
 # Make the script executable
 RUN chmod +x /app/script.py
 
-RUN touch /app/logs/cron.log && chmod 0666 /app/logs/cron.log
+RUN mkdir -p /app/logs && touch /app/logs/cron.log && chmod 0666 /app/logs/cron.log
 
 # Install cron and set it up
 RUN apt-get update && apt-get install -y cron
