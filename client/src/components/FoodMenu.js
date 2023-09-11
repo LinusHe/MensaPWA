@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, CircularProgress } from '@mui/material';
 import DishCard from './DishCard';
-function generateSafeTitle(title) {
-  const safe_title = title.replace(/[^\wäöüß]+/gi, '_');
-  console.log(`Generated safe_title: ${safe_title}`);
-  return safe_title;
-}
 
 
 
@@ -69,14 +64,14 @@ function generateSafeTitle(title) {
         {dishes.map((dish, index) => (
           <DishCard 
             key={index}
-            dishImage={`${process.env.PUBLIC_URL}/data/${year}-${month}-${day}/${generateSafeTitle(dish.title)}.jpg`} // Use the formatted title as the filename
+            dishImage={`${process.env.PUBLIC_URL}/data/${year}-${month}-${day}/${dish.imageUrl}`} // Use the image number as the filename
             orangeText={dish.category} 
             mainText={dish.title} 
             smallText={dish.chat_completion} // Join the selections array into a string
             price={dish.prices.student} // Use the student price as an example
             bottomText={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
           />
-        ))}
+      ))}
       </Grid>
     </Grid>
   );
