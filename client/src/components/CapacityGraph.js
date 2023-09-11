@@ -6,16 +6,16 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
   const bigElementRef = useRef(null);
   const currentTime = currentTimeString;
 
-  const startHour = 11;
-  const endHour = 15;
+  const startHour = 9;
+  const endHour = 14;
   const currentHour = currentTime.split(':')[0];
   const currentMinute = currentTime.split(':')[1];
-  let scrollMultiplier = greyed?1.5:(((parseInt(currentHour) + parseInt(currentMinute) / 60) - startHour) / (endHour - startHour)) + 0.5 * (currentHour - startHour);
+  let scrollMultiplier = greyed ? 1.5 : (((parseInt(currentHour) + parseInt(currentMinute) / 60) - startHour) / (endHour - startHour)) + 0.5 * (currentHour - startHour);
 
 
   let currencyCapacity = currentCapa;
 
-  const markers = greyed?[]:[
+  const markers = greyed ? [] : [
     {
       axis: 'x',
       legend: currencyCapacity,
@@ -55,7 +55,7 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
   return (
     <div
       style={{
-        height: greyed?'calc(90vh - 380px)':'calc(90vh - 396px)', // TODO Make this relative to sizes of other elements
+        height: greyed ? 'calc(90vh - 380px)' : 'calc(90vh - 396px)', // TODO Make this relative to sizes of other elements
         overflowX: 'scroll',
         overflowY: 'hidden',
       }}
@@ -87,7 +87,7 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
           axisBottom={{
             orient: 'bottom',
             format: '%H:%M',
-            tickValues: greyed? 'every 30 minutes':'every 30 minutes',
+            tickValues: greyed ? 'every 30 minutes' : 'every 30 minutes',
             legendOffset: 36,
             legendPosition: 'middle',
           }}
@@ -104,7 +104,7 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
             }
           }
           axisLeft={null}
-          colors={[greyed?'#B9BCBF':'#424588']}
+          colors={[greyed ? '#B9BCBF' : '#424588']}
           lineWidth={3}
           pointSize={10}
           pointColor={{ theme: 'background' }}
@@ -123,8 +123,8 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
               id: 'gradient',
               type: 'linearGradient',
               colors: [
-                { offset: 0, color: greyed?'#B9BCBF':'#BEACEC', opacity: 1 },
-                { offset: 100, color: greyed?'#FFFFFF':'#BEACEC', opacity: 0 },
+                { offset: 0, color: greyed ? '#B9BCBF' : '#BEACEC', opacity: 1 },
+                { offset: 100, color: greyed ? '#FFFFFF' : '#BEACEC', opacity: 0 },
               ],
             },
           ]}

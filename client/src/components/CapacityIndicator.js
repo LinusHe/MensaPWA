@@ -7,14 +7,14 @@ import CapacityCard from './CapacityCard';
 
 
 function CapacityIndicator() {
-  let currentHour = new Date().getHours().toString();
-  let currentMinute = new Date().getMinutes().toString().padStart(2, '0');;
+  let currentHour = new Date().getHours().toString().padStart(2, '0');
+  let currentMinute = new Date().getMinutes().toString().padStart(2, '0');
   // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
   let currentDay = new Date().getDay();
   // DEBUG
-  // currentHour = '12';
-  // currentMinute = '44';
-  // currentDay = 0;
+  // currentHour = '09';
+  // currentMinute = '00';
+  // currentDay = 1;
   const currentTime = `${currentHour}:${currentMinute}`;
   const openingTime = '09:00';
   const closingTime = '14:00';
