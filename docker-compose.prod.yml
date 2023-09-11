@@ -29,7 +29,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.app.prod
-    image: node:18
     volumes:
       - ./server:/app
     working_dir: /app
