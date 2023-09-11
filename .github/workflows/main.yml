@@ -20,6 +20,7 @@ jobs:
       run: |
         cd client
         npm install
+        export GH_TOKEN=${{ secrets.GH_TOKEN }}
         npx semantic-release
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
