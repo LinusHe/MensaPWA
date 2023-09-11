@@ -10,11 +10,14 @@ RUN pip install requests openai Pillow
 # Copy files
 COPY nightly_task/ ./
 
+# Make the script executable
+RUN chmod +x /app/script.py
+
 # Install cron and set it up
 RUN apt-get update && apt-get install -y cron
 ADD nightly_task/crontab /etc/cron.d/nightly-task-cron
 RUN chmod 0644 /etc/cron.d/nightly-task-cron
 RUN crontab /etc/cron.d/nightly-task-cron
 
-# Run the script once and start cron
-CMD python script.py && cron -f
+# Start cron in the background and run the script
+CMD cron && python script.py

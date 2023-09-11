@@ -26,11 +26,13 @@ services:
 
   app:
     restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.app.prod
     image: node:18
     volumes:
       - ./server:/app
     working_dir: /app
-    command: npm start
     environment:
       - DB_URL=mongodb://db:27017/mydatabase
       - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
@@ -40,7 +42,7 @@ services:
 
   db:
     restart: unless-stopped
-    image: mongo
+    image: mongo:4.4
     volumes:
       - mongo-data:/data/db
 
