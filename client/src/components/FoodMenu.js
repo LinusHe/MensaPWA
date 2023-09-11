@@ -21,7 +21,7 @@ function generateSafeTitle(title) {
     const day = String(date.getDate()).padStart(2, '0');
   
     useEffect(() => {
-      fetch(`${process.env.PUBLIC_URL}/out/${year}-${month}-${day}/menu.json`)
+      fetch(`${process.env.PUBLIC_URL}/data/${year}-${month}-${day}/menu.json`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Error fetching menu');
@@ -69,7 +69,7 @@ function generateSafeTitle(title) {
         {dishes.map((dish, index) => (
           <DishCard 
             key={index}
-            dishImage={`${process.env.PUBLIC_URL}/out/${year}-${month}-${day}/${generateSafeTitle(dish.title)}.jpg`} // Use the formatted title as the filename
+            dishImage={`${process.env.PUBLIC_URL}/data/${year}-${month}-${day}/${generateSafeTitle(dish.title)}.jpg`} // Use the formatted title as the filename
             orangeText={dish.category} 
             mainText={dish.title} 
             smallText={dish.chat_completion} // Join the selections array into a string
