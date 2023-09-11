@@ -74,6 +74,7 @@
     "branches": [
       "production"
     ],
+    "repositoryUrl": "https://github.com/LinusHe/MensaPWA.git",
     "plugins": [
       [
         "@semantic-release/commit-analyzer",
