@@ -13,11 +13,15 @@ COPY nightly_task/ ./
 # Make the script executable
 RUN chmod +x /app/script.py
 
+RUN touch /app/logs/cron.log && chmod 0666 /app/logs/cron.log
+
 # Install cron and set it up
 RUN apt-get update && apt-get install -y cron
 ADD nightly_task/crontab /etc/cron.d/nightly-task-cron
 RUN chmod 0644 /etc/cron.d/nightly-task-cron
 RUN crontab /etc/cron.d/nightly-task-cron
 
-# Start cron in the background and run the script
-CMD cron && python script.py
+# run the script
+RUN python script.py
+
+CMD cron -f

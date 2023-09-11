@@ -1,1 +1,1 @@
-0 3 * * * python /app/script.py
+0 3 * * * python /app/script.py >> /app/logs/cron.log 2>&1

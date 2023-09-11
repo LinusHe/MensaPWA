@@ -15,7 +15,9 @@ services:
 
   app:
     restart: unless-stopped
-    image: node:18
+    build:
+      context: .
+      dockerfile: Dockerfile.app.prod
     volumes:
       - ./server:/app
     working_dir: /app
@@ -41,7 +43,6 @@ services:
       context: .
       dockerfile: Dockerfile.nightly
     volumes:
-      - ./nightly_task/out:/app/out
       - ./logs/nightly:/app/logs
       - public-data:/app/out
 
