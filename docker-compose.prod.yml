@@ -14,6 +14,7 @@ services:
     volumes:
       - ./client:/app
       - public-data:/app/public/data
+      - public-data:/usr/share/nginx/html/data
     # ports:
     #   - "80:80"
     #   - "443:443"

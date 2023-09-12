@@ -1,3 +1,5 @@
+/* eslint-disable no-dupe-keys */
+
 import React, { useState } from 'react'
 import { Grid } from '@mui/material';
 import { useParams, Navigate } from 'react-router-dom';
@@ -6,8 +8,8 @@ import FloorplanSelector from './FloorplanSelector';
 import FloorplanIndicator from './FloorplanIndicator';
 import { isValidCode } from '../utils/codeValidation';
 import { Helmet } from 'react-helmet-async';
-import html2canvas from 'html2canvas';
-import { saveAs } from 'file-saver';
+// import html2canvas from 'html2canvas';
+// import { saveAs } from 'file-saver';
 
 function Floorplan() {
   let { code } = useParams();
@@ -67,7 +69,8 @@ function Floorplan() {
         alignItems="flex-start"
         rowSpacing={0}
         columnSpacing={0}
-        sx={{ height: "100vh", overflow: "hidden" }}
+        className='fullHeight'
+        sx={{ overflow: "hidden" }}
       >
         <Grid item xs={12} sx={{ p: 2 }}>
           <Typography variant="screenHeading">
@@ -77,7 +80,7 @@ function Floorplan() {
             </Typography>
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ height: '100vh', height: '-webkit-fill-available', overflow: 'hidden' }}>
           <FloorplanSelector code={code} />
         </Grid>
         <FloorplanIndicator code={code} />

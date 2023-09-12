@@ -61,6 +61,19 @@ registerRoute(
   })
 );
 
+registerRoute(
+  // Add in any other file extensions or routing criteria as needed.
+  ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/data'), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  new StaleWhileRevalidate({
+    cacheName: 'data',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used data are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
@@ -70,3 +83,9 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'UPDATE_CACHE') {
+    self.skipWaiting();
+  }
+});

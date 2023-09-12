@@ -9,7 +9,8 @@ h1#LocationCode {
 
 #map-holder {
   width: 100%;
-  height: calc(100vh);
+  height: 100vh;
+  height: -webkit-fill-available;
   overflow: hidden;
   background-image: url("bgPattern.svg");
   background-size: 30px;

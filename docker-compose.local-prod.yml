@@ -15,7 +15,9 @@ services:
 
   app:
     restart: unless-stopped
-    image: node:18
+    build:
+      context: .
+      dockerfile: Dockerfile.app.prod
     volumes:
       - ./server:/app
     working_dir: /app
