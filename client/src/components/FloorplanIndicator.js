@@ -23,15 +23,20 @@ function FloorplanIndicator() {
   }
 
   const shareUrl = () => {
+    const isFirefox = typeof InstallTrigger !== 'undefined'; // Check if browser is Firefox
+
     const shareData = {
       title: 'Teile deinen Sitzplatz (' + code + ')',
       text: 'Ich bin in der Mensa und sitze bei "' + code + '". \n' + window.location.href,
     };
 
-    const shareDataUrlOnly = { url: window.location.href };
+    const shareDataUrlOnly = {
+      title: 'Teile deinen Sitzplatz (' + code + ')',
+      url: window.location.href
+    };
 
     if (navigator.share) {
-      if (navigator.canShare && navigator.canShare(shareData)) {
+      if ((navigator.canShare && navigator.canShare(shareData)) && !isFirefox) {
         navigator.share(shareData)
           .then(() => console.log('URL shared successfully'))
           .catch((err) => console.log('Error: ' + err));
