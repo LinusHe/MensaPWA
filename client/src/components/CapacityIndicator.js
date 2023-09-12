@@ -57,7 +57,7 @@ function CapacityIndicator() {
     }
 
     let peaks = [];
-    let max = mensaCapacity[0].data[0].y;
+    // let max = mensaCapacity[0].data[0].y;
     for (let i = 1; i < mensaCapacity[0].data.length - 1; i++) {
       if (mensaCapacity[0].data[i].y > mensaCapacity[0].data[i - 1].y && mensaCapacity[0].data[i].y > mensaCapacity[0].data[i + 1].y) {
         peaks.push(mensaCapacity[0].data[i].x);
@@ -153,7 +153,7 @@ function CapacityIndicator() {
       alignContent="flex-start"
       rowSpacing={0}
       columnSpacing={0}
-      sx={{ minHeight: 'calc(100vh - 80px)' }}
+      sx={{ minHeight: 'calc((calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0))) - 80px)' }}
     >
       <Grid item xs={12} sx={{ p: 2, flexGrow: 0 }}>
         <Typography variant="screenHeading">

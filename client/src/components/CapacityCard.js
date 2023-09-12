@@ -5,9 +5,6 @@ import InfoIcon from '@mui/icons-material/Info';
 
 
 function CapacityCard({ data, currentTimeString, topString, bottomString }) {
-  const capacityData = data;
-  const currentTimeStr = currentTimeString;
-  
 
   return (
     <Card sx={{ border: 2, borderColor: 'primary.main', borderRadius: '1rem', display: 'inline-block' }}>
