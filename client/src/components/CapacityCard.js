@@ -16,8 +16,8 @@ function CapacityCard({ data, currentTimeString, topString, bottomString }) {
           <InfoIcon color="primary" fontSize="large" />
         </Grid>
         <Grid item sx={{ pl: 1, pr: 1, flexGrow: 1, justifyContent: 'center' }}>
-          <Typography variant="body1" sx={{ lineHeight: 1 }}>{topString}</Typography>
-          <Typography variant="h6" fontWeight="bold">{bottomString}</Typography>
+          <Typography variant="body1" sx={{ lineHeight: 1 }} textTransform="uppercase">{topString}</Typography>
+          <Typography variant="h6" fontWeight="bold" textTransform="uppercase">{bottomString}</Typography>
         </Grid>
       </Grid>
     </Card>
