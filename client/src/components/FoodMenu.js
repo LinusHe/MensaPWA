@@ -18,7 +18,14 @@ function FoodMenu() {
     return date.toISOString().split('T')[0]; // Format the date as 'YYYY-MM-DD'
   });
 
+  // Create an array of weekday names
+  const weekdays = dates.map(date => {
+    const d = new Date(date);
+    return d.toLocaleDateString('de-DE', { weekday: 'long' }); // Get the weekday name in German
+  });
+
   useEffect(() => {
+    console.log(dates)
     // Fetch the dishes for the first date when the component mounts
     const url = `${process.env.PUBLIC_URL}/data/${dates[0]}/menu.json`;
     fetch(url)
@@ -102,48 +109,77 @@ function FoodMenu() {
       alignContent="flex-start"
       rowSpacing={0}
       columnSpacing={0}
-      sx={{ overflow: 'hidden', height: '100vh', width: '100%' }}
+      className='fullHeight'
+      sx={{ overflow: 'hidden', width: '100%' }}
     >
       <Grid item xs={12} sx={{ flexGrow: 1 }}>
-        <Typography sx={{ pt: 2, pl: 2, pr: 2 }} variant="screenHeading">
+        <Typography sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }} variant="screenHeading">
           Speiseplan
         </Typography>
         {/* <Typography variant="p" fontWeight="regular" textTransform="uppercase">
           Heutige Gerichte
         </Typography> */}
+      </Grid>
+
+      <Grid item xs={12} sx={{ overflow: 'auto', maxHeight: 'calc(100vh - 144px)' }}> {/* Adjust the maxHeight value as needed */}
+        {/* TAB HEADER */}
         <Tabs value={value}
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="auto"
           allowScrollButtonsMobile
-          sx={{ '& .MuiTabs-scrollButtons': { width: '16px' }, '& .MuiTabs-scrollButtons.Mui-disabled': { opacity: '.3' } }}
+          TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+          sx={{
+            pb: 2,
+            '& .MuiTabs-scrollButtons': { width: '30px' },
+            '& .MuiTabs-scrollButtons.Mui-disabled': { opacity: '.3' },
+            '& .MuiTabs-indicator': {
+              display: 'flex',
+              justifyContent: 'center',
+              backgroundColor: 'transparent'
+            },
+            '& .MuiTabs-indicatorSpan': {
+              maxWidth: 40,
+              width: '100%',
+              backgroundColor: 'primary.main',
+            }
+          }}
         >
-          {dates.map((date, index) => (
-            <Tab key={index} label={date} {...a11yProps(index)} disabled={data[index] === null} />
+          {weekdays.map((weekday, index) => (
+            <Tab key={index}
+              label={
+                <div>
+                  <div>{weekday}</div>
+                  <div style={{ fontSize: 'smaller' }}>{dates[index].slice(8, 10) + '.' + dates[index].slice(5, 7)}</div>
+                </div>
+              }
+              {...a11yProps(index)}
+              disabled={data[index] === null}
+            />
           ))}
         </Tabs>
-      </Grid>
-      <Grid item xs={12} sx={{ overflow: 'auto', maxHeight: 'calc(100vh - 144px)' }}> {/* Adjust the maxHeight value as needed */}
+
+        {/* TAB CONTENT */}
         {dates.map((date, index) => (
-          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{marginBottom:'100px'}}>
-        {value === index && (
-          <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
-            {dishes.map((dish, i) => (
-              <DishCard
-                key={`${date}-${dish.id}-${i}`} // Use the dish id and index as part of the key
-                dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
-                orangeText={dish.category}
-                mainText={dish.title}
-                smallText={dish.chat_completion} // Join the selections array into a string
-                price={dish.prices.student} // Use the student price as an example
-                bottomText={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
-              />
-            ))}
-          </Grid>
-        )}
-      </div>
+          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{ marginBottom: '100px' }}>
+            {value === index && (
+              <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
+                {dishes.map((dish, i) => (
+                  <DishCard
+                    key={`${date}-${dish.id}-${i}`} // Use the dish id and index as part of the key
+                    dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
+                    orangeText={dish.category}
+                    mainText={dish.title}
+                    smallText={dish.chat_completion} // Join the selections array into a string
+                    price={dish.prices.student} // Use the student price as an example
+                    bottomText={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
+                  />
+                ))}
+              </Grid>
+            )}
+          </div>
         ))}
-    </Grid>
+      </Grid>
     </Grid >
   );
 }
