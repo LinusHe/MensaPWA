@@ -23,6 +23,6 @@ RUN crontab /etc/cron.d/nightly-task-cron
 
 # run the script
 RUN mkdir -p /app/out
-RUN python script.py
 
-CMD cron -f
+# run the script in the background and cron in the foreground
+CMD python script.py & cron -f
