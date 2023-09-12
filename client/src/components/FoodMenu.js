@@ -1,9 +1,7 @@
 // Import necessary libraries and components
 import React, { useState, useEffect } from 'react';
-import { Grid, CircularProgress, AppBar, Tabs, Tab } from '@mui/material';
+import { Typography, Grid, CircularProgress, Tabs, Tab } from '@mui/material';
 import DishCard from './DishCard';
-import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
 
 // Main FoodMenu component
 function FoodMenu() {
@@ -96,34 +94,57 @@ function FoodMenu() {
 
   // Render the component
   return (
-    <div>
-      <Tabs value={value} onChange={handleChange} variant="fullWidth" >
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="flex-start"
+      alignContent="flex-start"
+      rowSpacing={0}
+      columnSpacing={0}
+      sx={{ overflow: 'hidden', height: '100vh', width: '100%' }}
+    >
+      <Grid item xs={12} sx={{ flexGrow: 1 }}>
+        <Typography sx={{ pt: 2, pl: 2, pr: 2 }} variant="screenHeading">
+          Speiseplan
+        </Typography>
+        {/* <Typography variant="p" fontWeight="regular" textTransform="uppercase">
+          Heutige Gerichte
+        </Typography> */}
+        <Tabs value={value}
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+          sx={{ '& .MuiTabs-scrollButtons': { width: '16px' }, '& .MuiTabs-scrollButtons.Mui-disabled': { opacity: '.3' } }}
+        >
+          {dates.map((date, index) => (
+            <Tab key={index} label={date} {...a11yProps(index)} disabled={data[index] === null} />
+          ))}
+        </Tabs>
+      </Grid>
+      <Grid item xs={12} sx={{ overflow: 'auto', maxHeight: 'calc(100vh - 144px)' }}> {/* Adjust the maxHeight value as needed */}
         {dates.map((date, index) => (
-          <Tab key={index} label={date} {...a11yProps(index)} disabled={data[index] === null} />
+          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{marginBottom:'100px'}}>
+        {value === index && (
+          <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
+            {dishes.map((dish, i) => (
+              <DishCard
+                key={`${date}-${dish.id}-${i}`} // Use the dish id and index as part of the key
+                dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
+                orangeText={dish.category}
+                mainText={dish.title}
+                smallText={dish.chat_completion} // Join the selections array into a string
+                price={dish.prices.student} // Use the student price as an example
+                bottomText={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
+              />
+            ))}
+          </Grid>
+        )}
+      </div>
         ))}
-      </Tabs>
-      <SwipeableViews index={value} onChangeIndex={handleChange}>
-        {dates.map((date, index) => (
-          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`}>
-            {value === index && (
-              <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
-                {dishes.map((dish, i) => (
-                  <DishCard
-                    key={`${date}-${dish.id}-${i}`} // Use the dish id and index as part of the key
-                    dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
-                    orangeText={dish.category}
-                    mainText={dish.title}
-                    smallText={dish.chat_completion} // Join the selections array into a string
-                    price={dish.prices.student} // Use the student price as an example
-                    bottomText={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
-                  />
-                ))}
-              </Grid>
-            )}
-          </div>
-        ))}
-      </SwipeableViews>
-    </div>
+    </Grid>
+    </Grid >
   );
 }
 
