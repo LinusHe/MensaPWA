@@ -7,55 +7,29 @@ import packageJson from '../../package.json';
 
 function Settings() {
   const { enqueueSnackbar } = useSnackbar();
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const version = packageJson.version;
 
-  const subscribeToPush = async () => {
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') {
-      enqueueSnackbar('Permission not granted for Notification', { variant: 'error' });
-      return;
-    }
-
-    const sw = await navigator.serviceWorker.ready;
-    const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
-    console.log(vapidPublicKey);
-    const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-    const subscription = await sw.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: convertedVapidKey
-    });
-
-    const response = await fetch('http://localhost:4000/subscribe', {
-      method: 'POST',
-      body: JSON.stringify(subscription),
-      headers: {
-        'content-type': 'application/json'
-      }
-    });
-
-    if (response.ok) {
-      setIsSubscribed(true);
-      enqueueSnackbar('Subscribed successfully', { variant: 'success' });
+  const updateCache = () => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.unregister().then((boolean) => {
+          if (boolean) {
+            console.log("Service worker unregistered.");
+            enqueueSnackbar('Cache erfolgreich aktualisiert. App wird neu geladen...', { variant: 'success' });
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else {
+            console.log("Service worker not found.");
+          }
+        });
+      }).catch((error) => {
+        enqueueSnackbar(`Ein Fehler ist aufgetreten: ${error.message}`, { variant: 'error' });
+      });
     } else {
-      enqueueSnackbar('Subscription failed', { variant: 'error' });
+      enqueueSnackbar('Service Worker ist nicht verfügbar', { variant: 'error' });
     }
   };
-
-  function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/');
-
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  }
 
   return (
     <Grid
@@ -72,26 +46,28 @@ function Settings() {
           Einstellungen
         </Typography>
       </Grid>
-      <Grid item xs={12}>
-        <Typography variant="p" fontWeight="light">
-          Settings comes here
+      <Grid item xs={12} sx={{ mb: 3 }}>
+        <Typography variant="p" fontWeight="regular" textTransform="uppercase">
+          Einstellungen der Mensa App
         </Typography>
-        <Button variant="contained" onClick={subscribeToPush}>
-          Subscribe to Notifications
-        </Button>
-        {isSubscribed && <Typography variant="p" fontWeight="light">
-          You are subscribed to notifications
-        </Typography>}
-        <button onClick={() => enqueueSnackbar('That was easy!')}>Show snackbar</button>
       </Grid>
-      <Grid item>
-        <Typography variant="p" fontWeight="light">
+      {/* <Button variant="contained" onClick={subscribeToPush}>
+        Subscribe to Notifications
+      </Button> */}
+
+      <Grid item xs={12} textAlign={"left"} sx={{ pt: 2, display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+        <Typography variant="p" fontWeight="300" sx={{ pr: 1 }}>
           App Version: {version}
         </Typography>
+        <Typography fontWeight="400">
+          |
+        </Typography>
+        <Button variant="text" style={{ color: 'rgba(0, 0, 0, 0.87)', fontWeight: '400' }} onClick={updateCache}>
+          Update Cache
+        </Button>
       </Grid>
-    </Grid>
+    </Grid >
   )
 }
 
 export default Settings
-

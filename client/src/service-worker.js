@@ -83,3 +83,9 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'UPDATE_CACHE') {
+    self.skipWaiting();
+  }
+});
