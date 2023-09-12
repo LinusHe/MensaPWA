@@ -5,14 +5,6 @@ import DishCard from './DishCard';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
 
-// Function to generate accessibility props for tabs
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
-
 // Main FoodMenu component
 function FoodMenu() {
   // Define state variables
@@ -27,9 +19,9 @@ function FoodMenu() {
     date.setDate(date.getDate() + i);
     return date.toISOString().split('T')[0]; // Format the date as 'YYYY-MM-DD'
   });
-  useEffect(() => {
 
-      // Fetch the dishes for the first date when the component mounts
+  useEffect(() => {
+    // Fetch the dishes for the first date when the component mounts
     const url = `${process.env.PUBLIC_URL}/data/${dates[0]}/menu.json`;
     fetch(url)
       .then((response) => response.json())
@@ -55,16 +47,16 @@ function FoodMenu() {
           return null;
         });
     }))
-    .then(data => {
-      console.log('Fetched data:', data);
-      setData(data);
-      setIsLoading(false);
-    })
-    .catch(error => {
-      console.error('Error fetching dates:', error);
-      setError(error);
-      setIsLoading(false);
-    });
+      .then(data => {
+        console.log('Fetched data:', data);
+        setData(data);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching dates:', error);
+        setError(error);
+        setIsLoading(false);
+      });
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -94,27 +86,33 @@ function FoodMenu() {
     return <p>Error: {error.toString()}</p>;
   }
 
+  // Function to generate accessibility props for tabs
+  function a11yProps(index) {
+    return {
+      id: `full-width-tab-${index}`,
+      'aria-controls': `full-width-tabpanel-${index}`,
+    };
+  }
+
   // Render the component
   return (
     <div>
-      <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} variant="fullWidth">
-          {dates.map((date, index) => (
-            <Tab key={`${date}-${index}`} label={date} {...a11yProps(index)} disabled={data[index] === null} />
-          ))}
-        </Tabs>
-      </AppBar>
+      <Tabs value={value} onChange={handleChange} variant="fullWidth" >
+        {dates.map((date, index) => (
+          <Tab key={index} label={date} {...a11yProps(index)} disabled={data[index] === null} />
+        ))}
+      </Tabs>
       <SwipeableViews index={value} onChangeIndex={handleChange}>
         {dates.map((date, index) => (
-          <div role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`}>
+          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`}>
             {value === index && (
               <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
                 {dishes.map((dish, i) => (
-                  <DishCard 
+                  <DishCard
                     key={`${date}-${dish.id}-${i}`} // Use the dish id and index as part of the key
                     dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
-                    orangeText={dish.category} 
-                    mainText={dish.title} 
+                    orangeText={dish.category}
+                    mainText={dish.title}
                     smallText={dish.chat_completion} // Join the selections array into a string
                     price={dish.prices.student} // Use the student price as an example
                     bottomText={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
