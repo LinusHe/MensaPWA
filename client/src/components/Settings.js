@@ -39,7 +39,7 @@ function Settings() {
       alignItems="flex-start"
       rowSpacing={0}
       columnSpacing={0}
-      sx={{ p: 2 }}
+      sx={{ p: 2, width: '100%', maxWidth: '720px', mx: 'auto' }}
     >
       <Grid item xs={12}>
         <Typography variant="screenHeading">

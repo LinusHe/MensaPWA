@@ -14,7 +14,7 @@ function CapacityIndicator() {
   // DEBUG
   // currentHour = '15';
   // currentMinute = '00';
-  currentDay = 0; // 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
+  // currentDay = 0; // 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
   const currentTime = `${currentHour}:${currentMinute}`;
   const openingTime = '09:00';
   const closingTime = '14:00';
@@ -153,7 +153,7 @@ function CapacityIndicator() {
       alignContent="flex-start"
       rowSpacing={0}
       columnSpacing={0}
-      sx={{ minHeight: 'calc((calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0))) - 80px)' }}
+      sx={{ minHeight: 'calc((calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0))) - 80px)', width: '100%', maxWidth: '720px', mx: 'auto' }}
     >
       <Grid item xs={12} sx={{ p: 2, flexGrow: 0 }}>
         <Typography variant="screenHeading">

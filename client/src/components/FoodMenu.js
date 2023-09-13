@@ -110,7 +110,7 @@ function FoodMenu() {
       rowSpacing={0}
       columnSpacing={0}
       className='fullHeight'
-      sx={{ overflow: 'hidden', width: '100%' }}
+      sx={{ overflow: 'hidden', width: '100%', maxWidth: '720px', mx: 'auto' }}
     >
       <Grid item xs={12} sx={{ flexGrow: 1 }}>
         <Typography sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }} variant="screenHeading">
@@ -161,18 +161,18 @@ function FoodMenu() {
 
         {/* TAB CONTENT */}
         {dates.map((date, index) => (
-          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{ marginBottom: '100px' }}>
+          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{ marginBottom: '120px' }}>
             {value === index && (
               <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
                 {dishes.map((dish, i) => (
                   <DishCard
                     key={`${date}-${dish.id}-${i}`} // Use the dish id and index as part of the key
                     dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
-                    orangeText={dish.category}
-                    mainText={dish.title}
-                    smallText={dish.chat_completion} // Join the selections array into a string
+                    category={dish.category}
+                    title={dish.title}
+                    chat_completion={dish.chat_completion} // Join the selections array into a string
                     price={dish.prices.student} // Use the student price as an example
-                    bottomText={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
+                    selections={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
                   />
                 ))}
               </Grid>
