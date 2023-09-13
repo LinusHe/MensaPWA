@@ -9,11 +9,11 @@ import VegetarianIcon from 'mdi-material-ui/Leaf';
 import PorkIcon from 'mdi-material-ui/Pig';
 import VeganIcon from 'mdi-material-ui/Leaf';
 import ChickenIcon from 'mdi-material-ui/FoodDrumstick';
-import BioIcon from 'mdi-material-ui/Leaf';
+import BioIcon from 'mdi-material-ui/Tree';
 import AlcoholIcon from 'mdi-material-ui/GlassCocktail';
 import DefaultIcon from 'mdi-material-ui/Food';
 
-const DishCard = ({ dishImage, category, title, chat_completion, price, selections }) => {
+const DishCard = ({ dishImage, category, title, chat_completion, prices, selections }) => {
     const [open, setOpen] = useState(false);
 
     const selectionMap = {
@@ -81,9 +81,9 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
                     <Typography variant="body" fontWeight={'400'} color="primary">
                         {category}
                     </Typography>
-                    <Chip label={price} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
+                    <Chip label={prices.student} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
                 </Grid>
-                <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5 }}>
+                <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5, mb:.5 }}>
                     {title}
                     {additional_title_lines.length > 0 && additional_title_lines.every(line => line.trim() !== '') &&
                         <Typography variant="p" fontWeight={'500'} fontSize={'1rem'}>
@@ -107,7 +107,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
                         />
                     );
                 })}
-                <DishDetail open={open} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, price, selections, selectionMap }} />
+                <DishDetail open={open} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, prices, selections, selectionMap }} />
             </Grid>
         </Grid >
     );
