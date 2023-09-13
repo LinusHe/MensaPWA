@@ -16,7 +16,6 @@ function FloorplanSelector() {
   // Constants for zooming
   const minZoom = 0.8;
   const maxZoom = window.innerWidth / 50;
-  console.log(maxZoom);
   const bounds = 200;
   const initialScaleFactor = 2.1;
 
@@ -62,11 +61,9 @@ function FloorplanSelector() {
   // Function to handle table click
   function handleTableClick(table, pinIcon, zoom, mapHolderWidth, mapHolderHeight, svg) {
     const locationCode = getLocationCode(table.id);
-    console.log(locationCode);
     d3.selectAll(".table").classed("table-on", false);
     d3.select(table).classed("table-on", true);
 
-    console.log(table)
 
     pinTable(table, pinIcon);
 
@@ -85,7 +82,6 @@ function FloorplanSelector() {
   function zoomToTable(zoom, svg, zoomDirection, mapHolderWidth, mapHolderHeight) {
     const currentTransform = d3.zoomTransform(svg.node());
     const currentScale = currentTransform.k;
-    console.log("Current Zoom: " + currentScale);
 
     const newScale = currentScale * 1.2 < 2.1 ? currentScale * 1.2 : currentScale;
     const newCenterY = (mapHolderHeight - newScale * mapHolderHeight) / 2 - 150;

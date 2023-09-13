@@ -33,7 +33,6 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
 
     const handleClose = (event) => {
         event.stopPropagation();
-        console.log('closed');
         setOpen(false);
     };
 

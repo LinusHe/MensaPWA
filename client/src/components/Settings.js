@@ -14,13 +14,12 @@ function Settings() {
       navigator.serviceWorker.ready.then((registration) => {
         registration.unregister().then((boolean) => {
           if (boolean) {
-            console.log("Service worker unregistered.");
             enqueueSnackbar('Cache erfolgreich aktualisiert. App wird neu geladen...', { variant: 'success' });
             setTimeout(() => {
               window.location.reload();
             }, 1000);
           } else {
-            console.log("Service worker not found.");
+            // console.log("Service worker not found.");
           }
         });
       }).catch((error) => {

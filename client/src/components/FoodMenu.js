@@ -28,7 +28,6 @@ function FoodMenu() {
   });
 
   useEffect(() => {
-    console.log(dates)
     // Fetch the dishes for the first date when the component mounts
     const url = `${process.env.PUBLIC_URL}/data/${dates[0]}/menu.json`;
     fetch(url)
@@ -50,13 +49,12 @@ function FoodMenu() {
           return response.json();
         })
         .catch(error => {
-          console.log(`No data for date ${date} (mensa may be closed)`);
+          // console.log(`No data for date ${date} (mensa may be closed)`);
           // Return null if there was an error fetching the data
           return null;
         });
     }))
       .then(data => {
-        console.log('Fetched data:', data);
         setData(data);
         setIsLoading(false);
       })
@@ -72,7 +70,7 @@ function FoodMenu() {
     const selectedDate = dates[newValue];
     const url = `${process.env.PUBLIC_URL}/data/${selectedDate}/menu.json`;
 
-    console.log('Fetching menu from:', url);
+    // console.log('Fetching menu from:', url);
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
