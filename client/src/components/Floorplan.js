@@ -72,8 +72,8 @@ function Floorplan() {
         className='fullHeight'
         sx={{ overflow: "hidden" }}
       >
-        <Grid item xs={12} sx={{ p: 2 }}>
-          <Typography variant="screenHeading">
+        <Grid item xs={12} sx={{ p: 2}}>
+          <Typography variant="screenHeading" sx={{ overflow: 'hidden', width: '100%', maxWidth: '720px', mx: 'auto' }}>
             Sitzplatz{' '}
             <Typography component="span" variant="span" fontWeight="300">
               teilen

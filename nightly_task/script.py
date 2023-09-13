@@ -64,7 +64,7 @@ delete_old_dirs(output_dir)
 # Get today's date
 today = date.today()
 # Loop over the next five days
-for i in range(1):
+for i in range(5):
     # Get the date for the current iteration
     current_date = (today + timedelta(days=i)).isoformat()
     logging.info(f"Processing data for date: {current_date}")

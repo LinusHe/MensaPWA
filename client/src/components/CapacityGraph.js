@@ -62,7 +62,7 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
       <div
         style={{
           height: '100%',
-          width: greyed ? '150vw' : '200vw',
+          width: greyed ? '150%' : '200%',
         }}
         ref={bigElementRef}
       >
