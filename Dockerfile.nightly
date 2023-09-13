@@ -2,6 +2,9 @@
 FROM python:3.8
 ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 
+# Set the timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Set working directory
 WORKDIR /app
 

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 networks:
   traefiknet:
     external: true
@@ -22,7 +22,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.mensapwarouter.entrypoints=web, websecure"
       - "traefik.http.routers.mensapwarouter.rule=Host(`mensa.heylinus.de`)"
-      - "traefik.http.routers.mensapwarouter.tls=true" 
+      - "traefik.http.routers.mensapwarouter.tls=true"
       - "traefik.http.routers.mensapwarouter.tls.certresolver=production"
 
   app:
@@ -50,6 +50,7 @@ services:
     restart: unless-stopped
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - TZ=Europe/Berlin
     build:
       context: .
       dockerfile: Dockerfile.nightly
@@ -60,4 +61,3 @@ services:
 volumes:
   mongo-data:
   public-data:
-  

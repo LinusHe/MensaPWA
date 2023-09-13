@@ -45,6 +45,7 @@ services:
     restart: unless-stopped
     environment:
       - OPENAI_API_KEY
+      - TZ=Europe/Berlin
     build:
       context: .
       dockerfile: Dockerfile.nightly
