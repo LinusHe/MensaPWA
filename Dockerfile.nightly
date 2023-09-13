@@ -17,11 +17,6 @@ RUN chmod +x /app/script.py
 # Create a log file and make it writable
 RUN mkdir -p /app/logs && touch /app/logs/cron.log && chmod 0666 /app/logs/cron.log
 
-# Print the environment variables to a file
-RUN env > /root/env_var.sh
-# Make the file executable
-RUN chmod +x /root/env_var.sh
-
 # Install cron and set it up
 RUN apt-get update && apt-get install -y cron
 ADD nightly_task/crontab /etc/cron.d/nightly-task-cron
@@ -34,5 +29,5 @@ RUN mkdir -p /app/out
 # run the script in the background and cron in the foreground
 #CMD python script.py & cron -f
 
-# only run the cronjob
-CMD cron -f
+# pass the env to a file and run cron in the foreground
+CMD /bin/sh -c "env > /root/env_var.sh && cron -f"
