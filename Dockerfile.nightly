@@ -29,8 +29,5 @@ RUN crontab /etc/cron.d/nightly-task-cron
 # run the script
 RUN mkdir -p /app/out
 
-# run the script in the background and cron in the foreground
-#CMD python script.py & cron -f
-
-# pass the env to a file and run cron in the foreground
-CMD /bin/sh -c "env >> /etc/environment && cron -f"
+# pass the env, run the script in the background and cron in the foreground
+CMD /bin/sh -c "env >> /etc/environment && python script.py & cron -f"
