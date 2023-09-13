@@ -1,1 +1,5 @@
-0 3 * * * /usr/local/bin/python /app/script.py >> /app/logs/cron.log 2>&1
+# This is a cron job that runs the script.py at 3 AM every day
+# 0 3 * * * . /root/env_var.sh; /usr/local/bin/python /app/script.py >> /app/logs/cron.log 2>&1
+
+# TEST: run the cronjob every 10 minutes
+*/10 * * * * . /root/env_var.sh; /usr/local/bin/python /app/script.py >> /app/logs/cron.log 2>&1

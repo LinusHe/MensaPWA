@@ -1,3 +1,31 @@
+#root  {
+  /* equivalent to 100dvh in major browsers */
+  min-height: calc(
+    100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0)
+  );
+}
+
+@supports (-webkit-touch-callout: none) {
+  #root {
+    /* for ios safari 15, safe-area-inset-bottom is 0, so a special fix apply here */
+    min-height: -webkit-fill-available;
+  }
+}
+
+.fullHeight  {
+  /* equivalent to 100dvh in major browsers */
+  height: calc(
+    100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0)
+  );
+}
+
+@supports (-webkit-touch-callout: none) {
+  .fullHeight {
+    /* for ios safari 15, safe-area-inset-bottom is 0, so a special fix apply here */
+    height: -webkit-fill-available;
+  }
+}
+
 .notistack-SnackbarContainer {
   margin-bottom: var(--navBarHeight) !important;
 }

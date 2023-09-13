@@ -12,9 +12,9 @@ function CapacityIndicator() {
   // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
   let currentDay = new Date().getDay();
   // DEBUG
-  // currentHour = '09';
+  // currentHour = '15';
   // currentMinute = '00';
-  // currentDay = 1;
+  currentDay = 0; // 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
   const currentTime = `${currentHour}:${currentMinute}`;
   const openingTime = '09:00';
   const closingTime = '14:00';
@@ -57,7 +57,7 @@ function CapacityIndicator() {
     }
 
     let peaks = [];
-    let max = mensaCapacity[0].data[0].y;
+    // let max = mensaCapacity[0].data[0].y;
     for (let i = 1; i < mensaCapacity[0].data.length - 1; i++) {
       if (mensaCapacity[0].data[i].y > mensaCapacity[0].data[i - 1].y && mensaCapacity[0].data[i].y > mensaCapacity[0].data[i + 1].y) {
         peaks.push(mensaCapacity[0].data[i].x);
@@ -95,7 +95,7 @@ function CapacityIndicator() {
     let diff = openingTimeInMinutes - currentTimeInMinutes;
 
     // If the current time is after the closing time, add 24 hours (1440 minutes) to the difference
-    if (currentTimeInMinutes > timeToMinutes(closingTime)) {
+    if ((currentTimeInMinutes > timeToMinutes(closingTime)) && (currentDay !== 6 && currentDay !== 0) ) {
       diff += 24 * 60;
     }
 
@@ -104,13 +104,13 @@ function CapacityIndicator() {
       diff += 48 * 60;
     }
 
-    // If it's Saturday, add 24 hours (1440 minutes) to the difference
+    // If it's Saturday, add 48 hours (2880 minutes) to the difference
     if (currentDay === 6) {
-      diff += 24 * 60;
+      diff += 48 * 60;
     }
 
     // If it's Sunday and the current time is before the closing time, add 24 hours (1440 minutes) to the difference
-    if (currentDay === 0 && currentTimeInMinutes < timeToMinutes(closingTime)) {
+    if (currentDay === 0) {
       diff += 24 * 60;
     }
 
@@ -123,25 +123,25 @@ function CapacityIndicator() {
   const openingTimeInMinutes = timeToMinutes(openingTime);
 
 
-  let topString = 'Nächster Ansturm'.toUpperCase();
-  let bottomString = 'In ca. '.toUpperCase() + calculateTimeToNextPeak();
+  let topString = 'Nächster Ansturm';
+  let bottomString = 'In ca. ' + calculateTimeToNextPeak();
 
   // Only show "Mensa schließt" after the last peak
-  if (currentDay === 6 || currentDay === 0) {
-    topString = 'Mensa geschlossen'.toUpperCase();
-    bottomString = 'Öffnet in '.toUpperCase() + calculateTimeToOpening();
+  if (currentDay === 6 || currentDay === 0 || (currentDay === 5 && currentTimeInMinutes > timeToMinutes(closingTime))) {
+    topString = 'Mensa geschlossen';
+    bottomString = 'Öffnet in ' + calculateTimeToOpening();
     greyed = true;
   } else if (currentTimeInMinutes < openingTimeInMinutes) {
-    topString = 'Mensa öffnet'.toUpperCase();
-    bottomString = 'In ca. '.toUpperCase() + calculateTimeToOpening();
+    topString = 'Mensa öffnet um ' + openingTime + ' uhr';
+    bottomString = 'In ca. ' + calculateTimeToOpening();
     greyed = true;
   } else if (currentTimeInMinutes > closingTimeInMinutes) {
-    topString = 'Mensa öffnet'.toUpperCase();
-    bottomString = 'In ca. '.toUpperCase() + calculateTimeToOpening();
+    topString = 'Mensa öffnet um ' + openingTime + ' uhr';
+    bottomString = 'In ca. ' + calculateTimeToOpening();
     greyed = true;
   } else if (currentTimeInMinutes >= timeToMinutes(calculatePeaks().slice(-1)[0])) {
-    topString = 'Mensa schließt'.toUpperCase();
-    bottomString = 'In ca. '.toUpperCase() + calculateTimeToClosing();
+    topString = 'Mensa schließt um ' + closingTime + ' uhr';
+    bottomString = 'In ca. ' + calculateTimeToClosing();
   }
 
   return (
@@ -153,7 +153,7 @@ function CapacityIndicator() {
       alignContent="flex-start"
       rowSpacing={0}
       columnSpacing={0}
-      sx={{ minHeight: 'calc(100vh - 80px)' }}
+      sx={{ minHeight: 'calc((calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0))) - 80px)' }}
     >
       <Grid item xs={12} sx={{ p: 2, flexGrow: 0 }}>
         <Typography variant="screenHeading">

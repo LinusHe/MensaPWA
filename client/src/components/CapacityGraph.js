@@ -12,7 +12,6 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
   const currentMinute = currentTime.split(':')[1];
   let scrollMultiplier = greyed ? 1.5 : (((parseInt(currentHour) + parseInt(currentMinute) / 60) - startHour) / (endHour - startHour)) + 0.5 * (currentHour - startHour);
 
-
   let currencyCapacity = currentCapa;
 
   const markers = greyed ? [] : [
@@ -36,19 +35,18 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
     }
   ];
 
+
   useEffect(() => {
+    const scrollToMiddle = (bigel, container) => {
+      const available = bigel.offsetWidth - container.offsetWidth;
+      const scrollOffset = (available / 2) * scrollMultiplier;
+      container.scrollLeft = scrollOffset;
+    };
+
     const container = containerRef.current;
     const bigElement = bigElementRef.current;
     scrollToMiddle(bigElement, container);
-  }, []);
-
-  const scrollToMiddle = (bigel, container) => {
-    const available = bigel.offsetWidth - container.offsetWidth;
-    const scrollOffset = (available / 2) * scrollMultiplier;
-    container.scrollLeft = scrollOffset;
-  };
-
-
+  }, [scrollMultiplier]);
 
   const format = v => `${v}%`
 
