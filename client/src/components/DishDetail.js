@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Dialog, DialogTitle, DialogContent, Typography, Slide, useTheme, IconButton } from '@mui/material';
+import { Chip, Grid, Dialog, DialogTitle, DialogContent, Typography, Slide, useTheme, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -63,6 +63,22 @@ const DishDetail = ({ open, handleClose, dish }) => {
                 {dish.additional_title_lines.map((line, index) => <React.Fragment key={index}>{line}</React.Fragment>)}
               </Typography>
             }
+          </Grid>
+          <Grid item textAlign={'center'}>
+          {dish.selections && dish.selections.map((selection, index) => {
+                    const selectionData = dish.selectionMap[selection] || { ...dish.selectionMap.default, label: selection };
+                    const { color, label, icon: Icon } = selectionData;
+                    return (
+                        <Chip
+                            key={index}
+                            label={label}
+                            variant="outlined"
+                            icon={<Icon color={color}/>}
+                            size='small'
+                            sx={{borderColor: color, color: color, margin: '8px 8px 0px 0px'}}
+                        />
+                    );
+                })}
           </Grid>
         </Grid>
         <IconButton
