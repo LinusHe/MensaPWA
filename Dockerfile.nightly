@@ -33,4 +33,4 @@ RUN mkdir -p /app/out
 #CMD python script.py & cron -f
 
 # pass the env to a file and run cron in the foreground
-CMD /bin/sh -c "env > /root/env_var.sh && cron -f"
+CMD /bin/sh -c "env >> /etc/environment && cron -f"
