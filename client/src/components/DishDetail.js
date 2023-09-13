@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { Chip, Grid, Dialog, DialogTitle, DialogContent, Typography, Slide, useTheme, IconButton, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import theme from '../theme';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} timeout={500} />;
