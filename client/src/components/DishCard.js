@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Chip, Grid, Typography } from '@mui/material';
 import emptyPlate from '../assets/emptyPlate.png';
 import smoothieImage from '../assets/smoothies.png';
 import { color } from 'd3';
+import DishDetail from './DishDetail';
 
 const DishCard = ({ dishImage, category, title, chat_completion, price, selections }) => {
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event) => {
+        event.stopPropagation();
+        console.log('closed');
+        setOpen(false);
+    };
 
     // Function to handle image loading errors
     const handleError = (e) => {
@@ -26,9 +38,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
         const splitTitle = title.split('|');
         title = splitTitle[0].trim();
         let additionalTitle = splitTitle.slice(1).join(',\n').trim(); // Join all remaining parts with ',' instead of '|'
-        if (category.toLowerCase().includes('pasta') || category.toLowerCase().includes('nudel')) {
-            // additional_title = splitTitle.slice(1).join('\n').trim(); // Join all remaining parts with '\n' instead of '|'
-        } else if (!specialWords.some(word => additionalTitle.toLowerCase().includes(word))) {
+        if (!specialWords.some(word => additionalTitle.toLowerCase().includes(word))) {
             additional_title = 'oder ' + additionalTitle.replace(/ ,/g, ','); // Replace all ' ,' with ','
         } else {
             additional_title = additionalTitle.replace(/ ,/g, ','); // Replace all ' ,' with ','
@@ -41,7 +51,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
     let additional_title_lines = additional_title.split('\n');
 
     return (
-        <Grid alignItems={'center'} container sx={{ p: 2, mx: 2, my: 1.5, backgroundColor: '#ffffff', boxShadow: '0px 0px 14px #00000012', borderRadius: '15px' }}>
+        <Grid onClick={handleOpen} alignItems={'center'} container sx={{ p: 2, mx: 2, my: 1.5, backgroundColor: '#ffffff', boxShadow: '0px 0px 14px #00000012', borderRadius: '15px' }}>
             <Grid item xs={3.5} >
                 <Grid container direction="column" justifyContent="center" alignItems="center">
                     <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -64,12 +74,10 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
                         </Typography>
                     }
                 </Typography>
-                {/* <Typography variant="body2" color="text.secondary">
-                    {chat_completion}
-                </Typography> */}
                 <Typography variant="body2" color="text.secondary" align="left" sx={{ pt: 1 }}>
                     {selections}
                 </Typography>
+                <DishDetail open={open} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, price, selections }} />
             </Grid>
         </Grid >
     );
