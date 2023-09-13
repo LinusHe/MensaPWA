@@ -26,6 +26,16 @@ const theme = createTheme({
       default: '#f9faff',
       paper: '#fff',
     },
+    food: {
+      fishSeafood: '#3F51B5',
+      vegetarian: '#8BC34A',
+      pork: '#F44336',
+      vegan: '#4CAF50',
+      chicken: '#FF9800',
+      bio: '#00897B',
+      alcohol: '#E91E63',
+      default: '#5E35B1',
+    },
   },
   components: {
     MuiTypography: {
