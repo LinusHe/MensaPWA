@@ -5,6 +5,9 @@ __pycache__
 
 logs/*
 
+# Helper file
+selections.py
+
 # ignore content of out folder exept one example (2023-09-01)
 out/*
 !out/2023-09-01

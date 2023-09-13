@@ -176,7 +176,7 @@ function FoodMenu() {
                         category={dish.category}
                         title={dish.title}
                         chat_completion={dish.chat_completion} // Join the selections array into a string
-                        price={dish.prices.student} // Use the student price as an example
+                        prices={dish.prices} // Use the student price as an example
                         selections={dish.selections} // Use the chat completion as an example
                       />
                     </div>
