@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
+
 // Import necessary libraries and components
 import React, { useState, useEffect } from 'react';
-import { Typography, Grid, CircularProgress, Tabs, Tab } from '@mui/material';
+import { Grow, Typography, Grid, CircularProgress, Tabs, Tab } from '@mui/material';
 import DishCard from './DishCard';
 
 // Main FoodMenu component
@@ -164,16 +167,20 @@ function FoodMenu() {
           <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{ marginBottom: '120px' }}>
             {value === index && (
               <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
-                {dishes.map((dish, i) => (
-                  <DishCard
-                    key={`${date}-${dish.id}-${i}`} // Use the dish id and index as part of the key
-                    dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
-                    category={dish.category}
-                    title={dish.title}
-                    chat_completion={dish.chat_completion} // Join the selections array into a string
-                    price={dish.prices.student} // Use the student price as an example
-                    selections={dish.selections ? dish.selections.join(', ') : ''} // Use the chat completion as an example
-                  />
+                {dishes && dishes.length > 0 && dishes.map((dish, i) => (
+                  <Grow timeout={500} key={`${date}-${dish.id}-${i}`}  in={true} style={{ width: '100%', transitionDelay: `${i * 50}ms` }}>
+                    <div>
+                      <DishCard
+                        // Use the dish id and index as part of the key
+                        dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
+                        category={dish.category}
+                        title={dish.title}
+                        chat_completion={dish.chat_completion} // Join the selections array into a string
+                        price={dish.prices.student} // Use the student price as an example
+                        selections={dish.selections} // Use the chat completion as an example
+                      />
+                    </div>
+                  </Grow>
                 ))}
               </Grid>
             )}

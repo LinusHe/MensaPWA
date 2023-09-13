@@ -2,11 +2,30 @@ import React, { useState } from 'react';
 import { Chip, Grid, Typography } from '@mui/material';
 import emptyPlate from '../assets/emptyPlate.png';
 import smoothieImage from '../assets/smoothies.png';
-import { color } from 'd3';
 import DishDetail from './DishDetail';
+
+import FishIcon from 'mdi-material-ui/Fish';
+import VegetarianIcon from 'mdi-material-ui/Leaf';
+import PorkIcon from 'mdi-material-ui/Pig';
+import VeganIcon from 'mdi-material-ui/Leaf';
+import ChickenIcon from 'mdi-material-ui/FoodDrumstick';
+import BioIcon from 'mdi-material-ui/Leaf';
+import AlcoholIcon from 'mdi-material-ui/GlassCocktail';
+import DefaultIcon from 'mdi-material-ui/Food';
 
 const DishCard = ({ dishImage, category, title, chat_completion, price, selections }) => {
     const [open, setOpen] = useState(false);
+
+    const selectionMap = {
+        "fish/seafood": { color: "food.fishSeafood", label: "Fisch/Meeresfrüchte", icon: FishIcon },
+        "vegetarian": { color: "food.vegetarian", label: "Vegetarisch", icon: VegetarianIcon },
+        "pork": { color: "food.pork", label: "Schweinefleisch", icon: PorkIcon },
+        "vegan": { color: "food.vegan", label: "Vegan", icon: VeganIcon },
+        "chicken": { color: "food.chicken", label: "Huhn", icon: ChickenIcon },
+        "bio": { color: "food.bio", label: "Bio", icon: BioIcon },
+        "alcohol": { color: "food.alcohol", label: "Alkohol", icon: AlcoholIcon },
+        "default": { color: "food.default", label: "Andere", icon: DefaultIcon }
+      };
 
     const handleOpen = () => {
         setOpen(true);
@@ -51,7 +70,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
     let additional_title_lines = additional_title.split('\n');
 
     return (
-        <Grid onClick={handleOpen} alignItems={'center'} container sx={{ p: 2, mx: 2, my: 1.5, backgroundColor: '#ffffff', boxShadow: '0px 0px 14px #00000012', borderRadius: '15px' }}>
+        <Grid onClick={handleOpen} alignItems={'center'} container sx={{ p: 2, mx: 2, my: 1.5, backgroundColor: '#ffffff', boxShadow: '0px 0px 14px #00000012', borderRadius: '15px', width: 'auto' }}>
             <Grid item xs={3.5} >
                 <Grid container direction="column" justifyContent="center" alignItems="center">
                     <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -74,10 +93,21 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
                         </Typography>
                     }
                 </Typography>
-                <Typography variant="body2" color="text.secondary" align="left" sx={{ pt: 1 }}>
-                    {selections}
-                </Typography>
-                <DishDetail open={open} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, price, selections }} />
+                {selections && selections.map((selection, index) => {
+                    const selectionData = selectionMap[selection] || { ...selectionMap.default, label: selection };
+                    const { color, label, icon: Icon } = selectionData;
+                    return (
+                        <Chip
+                            key={index}
+                            label={label}
+                            variant="outlined"
+                            icon={<Icon color={color}/>}
+                            size='small'
+                            sx={{borderColor: color, color: color, margin: '8px 8px 0px 0px'}}
+                        />
+                    );
+                })}
+                <DishDetail open={open} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, price, selections, selectionMap }} />
             </Grid>
         </Grid >
     );
