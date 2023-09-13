@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Chip, Grid, Typography } from '@mui/material';
 import emptyPlate from '../assets/emptyPlate.png';
 import smoothieImage from '../assets/smoothies.png';
-import { color } from 'd3';
 import DishDetail from './DishDetail';
 
 const DishCard = ({ dishImage, category, title, chat_completion, price, selections }) => {
@@ -51,7 +50,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, price, selectio
     let additional_title_lines = additional_title.split('\n');
 
     return (
-        <Grid onClick={handleOpen} alignItems={'center'} container sx={{ p: 2, mx: 2, my: 1.5, backgroundColor: '#ffffff', boxShadow: '0px 0px 14px #00000012', borderRadius: '15px' }}>
+        <Grid onClick={handleOpen} alignItems={'center'} container sx={{ p: 2, mx: 2, my: 1.5, backgroundColor: '#ffffff', boxShadow: '0px 0px 14px #00000012', borderRadius: '15px', width: 'auto' }}>
             <Grid item xs={3.5} >
                 <Grid container direction="column" justifyContent="center" alignItems="center">
                     <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
