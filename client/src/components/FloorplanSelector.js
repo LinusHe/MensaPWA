@@ -14,9 +14,9 @@ function FloorplanSelector() {
   const navigate = useNavigate();
 
   // Constants for zooming
-  const minZoom = 0.8;
-  const maxZoom = window.innerWidth / 50;
-  const bounds = 200;
+  const minZoom = 350 / window.innerWidth;
+  const maxZoom = 3500 / window.innerWidth;
+  const bounds = window.innerWidth;
   const initialScaleFactor = 2.1;
 
   // Array to hold table elements
@@ -30,9 +30,9 @@ function FloorplanSelector() {
 
   // Function to initiate zooming
   function initiateZoom(zoom, mapHolderWidth, mapHolderHeight, svg, zoomDirection) {
+
     zoom
       .scaleExtent([minZoom, maxZoom])
-      .translateExtent([[-bounds / 2, -bounds / 2], [mapHolderWidth + bounds / 2, mapHolderHeight + bounds / 2]]);
 
     const initialScale = minZoom * initialScaleFactor;
     const startScale = initialScale / 2;
