@@ -1,5 +1,6 @@
 # Base image
 FROM python:3.8
+ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 
 # Set working directory
 WORKDIR /app

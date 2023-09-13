@@ -1,1 +1,1 @@
-0 3 * * * /usr/local/bin/python /app/script.py >> /app/logs/cron.log 2>&1
+0 3 * * * /usr/bin/env OPENAI_API_KEY=<your_api_key> /usr/local/bin/python /app/script.py >> /app/logs/cron.log 2>&1
