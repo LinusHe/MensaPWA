@@ -35,12 +35,18 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
     <BottomSheet
       open={open}
       onDismiss={onDismiss}
-      
+
       // snapPoints={({ minHeight }) => [minHeight, '50', '70']}
-      snapPoints={({ minHeight }) => minHeight}
-      minHeight={50}
+      defaultSnap={({ snapPoints, lastSnap }) =>
+        lastSnap ?? Math.min(...snapPoints)
+      }
+      // snapPoints={({ maxHeight }) => [
+      //   maxHeight - maxHeight / 5,
+      //   maxHeight * 0.6,
+      // ]}
+      minheight={50}
       expandOnContentDrag={true}
-      style={{overflow: 'visible'}}
+      style={{ overflow: 'visible', maxWidth:'700px'}}
       onClick={(event) => event.stopPropagation()}
     // header={
     //   <>
@@ -61,7 +67,7 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
           width: '192px',
         }}
       />
-      <DialogTitle sx={{ pt: 14 }}>
+      <DialogTitle sx={{ pt: 13 }}>
 
         <Grid container direction="column" alignItems="center">
           <Grid item>

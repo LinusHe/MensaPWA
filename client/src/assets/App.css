@@ -1,8 +1,6 @@
-#root  {
+#root {
   /* equivalent to 100dvh in major browsers */
-  min-height: calc(
-    100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0)
-  );
+  min-height: calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0));
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -12,11 +10,9 @@
   }
 }
 
-.fullHeight  {
+.fullHeight {
   /* equivalent to 100dvh in major browsers */
-  height: calc(
-    100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0)
-  );
+  height: calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0));
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -30,6 +26,13 @@
   margin-bottom: var(--navBarHeight) !important;
 }
 
-[data-rsbs-content], [data-rsbs-scroll] {
+[data-rsbs-content],
+[data-rsbs-scroll] {
   overflow: visible;
+}
+
+[data-rsbs-overlay] {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 0 calc(env(safe-area-inset-bottom) + 1rem) 0;
 }
