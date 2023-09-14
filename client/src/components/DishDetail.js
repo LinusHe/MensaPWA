@@ -1,23 +1,16 @@
 import React from 'react'
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import { Chip, Grid, Dialog, DialogTitle, DialogContent, Typography, Slide, useTheme, IconButton, Divider } from '@mui/material';
+import { Chip, Grid, DialogTitle, DialogContent, Typography, IconButton, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 
 import 'react-spring-bottom-sheet/dist/style.css'
 
 
 const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
-  const theme = useTheme();
-
   const nutritionValues = dish.chat_completion.match(/\d+/g);
   const hasNutritionValues = nutritionValues && nutritionValues.length === 3;
-
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} timeout={500} />;
-  });
 
   const StyledLinearProgress = styled(({ color, ...otherProps }) => <LinearProgress {...otherProps} />)(({ theme, color }) => ({
     height: 5,
@@ -46,7 +39,7 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
       // ]}
       minheight={50}
       expandOnContentDrag={true}
-      style={{ overflow: 'visible', maxWidth:'700px'}}
+      style={{ overflow: 'visible', maxWidth: '700px' }}
       onClick={(event) => event.stopPropagation()}
     // header={
     //   <>
