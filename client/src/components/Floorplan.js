@@ -18,11 +18,11 @@ function Floorplan() {
   React.useEffect(() => {
     if (code && !isValidCode(code)) {
       // Redirect to home page if the code is not valid and the url is not / 
-      console.warn(`Code ${code} is not valid`);
+      // console.warn(`Code ${code} is not valid`);
       setInvalidCode(true);
     }
     else {
-      console.log(`Code ${code} is valid`);
+      // console.log(`Code ${code} is valid`);
       setInvalidCode(false);
     }
   }, [code]);

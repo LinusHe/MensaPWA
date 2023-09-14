@@ -38,8 +38,8 @@ function FloorplanIndicator() {
     if (navigator.share) {
       if ((navigator.canShare && navigator.canShare(shareData)) && !isFirefox) {
         navigator.share(shareData)
-          .then(() => console.log('URL shared successfully'))
-          .catch((err) => console.log('Error: ' + err));
+          .then(() => ('URL shared successfully'))
+          .catch((err) => console.loge.log('Error: ' + err));
       } else if (navigator.canShare && navigator.canShare(shareDataUrlOnly)) {
         navigator.share(shareDataUrlOnly)
           .then(() => console.log('URL shared successfully without text'))
@@ -55,7 +55,7 @@ function FloorplanIndicator() {
         })
         .catch((err) => console.log('Error: ' + err));
     } else {
-      console.log('Share and clipboard functions are not supported');
+      // console.log('Share and clipboard functions are not supported');
     }
   };
 

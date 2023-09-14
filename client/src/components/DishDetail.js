@@ -1,52 +1,51 @@
 import React from 'react'
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import { Chip, Grid, Dialog, DialogTitle, DialogContent, Typography, Slide, useTheme, IconButton, Divider } from '@mui/material';
+import { Chip, Grid, DialogTitle, DialogContent, Typography, IconButton, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { BottomSheet } from 'react-spring-bottom-sheet'
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} timeout={500} />;
-});
+import 'react-spring-bottom-sheet/dist/style.css'
 
-const StyledLinearProgress = styled(({ color, ...otherProps }) => <LinearProgress {...otherProps} />)(({ theme, color }) => ({
-  height: 5,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 5,
-    backgroundColor: theme.palette.food[color],
-  },
-}));
 
-const DishDetail = ({ open, handleClose, dish }) => {
-  const theme = useTheme();
-
+const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
   const nutritionValues = dish.chat_completion.match(/\d+/g);
   const hasNutritionValues = nutritionValues && nutritionValues.length === 3;
 
+  const StyledLinearProgress = styled(({ color, ...otherProps }) => <LinearProgress {...otherProps} />)(({ theme, color }) => ({
+    height: 5,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      backgroundColor: theme.palette.food[color],
+    },
+  }));
+
   return (
-    <Dialog
+    <BottomSheet
       open={open}
-      onClose={(event) => handleClose(event)}
-      fullWidth
-      maxWidth="sm"
-      TransitionComponent={Transition}
-      keepMounted
-      PaperProps={{
-        style: {
-          backgroundColor: theme.palette.background.paper,
-          boxShadow: theme.shadows[5],
-          margin: 0,
-          position: 'absolute',
-          borderRadius: '30px 30px 0px 0px',
-          bottom: '0',
-          width: '100%',
-          overflow: 'visible',
-          padding: '7rem 0px calc(env(safe-area-inset-bottom) + 1rem) 0px',
-        },
-      }}
+      onDismiss={onDismiss}
+
+      // snapPoints={({ minHeight }) => [minHeight, '50', '70']}
+      defaultSnap={({ snapPoints, lastSnap }) =>
+        lastSnap ?? Math.min(...snapPoints)
+      }
+      // snapPoints={({ maxHeight }) => [
+      //   maxHeight - maxHeight / 5,
+      //   maxHeight * 0.6,
+      // ]}
+      minheight={50}
+      expandOnContentDrag={true}
+      style={{ overflow: 'visible', maxWidth: '700px' }}
+      onClick={(event) => event.stopPropagation()}
+    // header={
+    //   <>
+
+    //   </>
+    // }
     >
       <img
         src={dish.imageSrc}
@@ -58,11 +57,11 @@ const DishDetail = ({ open, handleClose, dish }) => {
           transform: 'translateX(-50%)',
           borderRadius: '50%',
           maskImage: 'radial-gradient(circle, black 100%, white 100%)',
-          width: '192px'
+          width: '192px',
         }}
       />
+      <DialogTitle sx={{ pt: 13 }}>
 
-      <DialogTitle >
         <Grid container direction="column" alignItems="center">
           <Grid item>
             <Typography variant="caption" color="primary" align='center' fontSize={'1rem'}>
@@ -111,13 +110,11 @@ const DishDetail = ({ open, handleClose, dish }) => {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-
       <Divider sx={{ width: '80%', margin: '.5rem auto' }} />
-
       <DialogContent>
         <Grid container spacing={3} justifyContent={'center'}>
           <Grid item xs={6} justifyContent={'center'}>
-            <Typography variant="h3" fontWeight={'500'} fontSize={'1rem'} sx={{mb:2}}>
+            <Typography variant="h3" fontWeight={'500'} fontSize={'1rem'} sx={{ mb: 2 }}>
               Preise
             </Typography>
             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
@@ -138,7 +135,7 @@ const DishDetail = ({ open, handleClose, dish }) => {
           {hasNutritionValues ? (
             <>
               <Grid item xs={6} >
-                <Typography variant="h3" fontWeight={'500'} fontSize={'1rem'} sx={{mb:2}}>
+                <Typography variant="h3" fontWeight={'500'} fontSize={'1rem'} sx={{ mb: 2 }}>
                   Nährwertschätzung
                 </Typography>
                 <Grid container direction="row" justifyContent="space-between" alignItems="center" >
@@ -168,7 +165,7 @@ const DishDetail = ({ open, handleClose, dish }) => {
 
         {/* Add more details as needed */}
       </DialogContent>
-    </Dialog>
+    </BottomSheet>
   );
 }
 

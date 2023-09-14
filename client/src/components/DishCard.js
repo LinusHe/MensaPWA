@@ -25,15 +25,18 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
         "bio": { color: "food.bio", label: "Bio", icon: BioIcon },
         "alcohol": { color: "food.alcohol", label: "Alkohol", icon: AlcoholIcon },
         "default": { color: "food.default", label: "Andere", icon: DefaultIcon }
-      };
+    };
 
     const handleOpen = () => {
         setOpen(true);
     };
 
+    function onDismiss(event) {
+        setOpen(false);
+    }
+
     const handleClose = (event) => {
         event.stopPropagation();
-        console.log('closed');
         setOpen(false);
     };
 
@@ -70,8 +73,22 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
     let additional_title_lines = additional_title.split('\n');
 
     return (
-        <Grid onClick={handleOpen} alignItems={'center'} container sx={{ p: 2, mx: 2, my: 1.5, backgroundColor: '#ffffff', boxShadow: '0px 0px 14px #00000012', borderRadius: '15px', width: 'auto' }}>
-            <Grid item xs={3.5} >
+        <Grid
+            onClick={handleOpen}
+            alignItems={'center'}
+            container
+            sx={{
+                p: 2,
+                mx: 2,
+                my: 1.5,
+                backgroundColor: '#ffffff',
+                boxShadow: '0px 0px 14px #00000012',
+                borderRadius: '15px',
+                width: 'auto',
+                cursor: 'pointer',
+            }}
+        >
+            <Grid item xs={3.5}>
                 <Grid container direction="column" justifyContent="center" alignItems="center">
                     <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </Grid>
@@ -83,7 +100,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                     </Typography>
                     <Chip label={prices.student} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
                 </Grid>
-                <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5, mb:.5 }}>
+                <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5, mb: .5 }}>
                     {title}
                     {additional_title_lines.length > 0 && additional_title_lines.every(line => line.trim() !== '') &&
                         <Typography variant="p" fontWeight={'500'} fontSize={'1rem'}>
@@ -101,13 +118,13 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                             key={index}
                             label={label}
                             variant="outlined"
-                            icon={<Icon color={color}/>}
+                            icon={<Icon color={color} />}
                             size='small'
-                            sx={{borderColor: color, color: color, margin: '8px 8px 0px 0px'}}
+                            sx={{ borderColor: color, color: color, margin: '8px 8px 0px 0px' }}
                         />
                     );
                 })}
-                <DishDetail open={open} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, prices, selections, selectionMap }} />
+                <DishDetail open={open} onDismiss={onDismiss} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, prices, selections, selectionMap }} />
             </Grid>
         </Grid >
     );

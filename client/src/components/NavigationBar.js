@@ -18,7 +18,6 @@ function NavigationBar() {
   // set Buttom Navigation based on Path
   React.useEffect(() => {
     const height = navBarRef.current?.clientHeight || 0;
-    console.log(`NavBar height: ${height}`);
     dispatch({ type: 'SET_NAVBAR_HEIGHT', payload: height });
 
     const pathname = window.location.pathname;
