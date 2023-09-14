@@ -29,3 +29,7 @@
 .notistack-SnackbarContainer {
   margin-bottom: var(--navBarHeight) !important;
 }
+
+[data-rsbs-content], [data-rsbs-scroll] {
+  overflow: visible;
+}

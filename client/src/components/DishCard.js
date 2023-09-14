@@ -25,11 +25,15 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
         "bio": { color: "food.bio", label: "Bio", icon: BioIcon },
         "alcohol": { color: "food.alcohol", label: "Alkohol", icon: AlcoholIcon },
         "default": { color: "food.default", label: "Andere", icon: DefaultIcon }
-      };
+    };
 
     const handleOpen = () => {
         setOpen(true);
     };
+
+    function onDismiss(event) {
+        setOpen(false);
+    }
 
     const handleClose = (event) => {
         event.stopPropagation();
@@ -82,7 +86,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                     </Typography>
                     <Chip label={prices.student} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
                 </Grid>
-                <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5, mb:.5 }}>
+                <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5, mb: .5 }}>
                     {title}
                     {additional_title_lines.length > 0 && additional_title_lines.every(line => line.trim() !== '') &&
                         <Typography variant="p" fontWeight={'500'} fontSize={'1rem'}>
@@ -100,13 +104,13 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                             key={index}
                             label={label}
                             variant="outlined"
-                            icon={<Icon color={color}/>}
+                            icon={<Icon color={color} />}
                             size='small'
-                            sx={{borderColor: color, color: color, margin: '8px 8px 0px 0px'}}
+                            sx={{ borderColor: color, color: color, margin: '8px 8px 0px 0px' }}
                         />
                     );
                 })}
-                <DishDetail open={open} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, prices, selections, selectionMap }} />
+                <DishDetail open={open} onDismiss={onDismiss} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, prices, selections, selectionMap }} />
             </Grid>
         </Grid >
     );
