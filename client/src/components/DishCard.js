@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Chip, Grid, Typography } from '@mui/material';
 import emptyPlate from '../assets/emptyPlate.png';
 import smoothieImage from '../assets/smoothies.png';
@@ -15,6 +16,7 @@ import DefaultIcon from 'mdi-material-ui/Food';
 
 const DishCard = ({ dishImage, category, title, chat_completion, prices, selections }) => {
     const [open, setOpen] = useState(false);
+    const selectedPriceType = useSelector(state => state.selectedPriceType);
 
     const selectionMap = {
         "fish/seafood": { color: "food.fishSeafood", label: "Fisch/Meeresfrüchte", icon: FishIcon },
@@ -98,7 +100,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                     <Typography variant="body" fontWeight={'400'} color="primary">
                         {category}
                     </Typography>
-                    <Chip label={prices.student} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
+                    <Chip label={prices[selectedPriceType]} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
                 </Grid>
                 <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5, mb: .5 }}>
                     {title}
