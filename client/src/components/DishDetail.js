@@ -134,7 +134,7 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
           {/* <Typography variant="body2">{dish.chat_completion}</Typography> */}
           {hasNutritionValues ? (
             <>
-              <Grid item xs={6} >
+              <Grid item xs={6} sx={{mb:2}}>
                 <Typography variant="h3" fontWeight={'500'} fontSize={'1rem'} sx={{ mb: 2 }}>
                   Nährwertschätzung
                 </Typography>
