@@ -1,3 +1,14 @@
+/* React Spring Bottom Sheet */
+:root {
+  --rsbs-backdrop-bg: rgba(0, 0, 0, 0.6);
+  --rsbs-bg: #fff;
+  --rsbs-handle-bg: hsla(0, 0%, 0%, 0.14);
+  --rsbs-max-w: auto;
+  --rsbs-ml: env(safe-area-inset-left);
+  --rsbs-mr: env(safe-area-inset-right);
+  --rsbs-overlay-rounded: 16px;
+}
+
 #root {
   /* equivalent to 100dvh in major browsers */
   min-height: calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0));
@@ -35,4 +46,8 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 0 0 calc(env(safe-area-inset-bottom) + 1rem) 0;
+}
+
+.dark-mode [data-rsbs-overlay] {
+  background: #121212;
 }

@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Divider, Grid, Typography, Button, Select, Switch, MenuItem, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import packageJson from '../../package.json';
-import { debounce } from 'lodash';
+import { useTheme } from '@mui/material/styles';
 
 function Settings() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -244,7 +245,7 @@ function Settings() {
           <Typography fontWeight="400">
             |
           </Typography>
-          <Button variant="text" style={{ color: 'rgba(0, 0, 0, 0.87)', fontWeight: '400' }} onClick={updateCache}>
+          <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} onClick={updateCache}>
             Suche nach Updates
           </Button>
         </Grid>

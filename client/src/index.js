@@ -9,6 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 // mui imports
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 // PWA imports
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -24,6 +25,8 @@ import '@fontsource/roboto';
 
 
 const Root = () => {
+  const appearance = useSelector(state => state.appearance);
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [bottomPadding, setBottomPadding] = useState(0);
   const navBarHeight = useSelector(state => state.navBarHeight);
 
@@ -31,14 +34,16 @@ const Root = () => {
     setBottomPadding(navBarHeight);
   }, [navBarHeight]);
 
+  const themeMode = appearance === 'system' ? (prefersDarkMode ? 'dark' : 'light') : appearance;
+
   return (
     <React.StrictMode >
       <BrowserRouter>
         <HelmetProvider>
-          <ThemeProvider theme={theme}>
+          <ThemeProvider theme={theme(themeMode)}>
             <CssBaseline />
-            <div style={{ '--navBarHeight': 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)' }}>
-              <App />
+            <div style={{ '--navBarHeight': 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)' }} className={theme(themeMode).palette.mode === 'dark' ? 'dark-mode' : 'light-mode'}>
+              <App/>
             </div>
           </ThemeProvider>
         </HelmetProvider>

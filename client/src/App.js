@@ -12,26 +12,26 @@ import Button from '@mui/material/Button';
 
 function App() {
   return (
-    <div>
-      <SnackbarProvider
-        autoHideDuration={5000}
-        action={(snackbarId) => (
-          <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => closeSnackbar(snackbarId)}>
-            Schließen
-          </Button>
-        )}
-      >
-        <Routes>
-          <Route path="/" element={<Floorplan />} ></Route>
-          <Route path="/menu" element={<FoodMenu />} ></Route>
-          <Route path="/rush" element={<Capacity />} ></Route>
-          <Route path="/settings" element={<Settings />} ></Route>
-          {/* <Route path="/:code" element={<CustomComponent />} /> */}
-          <Route path="/:code" element={<Floorplan />} />
-        </Routes>
-        <NavigationBar></NavigationBar>
-      </SnackbarProvider>
-    </div>
+      <div>
+        <SnackbarProvider
+          autoHideDuration={5000}
+          action={(snackbarId) => (
+            <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => closeSnackbar(snackbarId)}>
+              Schließen
+            </Button>
+          )}
+        >
+          <Routes>
+            <Route path="/" element={<Floorplan />} ></Route>
+            <Route path="/menu" element={<FoodMenu />} ></Route>
+            <Route path="/rush" element={<Capacity />} ></Route>
+            <Route path="/settings" element={<Settings />} ></Route>
+            {/* <Route path="/:code" element={<CustomComponent />} /> */}
+            <Route path="/:code" element={<Floorplan />} />
+          </Routes>
+          <NavigationBar></NavigationBar>
+        </SnackbarProvider>
+      </div>
   );
 }
 
