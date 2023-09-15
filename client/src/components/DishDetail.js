@@ -4,11 +4,14 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { Chip, Grid, DialogTitle, DialogContent, Typography, IconButton, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { BottomSheet } from 'react-spring-bottom-sheet'
+import { useTheme } from '@mui/material/styles';
+import emptyPlate from '../assets/emptyPlate.png';
 
 import 'react-spring-bottom-sheet/dist/style.css'
 
 
 const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
+  const theme = useTheme();
   const nutritionValues = dish.chat_completion.match(/\d+/g);
   const hasNutritionValues = nutritionValues && nutritionValues.length === 3;
 
@@ -24,11 +27,18 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
     },
   }));
 
+  const handleError = (e) => {
+    // If an error occurs while loading the image, prevent further error triggers
+    e.target.onerror = null;
+    // Replace the image source with an empty plate image
+    e.target.src = emptyPlate;
+}
+
   return (
     <BottomSheet
       open={open}
       onDismiss={onDismiss}
-
+      className={theme.palette.mode === 'dark' ? 'dark-mode' : 'light-mode'}
       // snapPoints={({ minHeight }) => [minHeight, '50', '70']}
       defaultSnap={({ snapPoints, lastSnap }) =>
         lastSnap ?? Math.min(...snapPoints)
@@ -48,6 +58,7 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
     // }
     >
       <img
+        onError={handleError}
         src={dish.imageSrc}
         alt={dish.title}
         style={{
@@ -55,12 +66,12 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
           top: '-70px',
           left: '50%',
           transform: 'translateX(-50%)',
-          borderRadius: '50%',
-          maskImage: 'radial-gradient(circle, black 100%, white 100%)',
+          clipPath: 'circle(42% at center)',
           width: '192px',
+          zIndex: 1,
         }}
       />
-      <DialogTitle sx={{ pt: 13 }}>
+      <DialogTitle sx={{ pt: 12 }}>
 
         <Grid container direction="column" alignItems="center">
           <Grid item>
@@ -73,13 +84,15 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
               {dish.title}
             </Typography>
           </Grid>
-          <Grid item textAlign={'center'} lineHeight={'1'} sx={{ mb: 1.5 }}>
-            {dish.additional_title_lines.length > 0 && dish.additional_title_lines.every(line => line.trim() !== '') &&
+
+          {dish.additional_title_lines.length > 0 && dish.additional_title_lines.every(line => line.trim() !== '') &&
+            <Grid item textAlign={'center'} lineHeight={'1'} sx={{ mb: 1.5 }}>
               <Typography variant="p" fontWeight={'500'} fontSize={'1rem'} lineHeight={'1'}>
                 {dish.additional_title_lines.map((line, index) => <React.Fragment key={index}>{line}</React.Fragment>)}
               </Typography>
-            }
-          </Grid>
+            </Grid>
+          }
+
           <Grid item textAlign={'center'}>
             {dish.selections && dish.selections.map((selection, index) => {
               const selectionData = dish.selectionMap[selection] || { ...dish.selectionMap.default, label: selection };
@@ -119,22 +132,22 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
             </Typography>
             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
               <Typography variant="body2">Studierende</Typography>
-              <Chip label={dish.prices.student} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
+              <Chip label={dish.prices.student} size="small" style={{ backgroundColor: theme.palette.background.priceChip, color: theme.palette.text.primary, fontWeight: 500 }} />
             </Grid>
             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
               <Typography variant="body2">Mitarbeitende</Typography>
-              <Chip label={dish.prices.employee} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
+              <Chip label={dish.prices.employee} size="small" style={{ backgroundColor: theme.palette.background.priceChip, color: theme.palette.text.primary, fontWeight: 500 }} />
             </Grid>
             <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
               <Typography variant="body2">Externe</Typography>
-              <Chip label={dish.prices.guest} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
+              <Chip label={dish.prices.guest} size="small" style={{ backgroundColor: theme.palette.background.priceChip, color: theme.palette.text.primary, fontWeight: 500 }} />
             </Grid>
           </Grid>
 
           {/* <Typography variant="body2">{dish.chat_completion}</Typography> */}
           {hasNutritionValues ? (
             <>
-              <Grid item xs={6} sx={{mb:2}}>
+              <Grid item xs={6} sx={{ mb: 2 }}>
                 <Typography variant="h3" fontWeight={'500'} fontSize={'1rem'} sx={{ mb: 2 }}>
                   Nährwertschätzung
                 </Typography>

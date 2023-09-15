@@ -4,6 +4,7 @@ import { Chip, Grid, Typography } from '@mui/material';
 import emptyPlate from '../assets/emptyPlate.png';
 import smoothieImage from '../assets/smoothies.png';
 import DishDetail from './DishDetail';
+import { useTheme } from '@mui/material/styles';
 
 import FishIcon from 'mdi-material-ui/Fish';
 import VegetarianIcon from 'mdi-material-ui/Leaf';
@@ -15,6 +16,7 @@ import AlcoholIcon from 'mdi-material-ui/GlassCocktail';
 import DefaultIcon from 'mdi-material-ui/Food';
 
 const DishCard = ({ dishImage, category, title, chat_completion, prices, selections }) => {
+    const theme = useTheme();
     const [open, setOpen] = useState(false);
     const selectedPriceType = useSelector(state => state.selectedPriceType);
 
@@ -75,6 +77,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
     let additional_title_lines = additional_title.split('\n');
 
     return (
+        
         <Grid
             onClick={handleOpen}
             alignItems={'center'}
@@ -83,8 +86,8 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                 p: 2,
                 mx: 2,
                 my: 1.5,
-                backgroundColor: '#ffffff',
-                boxShadow: '0px 0px 14px #00000012',
+                backgroundColor: theme.palette.background.dishcard,
+                boxShadow: `0px 0px 14px ${theme.palette.shadow.main}`,
                 borderRadius: '15px',
                 width: 'auto',
                 cursor: 'pointer',
@@ -92,7 +95,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
         >
             <Grid item xs={3.5}>
                 <Grid container direction="column" justifyContent="center" alignItems="center">
-                    <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', clipPath: 'circle(42% at center)' }} />
                 </Grid>
             </Grid>
             <Grid item xs={8.5} sx={{ pl: 2 }} alignSelf={'flex-start'}>
@@ -100,7 +103,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                     <Typography variant="body" fontWeight={'400'} color="primary">
                         {category}
                     </Typography>
-                    <Chip label={prices[selectedPriceType]} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500 }} />
+                    <Chip label={prices[selectedPriceType]} size="small" style={{ backgroundColor: theme.palette.background.priceChip, color: theme.palette.text.primary, fontWeight: 500 }} />
                 </Grid>
                 <Typography variant="h5" fontWeight={'500'} fontSize={'1.2rem'} sx={{ py: 0.5, mb: .5 }}>
                     {title}

@@ -7,16 +7,18 @@ import $ from 'jquery'
 import floorPlanImage from '../assets/mensaplan.svg'
 import '../assets/floorplan.css'
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 // FloorplanSelector component
 function FloorplanSelector() {
+  const theme = useTheme();
   let { code } = useParams();
   const navigate = useNavigate();
 
   // Constants for zooming
   const minZoom = 350 / window.innerWidth;
   const maxZoom = 3500 / window.innerWidth;
-  const bounds = window.innerWidth;
+  // const bounds = window.innerWidth;
   const initialScaleFactor = 2.1;
 
   // Array to hold table elements
@@ -173,8 +175,9 @@ function FloorplanSelector() {
         image.node().appendChild(importedNode);
 
         const pinIcon = d3.select("#pin").attr("opacity", 0);
-        tables = Array.from(image.selectAll("g > *[id*='Table']").nodes());
 
+        // Get all tables and add click event listener and table class to them
+        tables = Array.from(image.selectAll("g > *[id*='Table']").nodes());
         tables.forEach(function (table) {
           d3.select(table)
             .classed("table", true)
@@ -182,6 +185,16 @@ function FloorplanSelector() {
               handleTableClick(table, pinIcon, zoom, mapHolderWidth, mapHolderHeight, svg);
             });
         });
+
+
+        const symbols = Array.from(image.selectAll("g[id='symbols'] path, g[id='symbols'] rect").nodes());
+
+        symbols.forEach(function (symbols) {
+          d3.select(symbols)
+            .classed("symbols", true)
+        });
+
+
 
         // Check if code prop is provided and matches any table id
         if (code) {
@@ -201,7 +214,7 @@ function FloorplanSelector() {
 
   // Render the component
   return (
-    <div id="map-holder"></div>
+    <div id="map-holder" className={theme.palette.mode === 'dark' ? 'dark-mode' : 'light-mode'}></div>
   )
 }
 

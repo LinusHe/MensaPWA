@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { ResponsiveLine } from '@nivo/line';
+import { useTheme } from '@mui/material/styles';
 
 const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
+  const theme = useTheme();
   const containerRef = useRef(null);
   const bigElementRef = useRef(null);
   const currentTime = currentTimeString;
@@ -20,7 +22,7 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
       legend: currencyCapacity,
       legendPosition: 'top',
       lineStyle: {
-        stroke: '#424588',
+        stroke: theme.palette.mode === 'dark' ? '#ffffff' : '#424588',
         strokeWidth: 2,
         strokeDasharray: '10 5',
         opacity: 0.5,
@@ -91,14 +93,25 @@ const CapacityGraph = ({ data, currentTimeString, currentCapa, greyed }) => {
           }}
           theme={
             {
+              axis: {
+                ticks: {
+                  text: {
+                    fill: theme.palette.mode === 'dark' ? '#ffffff80' : '#9D9FC3',
+                    fontSize: '14px',
+                  },
+                  line: {
+                    stroke: theme.palette.mode === 'dark' ? '#ffffff80' : '#9D9FC3',
+                  }
+                }
+              },
               grid: {
                 line: {
-                  stroke: '#424588',
+                  stroke: theme.palette.mode === 'dark' ? '#ffffffaa' : '#424588',
                   strokeWidth: 1,
                   strokeDasharray: '10 10',
                   opacity: 0.2,
                 }
-              }
+              },
             }
           }
           axisLeft={null}

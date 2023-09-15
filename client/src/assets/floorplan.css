@@ -12,9 +12,16 @@ h1#LocationCode {
   height: 100vh;
   height: -webkit-fill-available;
   overflow: hidden;
-  background-image: url("bgPattern.svg");
   background-size: 30px;
   background-repeat: repeat;
+}
+
+#map-holder.light-mode {
+  background-image: url("lightBgPattern.svg");
+}
+
+#map-holder.dark-mode {
+  background-image: url("darkBgPattern.svg");
 }
 
 .table {
@@ -22,6 +29,14 @@ h1#LocationCode {
   transition: all 0.2s;
 }
 
+#map-holder.dark-mode .table {
+  fill: #ffffff;
+}
+
 .table-on {
   fill: #424588 !important;
+}
+
+#map-holder.dark-mode .symbols {
+  fill: #a6acb6 !important;
 }
