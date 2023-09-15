@@ -1,16 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
+import { updateUserData } from './utils/dbController'
 
 const initialState = {
   navBarHeight: 0,
-  selectedPriceType: localStorage.getItem('selectedPriceType') || 'student', // default value
-  notificationsEnabled: JSON.parse(localStorage.getItem('notificationsEnabled')) || false, // default value
-  selectedDays: JSON.parse(localStorage.getItem('selectedDays')) || ["Mo", "Di", "Mi", "Do", "Fr"], // default value
-  notificationTime: localStorage.getItem('notificationTime') || '11:00', // default value
-  appearance: localStorage.getItem('appearance') || 'light' // default value for appearance
+  userId: localStorage.getItem('uniqueId') || uuidv4(), // UUID for notification identification in firebase database
+  token: localStorage.getItem('token') || null,
+  selectedPriceType: localStorage.getItem('selectedPriceType') || 'student',
+  notificationsEnabled: JSON.parse(localStorage.getItem('notificationsEnabled')) || false,
+  selectedDays: JSON.parse(localStorage.getItem('selectedDays')) || ["1", "2", "3", "4", "5"],
+  notificationTime: localStorage.getItem('notificationTime') || '11:00',
+  appearance: localStorage.getItem('appearance') || 'light'
 };
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case 'SET_TOKEN':
+      localStorage.setItem('token', action.payload);
+      return { ...state, token: action.payload };
     case 'SET_NAVBAR_HEIGHT':
       return { ...state, navBarHeight: action.payload };
     case 'SET_PRICE_TYPE':
@@ -34,3 +41,8 @@ function reducer(state = initialState, action) {
 }
 
 export const store = configureStore({ reducer });
+
+// Set uniqueId in localStorage if it doesn't already exist
+if (!localStorage.getItem('uniqueId')) {
+  localStorage.setItem('uniqueId', store.getState().userId);
+}

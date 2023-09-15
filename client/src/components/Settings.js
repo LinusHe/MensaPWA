@@ -1,39 +1,73 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Divider, Grid, Typography, Button, Select, Switch, MenuItem, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import packageJson from '../../package.json';
 import { useTheme } from '@mui/material/styles';
+import { store } from '../store';
+
+// Notification Stuff
+import { requestPermissionAndToken } from '../utils/pushNotification';
+import { updateUserData } from '../utils/dbController'
+
 
 function Settings() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const version = packageJson.version;
+  const userId = useSelector(state => state.userId);
 
+  const token = useSelector(state => state.token);
   const selectedPriceType = useSelector(state => state.selectedPriceType);
   const notificationsEnabled = useSelector(state => state.notificationsEnabled);
+  // 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
   const selectedDays = useSelector(state => state.selectedDays);
   const notificationTime = useSelector(state => state.notificationTime);
+
   const appearance = useSelector(state => state.appearance);
+  const version = packageJson.version;
 
-
+  useEffect(() => {
+    store.subscribe(() => {
+      const state = store.getState();
+      updateUserData(
+        state.userId,
+        state.token,
+        state.selectedDays,
+        state.notificationTime
+      );
+    });
+  }, []);
 
   const handlePriceTypeChange = (event) => {
     dispatch({ type: 'SET_PRICE_TYPE', payload: event.target.value });
   };
 
-  const handleNotificationsToggle = (event) => {
+  const handleNotificationsToggle = async (event) => {
+    if (event.target.checked) {
+      try {
+        if (token === null) {
+          const token = await requestPermissionAndToken();
+          dispatch({ type: 'SET_TOKEN', payload: token });
+        }
+        dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: true });
+        enqueueSnackbar('Benachrichtigungen aktiviert', { variant: 'success' });
+      } catch (error) {
+        enqueueSnackbar(`Error: ${error.message}`, { variant: 'error' });
+        dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: false });
+      }
+    }
     dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: event.target.checked });
   };
 
-  const handleDaysChange = (event, newDays) => {
+  const handleDaysChange = async (event, newDays) => {
     dispatch({ type: 'SET_SELECTED_DAYS', payload: newDays });
   };
 
-  const handleTimeChange = (event) => {
+  const handleTimeChange = async (event) => {
     console.log("changed", event.target.value)
+    console.log("timestamp", timeToTimeStamp(event.target.value))
     dispatch({ type: 'SET_NOTIFICATION_TIME', payload: event.target.value });
   };
 
@@ -62,6 +96,16 @@ function Settings() {
     }
   };
 
+  const timeToTimeStamp = (timeStr) => {
+    const date = new Date();
+    const hours = parseInt(timeStr.split(':')[0]);
+    const minutes = parseInt(timeStr.split(':')[1]);
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    return date.getTime();
+  }
+
+
   return (
     <Grid
       container
@@ -86,7 +130,7 @@ function Settings() {
         </Grid>
       </Grid>
 
-      <Grid item xs={12} sx={{ overflow: 'auto', px:2, maxHeight: 'calc(100vh - 144px)' }}>
+      <Grid item xs={12} sx={{ overflow: 'auto', px: 2, maxHeight: 'calc(100vh - 144px)' }}>
         <Grid item xs={12} textAlign={"left"}>
           <Grid container direction="row" justifyContent="center" alignItems="center">
             <Grid item xs={6}>
@@ -150,11 +194,11 @@ function Settings() {
                   <Grid container direction="row" alignItems="center" justifyContent="space-between" >
                     <Grid item>
                       <ToggleButtonGroup value={selectedDays} onChange={handleDaysChange} sx={{ pr: 1 }}>
-                        <ToggleButton value="Mo" color="primary">Mo</ToggleButton>
-                        <ToggleButton value="Di" color="primary">Di</ToggleButton>
-                        <ToggleButton value="Mi" color="primary">Mi</ToggleButton>
-                        <ToggleButton value="Do" color="primary">Do</ToggleButton>
-                        <ToggleButton value="Fr" color="primary">Fr</ToggleButton>
+                        <ToggleButton value="1" color="primary">Mo</ToggleButton>
+                        <ToggleButton value="2" color="primary">Di</ToggleButton>
+                        <ToggleButton value="3" color="primary">Mi</ToggleButton>
+                        <ToggleButton value="4" color="primary">Do</ToggleButton>
+                        <ToggleButton value="5" color="primary">Fr</ToggleButton>
                       </ToggleButtonGroup>
                     </Grid>
                     <Grid item>
