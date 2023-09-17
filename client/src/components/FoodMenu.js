@@ -6,9 +6,12 @@ import React, { useState, useEffect } from 'react';
 import { Grow, Fade, Typography, Grid, Skeleton, Tabs, Tab, Chip } from '@mui/material';
 import DishCard from './DishCard';
 import { useSnackbar } from 'notistack';
+import { useTheme } from '@mui/material/styles';
 
 // Main FoodMenu component
 function FoodMenu() {
+  const theme = useTheme();
+
   // Define state variables
   const [dishes, setDishes] = useState([]);
   const [showSkeleton, setShowSkeleton] = useState(false);
@@ -163,7 +166,7 @@ function FoodMenu() {
           }}
         >
           {weekdays.map((weekday, index) => (
-            <Tab key={index}
+            <Tab key={weekday}
               label={
                 <div>
                   <div>{weekday}</div>
@@ -178,12 +181,12 @@ function FoodMenu() {
 
         {/* TAB CONTENT */}
         {dates.map((date, index) => (
-          <div key={index} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{ marginBottom: '120px' }}>
+          <div key={date} role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} style={{ marginBottom: '120px' }}>
             {value === index && (
               <Grid container direction="row" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
                 {showSkeleton ? (
                   Array.from(new Array(5)).map((_, i) => (
-                    <Grow timeout={500} key={`${i}`} in={true} style={{ width: '100%', transitionDelay: `${i * 50}ms` }}>
+                    <Grow timeout={500} key={i} in={true} style={{ width: '100%', transitionDelay: `${i * 50}ms` }}>
                       <Grid
                         alignItems={'center'}
                         container
@@ -191,7 +194,7 @@ function FoodMenu() {
                           p: 2,
                           mx: 2,
                           my: 1.5,
-                          backgroundColor: '#ffffff',
+                          backgroundColor: theme.palette.background.dishcard,
                           boxShadow: '0px 0px 14px #00000012',
                           borderRadius: '15px',
                           width: '100%',
@@ -216,7 +219,7 @@ function FoodMenu() {
                           ))}
                           <Grid key={i} sx={{ pt: 1 }} container direction="row" >
                             {[...Array(Math.floor(Math.random() * 3) + 1)].map((_, i) => (
-                              <Skeleton sx={{ mr: 1 }}>
+                              <Skeleton key={i} sx={{ mr: 1 }}>
                                 <Chip label={Math.random().toString(36).substring(2, 7)} size="small" style={{ backgroundColor: '#F2F4FF', color: "#202021", fontWeight: 500, }} />
                               </Skeleton>
                             ))}
