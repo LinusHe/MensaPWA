@@ -67,7 +67,7 @@ function FoodMenu() {
         .catch(error => {
           const currentDate = new Date().toISOString().split('T')[0];
           if (date === currentDate) {
-            enqueueSnackbar(`No data for date ${date} (mensa may be closed)`, { variant: 'info' });
+            console.log(`No data for date ${date} (mensa may be closed)`);
           }
           // Return null if there was an error fetching the data
           return null;

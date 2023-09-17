@@ -186,6 +186,26 @@ function FloorplanSelector() {
             });
         });
 
+        tables.forEach(function (table) {
+          const bbox = table.getBBox();
+          const padding = 10; // Increase this value to increase the click area
+
+          // Create an overlay with a larger area than the table
+          const overlay = d3.select(table.parentNode)
+            .insert("rect", ":first-child")
+            .attr("x", bbox.x - padding)
+            .attr("y", bbox.y - padding)
+            .attr("width", bbox.width + padding * 2)
+            .attr("height", bbox.height + padding * 2)
+            .style("fill", "none")
+            .style("pointer-events", "all");
+
+          // Attach the click event listener to the overlay
+          overlay.on("click", function (d) {
+            handleTableClick(table, pinIcon, zoom, mapHolderWidth, mapHolderHeight, svg);
+          });
+        });
+
 
         const symbols = Array.from(image.selectAll("g[id='symbols'] path, g[id='symbols'] rect").nodes());
 
