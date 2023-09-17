@@ -197,6 +197,7 @@ function FloorplanSelector() {
             .attr("y", bbox.y - padding)
             .attr("width", bbox.width + padding * 2)
             .attr("height", bbox.height + padding * 2)
+            .style("fill", "none")
             .style("pointer-events", "all");
 
           // Attach the click event listener to the overlay
