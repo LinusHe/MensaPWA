@@ -39,15 +39,17 @@ function FloorplanSelector() {
     const initialScale = minZoom * initialScaleFactor;
     const startScale = initialScale / 2;
     let initialCenterX = (mapHolderWidth - initialScale * mapHolderWidth) / 2;
-    switch (zoomDirection) {
-      case 'N':
-        initialCenterX = 0;
-        break;
-      case 'S':
-        initialCenterX = (mapHolderWidth - initialScale * mapHolderWidth)
-        break;
-      default:
-        break;
+    if (mapHolderWidth * initialScale > window.innerWidth) {
+      switch (zoomDirection) {
+        case 'N':
+          initialCenterX = 0;
+          break;
+        case 'S':
+          initialCenterX = (mapHolderWidth - initialScale * mapHolderWidth)
+          break;
+        default:
+          break;
+      }
     }
     const initialCenterY = (mapHolderHeight - initialScale * mapHolderHeight) / 2 - 130;
     const startCenterX = (mapHolderWidth - startScale * mapHolderWidth) / 2;
@@ -88,22 +90,23 @@ function FloorplanSelector() {
     const newScale = currentScale * 1.2 < 2.1 ? currentScale * 1.2 : currentScale;
     const newCenterY = (mapHolderHeight - newScale * mapHolderHeight) / 2 - 150;
     let newCenterX = (mapHolderWidth - newScale * mapHolderWidth) / 2;
-    switch (zoomDirection) {
-      case 'N':
-        newCenterX = 0;
-        break;
-      case 'S':
-        newCenterX = (mapHolderWidth - newScale * mapHolderWidth);
-        break;
-      default:
-        break;
+    if (mapHolderWidth * currentScale > window.innerWidth) {
+      switch (zoomDirection) {
+        case 'N':
+          newCenterX = 0;
+          break;
+        case 'S':
+          newCenterX = (mapHolderWidth - newScale * mapHolderWidth);
+          break;
+        default:
+          break;
+      }
     }
 
     svg
       .transition()
       .duration(1000)
       .call(zoom.transform, d3.zoomIdentity.translate(newCenterX, newCenterY).scale(newScale));
-
 
   }
 
