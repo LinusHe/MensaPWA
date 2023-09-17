@@ -30,7 +30,7 @@ h1#LocationCode {
 }
 
 #map-holder.dark-mode .table {
-  fill: #ffffff;
+  fill: #373b53;
 }
 
 .table-on {
@@ -38,5 +38,11 @@ h1#LocationCode {
 }
 
 #map-holder.dark-mode .symbols {
-  fill: #a6acb6 !important;
+  fill: #9498F3 !important;
+}
+
+#map-holder.dark-mode .table-on {
+  fill: #9498f3 !important;
+  stroke: #fff;
+  stroke-width: 2;
 }
