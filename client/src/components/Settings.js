@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Divider, Grid, Typography, Button, Select, Switch, MenuItem, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
-import { useSnackbar } from 'notistack';
+import { useSnackbar, closeSnackbar } from 'notistack';
 import packageJson from '../../package.json';
 import { useTheme } from '@mui/material/styles';
 
@@ -28,22 +28,50 @@ function Settings() {
     dispatch({ type: 'SET_PRICE_TYPE', payload: event.target.value });
   };
 
-  const handleNotificationsToggle = async (event) => {
+  const handleNotificationsToggle = (event) => {
     if (event.target.checked) {
-      try {
-        if (token === null) {
-          const token = await requestPermissionAndToken();
-          dispatch({ type: 'SET_TOKEN', payload: token });
-        }
+      if (token === null) {
+        requestPermissionAndToken()
+          .then((token) => {
+            dispatch({ type: 'SET_TOKEN', payload: token });
+            dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: true });
+            enqueueSnackbar('Benachrichtigungen aktiviert', { variant: 'success' });
+          })
+          .catch((error) => {
+            if (error.buttonAction) {
+              const action = (key) => (
+                <>
+                  <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => handleSnackbarButtonClick(error.buttonAction, key)}>
+                    {error.buttonText}
+                  </Button>
+                  <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => closeSnackbar()}>
+                    Schließen
+                  </Button>
+                </>
+              );
+              enqueueSnackbar(error.message, { variant: error.type, action });
+            }
+            else enqueueSnackbar(error.message, { variant: error.type });
+            dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: false });
+          });
+      } else {
         dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: true });
         enqueueSnackbar('Benachrichtigungen aktiviert', { variant: 'success' });
-      } catch (error) {
-        enqueueSnackbar(`Error: ${error.message}`, { variant: 'error' });
-        dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: false });
       }
+    } else {
+      dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: false });
     }
-    dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: event.target.checked });
   };
+
+  function handleSnackbarButtonClick(action, key) {
+    if (action === "installPWA") {
+      // Code to install the PWA...
+      alert("TODO Install PWA Dialog")
+    } else if (action === "contactUs") {
+      // Code to contact us...
+    }
+    closeSnackbar(key);
+  }
 
   const handleDaysChange = async (event, newDays) => {
     dispatch({ type: 'SET_SELECTED_DAYS', payload: newDays });
@@ -96,6 +124,7 @@ function Settings() {
       direction="row"
       justifyContent="center"
       alignItems="flex-start"
+      alignContent="flex-start"
       rowSpacing={0}
       columnSpacing={0}
       className='fullHeight'
@@ -177,7 +206,7 @@ function Settings() {
                 <Grid item>
                   <Grid container direction="row" alignItems="center" justifyContent="left" >
                     <Grid item>
-                      <ToggleButtonGroup value={selectedDays} onChange={handleDaysChange} sx={{ pr: 2, mt:1 }}>
+                      <ToggleButtonGroup value={selectedDays} onChange={handleDaysChange} sx={{ pr: 2, mt: 1 }}>
                         <ToggleButton value="1" color="primary">Mo</ToggleButton>
                         <ToggleButton value="2" color="primary">Di</ToggleButton>
                         <ToggleButton value="3" color="primary">Mi</ToggleButton>
