@@ -18,6 +18,7 @@ const getNextNotification = (selectedDays, notificationTime) => {
     const day = sortedDays[i];
 
     // If the current day is a selected day and the notification time has not passed yet
+    // eslint-disable-next-line
     if (day == currentDay && currentTime < notificationMinutes) {
       return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
     }

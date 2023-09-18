@@ -31,8 +31,16 @@ function reducer(state = initialState, action) {
         updateUserData(state.userId, state.token, state.selectedDays, state.notificationTime, state.timezone);
       } else if (action.payload === false) {
         disableNotification(state.userId);
+        // Reset the variables to their default values
+        localStorage.setItem('selectedDays', JSON.stringify(["1", "2", "3", "4", "5"]));
+        localStorage.setItem('notificationTime', "11:00");
       }
-      return { ...state, notificationsEnabled: action.payload };
+      return {
+        ...state,
+        notificationsEnabled: action.payload,
+        selectedDays: action.payload ? state.selectedDays : ["1", "2", "3", "4", "5"],
+        notificationTime: action.payload ? state.notificationTime : "11:00"
+      };
     case 'SET_SELECTED_DAYS':
       localStorage.setItem('selectedDays', JSON.stringify(action.payload));
       if (state.notificationsEnabled === true) {

@@ -17,16 +17,19 @@ export function requestPermissionAndToken() {
             if (currentToken) {
               resolve(currentToken);
             } else {
-              reject(new Error("VapidKey Token konnte nicht generiert werden."));
+              reject({ message: "VapidKey Token konnte nicht generiert werden.", type: "error" });
             }
           });
         } else {
-          reject(new Error("Berechtigung für Benachrichtigungen wurden nicht erteilt. Bitte erteile dieser App die Berechtigung, Benachrichtigungen zu empfangen."));
+          reject({ message: "Berechtigung für Benachrichtigungen wurden nicht erteilt. Bitte erteile dieser App die Berechtigung, Benachrichtigungen zu empfangen.", type: "error" });
         }
       });
     }
+    else if (window.navigator.standalone === false) {
+      reject({ message: "Die App ist auf iOS nicht als PWA installiert. Bitte installiere die App als PWA und aktiviere anschließend die Benachrichtigungen.", type: "info", buttonText: "Installieren", buttonAction: "installPWA" });
+    }
     else {
-      reject(new Error("Benachrichtigungen sind in diesem Browser aufgrund von unsicherer HTTP-Verbindung nicht verfügbar. Versuche die Seite per HTTPS Verbindung aufzurufen, oder kontaktiere uns."));
+      reject({ message: "Benachrichtigungen sind in diesem Browser aufgrund von unsicherer HTTP-Verbindung nicht verfügbar. Versuche die Seite per HTTPS Verbindung aufzurufen, oder kontaktiere uns.", type: "error" });
     }
   });
 }

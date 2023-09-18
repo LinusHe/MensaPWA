@@ -34,11 +34,16 @@ exports.checkNotifications = functions.pubsub
 
       // Send a notification
       const message = {
-        notification: {
+        token: user.fcm_token,
+        data: {
           title: "Your notification: " + user.preferences.time,
           body: "Your notification body",
         },
-        token: user.fcm_token,
+        webpush: {
+          fcm_options: {
+            link: '/menu',
+          },
+        },
       };
 
       admin.messaging().send(message).then((response) => {
