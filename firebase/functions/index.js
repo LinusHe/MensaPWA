@@ -1,15 +1,21 @@
-/* eslint-disable indent */
+/* eslint-disable indent, max-len, quotes */
 // Deploy with: firebase deploy --only functions
-
+const moment = require("moment-timezone");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
+console.log("Firebase Admin Initialized");
+
 exports.checkNotifications = functions.pubsub
   .schedule("every 1 minutes")
   .onRun(async (context) => {
-    const now = admin.firestore.Timestamp.now();
+    console.log("Checking notifications...");
+
+    const now = moment().tz("Europe/Berlin").toDate();
     const db = admin.firestore();
+
+    console.log("Current time: ", now);
 
     // Get all users whose nextNotification has passed
     const snapshot = await db.collection("notificationUsers")
@@ -17,21 +23,31 @@ exports.checkNotifications = functions.pubsub
       .where("enabled", "==", true)
       .get();
 
+    console.log("Fetched users: ", snapshot.size);
+
     // For each user, send a notification and
     // update the nextNotification time
     for (const doc of snapshot.docs) {
       const user = doc.data();
 
+      console.log("Processing user: ", user.userId);
+
       // Send a notification
       const message = {
         notification: {
-          title: "Your notification title",
+          title: "Your notification: " + user.preferences.time,
           body: "Your notification body",
         },
         token: user.fcm_token,
       };
 
-      await admin.messaging().send(message);
+      admin.messaging().send(message).then((response) => {
+        console.log("Notification sent to user: ", user.userId);
+        console.log("Benachrichtigung gesendet:", response);
+      }).catch((error) => {
+        console.log("Fehler beim Senden der Benachrichtigung:", error);
+      });
+
 
       // Update the nextNotification time
       const nextNotification = getNextNotification(
@@ -41,56 +57,51 @@ exports.checkNotifications = functions.pubsub
       await db.collection("notificationUsers").doc(user.userId).update({
         nextNotification: admin.firestore.Timestamp.fromDate(nextNotification),
       });
+
+      console.log("Updated nextNotification time for user: ", user.userId, " to: ", nextNotification);
     }
 
     console.log("Notifications checked");
   });
 
 const getNextNotification = (selectedDays, notificationTime) => {
-  // Get current date
-  const now = new Date();
-  const currentDay = now.getDay();
-  const currentTime = now.getHours() * 60 + now.getMinutes();
+  console.log("Calculating next notification time...");
+
+  // Get current date and time
+  const now = moment().tz("Europe/Berlin");
 
   // Convert notification time to minutes
   const [hours, minutes] = notificationTime.split(":").map(Number);
   const notificationMinutes = hours * 60 + minutes;
 
+  console.log("Notification time in minutes: ", notificationMinutes);
+
   // Sort selected days
   const sortedDays = [...selectedDays].sort();
+
+  console.log("Sorted days: ", sortedDays);
 
   // Find the next notification day
   for (let i = 0; i < sortedDays.length; i++) {
     const day = sortedDays[i];
 
-    // If the current day is a selected day
-    // and the notification time has not passed yet
-    if (day == currentDay && currentTime < notificationMinutes) {
-      return new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        hours, minutes,
-      );
-    }
+    console.log("Processing day: ", day);
 
-    // If the current day is before a selected day
-    if (day > currentDay) {
-      return new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + (day - currentDay),
-        hours, minutes,
-      );
+    // Create a moment object for the next notification day
+    const nextNotificationDay = now.clone().day(day).hour(hours).minute(minutes);
+
+    // If the next notification day is in the future, return it
+    if (nextNotificationDay.isAfter(now)) {
+      console.log("Next notification day: ", nextNotificationDay.format());
+      return nextNotificationDay.toDate();
     }
   }
 
   // If no day was found in this week, return the first day of the next week
+  console.log("No day was found in this week, return 1st day of the next week");
   const nextDay = sortedDays[0];
-  return new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + (7 - currentDay + nextDay),
-    hours, minutes,
-  );
+  const nextNotificationDay = now.clone().add(1, 'weeks').day(nextDay).hour(hours).minute(minutes);
+
+  console.log("Next notification day: ", nextNotificationDay.format());
+  return nextNotificationDay.toDate();
 };
