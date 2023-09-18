@@ -95,10 +95,22 @@ for i in range(5):
         # Define the path for the menu.json file
         menu_file_path = f'{current_dir}/menu.json'
 
+        # Define the path for the notification.json file
+        notification_file_path = f'{current_dir}/notification.json'
+
         # Check if the directory already exists
         if os.path.exists(current_dir):
             # Check if the menu.json file already exists
             if os.path.exists(menu_file_path):
+
+                # Check if the notification.json file already exists and generate it if not
+                if not os.path.exists(notification_file_path):
+                    try:
+                        logging.info(f"Generating notification texts")
+                        generate_notification_completion(current_date, script_dir, output_dir)
+                    except Exception as e:
+                        logging.error(f"Error while generating notification texts: {str(e)}")
+
                 # Load the existing data
                 with open(menu_file_path, 'r', encoding='utf-8') as f:
                     existing_data = json.load(f)

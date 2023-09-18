@@ -17,6 +17,27 @@ exports.checkNotifications = functions.pubsub
 
     console.log("Current time: ", now);
 
+    // Fetch the notification message
+    const date = moment().tz("Europe/Berlin").format('YYYY-MM-DD');
+    const url = `https://mensa.heylinus.de/data/${date}/notification.json`;
+    let notification;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      notification = data.notification;
+      console.log("Fetched notification: ", notification);
+    } catch (error) {
+      console.error("Error fetching notification: ", error);
+      // Set a default notification message
+      notification = {
+        title: "Check den Speiseplan aus!",
+        body: "Die Mensa hat heute viele Leckereien für dich vorbereitet.",
+      };
+    }
+
     // Get all users whose nextNotification has passed
     const snapshot = await db.collection("notificationUsers")
       .where("nextNotification", "<=", now)
@@ -36,8 +57,9 @@ exports.checkNotifications = functions.pubsub
       const message = {
         token: user.fcm_token,
         data: {
-          title: "Your notification: " + user.preferences.time,
-          body: "Your notification body",
+          title: notification.title,
+          body: notification.body,
+          link: '/menu',
         },
         webpush: {
           fcm_options: {

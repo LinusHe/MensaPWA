@@ -22,11 +22,36 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage(function (payload) {
   console.log("Received background message ", payload);
 
-  const notificationTitle = "payload.notification.title";
+  const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.data.body,
     // more options, like icons, etc.
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+self.addEventListener('notificationclick', function(event) {
+  // Prevent the browser from focusing the Notification's tab.
+  event.notification.close();
+
+  // Get the link from the notification data
+  const urlToOpen = new URL(event.notification.data.link, self.location.origin).href;
+
+  // Check if the current is open and focus if it is
+  event.waitUntil(
+    clients.matchAll({type: 'window', includeUncontrolled: true}).then( windowClients => {
+      for (let i = 0; i < windowClients.length; i++) {
+        const client = windowClients[i];
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+
+      // If we don't find an existing tab, open a new one
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
 });
