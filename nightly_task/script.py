@@ -7,7 +7,8 @@ from datetime import date, datetime, timedelta
 import json
 import re  # import the regex module
 from image_generator.image_generator import generate_image
-from nutrition_generator.nutrition_generator import generate_chat_completion
+from nutrition_generator.nutrition_generator import generate_nutrition_completion
+from notification_generator.notification_generator import generate_notification_completion
 
 # Get the directory of the current script
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -94,10 +95,22 @@ for i in range(5):
         # Define the path for the menu.json file
         menu_file_path = f'{current_dir}/menu.json'
 
+        # Define the path for the notification.json file
+        notification_file_path = f'{current_dir}/notification.json'
+
         # Check if the directory already exists
         if os.path.exists(current_dir):
             # Check if the menu.json file already exists
             if os.path.exists(menu_file_path):
+
+                # Check if the notification.json file already exists and generate it if not
+                if not os.path.exists(notification_file_path):
+                    try:
+                        logging.info(f"Generating notification texts")
+                        generate_notification_completion(current_date, script_dir, output_dir)
+                    except Exception as e:
+                        logging.error(f"Error while generating notification texts: {str(e)}")
+
                 # Load the existing data
                 with open(menu_file_path, 'r', encoding='utf-8') as f:
                     existing_data = json.load(f)
@@ -134,7 +147,7 @@ for i in range(5):
             # Call the function to generate chat completion and save the response
             try:
                 logging.info(f"Generating chat completion for item: {title}")
-                generate_chat_completion(title, current_date, safe_title, script_dir, output_dir)
+                generate_nutrition_completion(title, current_date, safe_title, script_dir, output_dir)
             except Exception as e:
                 # skip chat completion, if there is an Error
                 logging.error(f"Skipping item '{title}' due to error: {str(e)}")
@@ -148,6 +161,14 @@ for i in range(5):
                 logging.error(f"Skipping item '{title}' due to error: {str(e)}")
             else:
                 logging.info(f"Image generated successfully for item: {title}")
+        
+        # Call the function to generate notification texts and save them
+        try:
+            logging.info(f"Generating notification texts")
+            generate_notification_completion(current_date, script_dir, output_dir)
+        except Exception as e:
+            # skip chat completion, if there is an Error
+            logging.error(f"Error while generating notification texts: {str(e)}")
 
 logging.info("End of script execution.")
 
