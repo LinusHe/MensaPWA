@@ -23,6 +23,18 @@ import theme from './theme';
 import '@fontsource-variable/jost';
 import '@fontsource/roboto';
 
+// Initialize firebase project
+import { initializeApp } from "firebase/app";
+const firebaseConfig = {
+  apiKey: "AIzaSyD5aT5GwndtWGX8wJ4izKUIoW7zixOvydk",
+  authDomain: "mensapwa-39cd9.firebaseapp.com",
+  projectId: "mensapwa-39cd9",
+  storageBucket: "mensapwa-39cd9.appspot.com",
+  messagingSenderId: "501729068545",
+  appId: "1:501729068545:web:e8f6c4cb184c83ea40a200"
+};
+initializeApp(firebaseConfig);
+
 
 const Root = () => {
   const appearance = useSelector(state => state.appearance);
@@ -43,7 +55,7 @@ const Root = () => {
           <ThemeProvider theme={theme(themeMode)}>
             <CssBaseline />
             <div style={{ '--navBarHeight': 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)' }} className={theme(themeMode).palette.mode === 'dark' ? 'dark-mode' : 'light-mode'}>
-              <App/>
+              <App />
             </div>
           </ThemeProvider>
         </HelmetProvider>
