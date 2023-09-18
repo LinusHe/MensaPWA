@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { updateUserData } from './utils/dbController'
+import { updateUserData, disableNotification } from './utils/dbController'
 
 const initialState = {
   navBarHeight: 0,
@@ -9,7 +9,7 @@ const initialState = {
   selectedPriceType: localStorage.getItem('selectedPriceType') || 'student',
   notificationsEnabled: JSON.parse(localStorage.getItem('notificationsEnabled')) || false,
   selectedDays: JSON.parse(localStorage.getItem('selectedDays')) || ["1", "2", "3", "4", "5"],
-  notificationTime: localStorage.getItem('notificationTime') || '11:00',
+  notificationTime: localStorage.getItem('notificationTime') || "11:00",
   appearance: localStorage.getItem('appearance') || 'light'
 };
 // userId, token, selectedDays, notificationTime
@@ -28,6 +28,8 @@ function reducer(state = initialState, action) {
       if (action.payload === true) {
         console.log("Updating db with new notification settings")
         updateUserData(state.userId, state.token, state.selectedDays, state.notificationTime);
+      } else if (action.payload === false) {
+        disableNotification(state.userId);
       }
       return { ...state, notificationsEnabled: action.payload };
     case 'SET_SELECTED_DAYS':
