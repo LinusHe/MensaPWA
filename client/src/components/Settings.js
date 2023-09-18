@@ -1,22 +1,18 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Divider, Grid, Typography, Button, Select, Switch, MenuItem, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import packageJson from '../../package.json';
 import { useTheme } from '@mui/material/styles';
-import { store } from '../store';
 
 // Notification Stuff
 import { requestPermissionAndToken } from '../utils/pushNotification';
-import { updateUserData } from '../utils/dbController'
 
 
 function Settings() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-
-  const userId = useSelector(state => state.userId);
 
   const token = useSelector(state => state.token);
   const selectedPriceType = useSelector(state => state.selectedPriceType);
@@ -27,18 +23,6 @@ function Settings() {
 
   const appearance = useSelector(state => state.appearance);
   const version = packageJson.version;
-
-  useEffect(() => {
-    store.subscribe(() => {
-      const state = store.getState();
-      updateUserData(
-        state.userId,
-        state.token,
-        state.selectedDays,
-        state.notificationTime
-      );
-    });
-  }, []);
 
   const handlePriceTypeChange = (event) => {
     dispatch({ type: 'SET_PRICE_TYPE', payload: event.target.value });
@@ -191,9 +175,9 @@ function Settings() {
                   Wann möchtest du benachrichtigt werden?
                 </Typography>
                 <Grid item>
-                  <Grid container direction="row" alignItems="center" justifyContent="space-between" >
+                  <Grid container direction="row" alignItems="center" justifyContent="left" >
                     <Grid item>
-                      <ToggleButtonGroup value={selectedDays} onChange={handleDaysChange} sx={{ pr: 1 }}>
+                      <ToggleButtonGroup value={selectedDays} onChange={handleDaysChange} sx={{ pr: 2, mt:1 }}>
                         <ToggleButton value="1" color="primary">Mo</ToggleButton>
                         <ToggleButton value="2" color="primary">Di</ToggleButton>
                         <ToggleButton value="3" color="primary">Mi</ToggleButton>

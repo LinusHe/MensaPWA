@@ -4,7 +4,7 @@ export function updateUserData(userId, token, selectedDays, notificationTime) {
   const db = getFirestore();
   return new Promise(async (resolve, reject) => {
     try {
-      const userRef = doc(db, "users", userId);
+      const userRef = doc(db, "notificationUsers", userId);
       await setDoc(userRef, {
         fcm_token: token,
         preferences: {

@@ -12,7 +12,7 @@ const initialState = {
   notificationTime: localStorage.getItem('notificationTime') || '11:00',
   appearance: localStorage.getItem('appearance') || 'light'
 };
-
+// userId, token, selectedDays, notificationTime
 function reducer(state = initialState, action) {
   switch (action.type) {
     case 'SET_TOKEN':
@@ -25,12 +25,24 @@ function reducer(state = initialState, action) {
       return { ...state, selectedPriceType: action.payload };
     case 'SET_NOTIFICATIONS_ENABLED':
       localStorage.setItem('notificationsEnabled', JSON.stringify(action.payload));
+      if (action.payload === true) {
+        console.log("Updating db with new notification settings")
+        updateUserData(state.userId, state.token, state.selectedDays, state.notificationTime);
+      }
       return { ...state, notificationsEnabled: action.payload };
     case 'SET_SELECTED_DAYS':
       localStorage.setItem('selectedDays', JSON.stringify(action.payload));
+      if (state.notificationsEnabled === true) {
+        console.log("Updating db with new selected days");
+        updateUserData(state.userId, state.token, action.payload, state.notificationTime);
+      }
       return { ...state, selectedDays: action.payload };
     case 'SET_NOTIFICATION_TIME':
       localStorage.setItem('notificationTime', action.payload);
+      if (state.notificationsEnabled === true) {
+        console.log("Updating db with new notification time")
+        updateUserData(state.userId, state.token, state.selectedDays, action.payload);
+      }
       return { ...state, notificationTime: action.payload };
     case 'SET_APPEARANCE':
       localStorage.setItem('appearance', action.payload);
