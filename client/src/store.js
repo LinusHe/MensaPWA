@@ -10,7 +10,8 @@ const initialState = {
   notificationsEnabled: JSON.parse(localStorage.getItem('notificationsEnabled')) || false,
   selectedDays: JSON.parse(localStorage.getItem('selectedDays')) || ["1", "2", "3", "4", "5"],
   notificationTime: localStorage.getItem('notificationTime') || "11:00",
-  appearance: localStorage.getItem('appearance') || 'light'
+  appearance: localStorage.getItem('appearance') || 'light',
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 };
 // userId, token, selectedDays, notificationTime
 function reducer(state = initialState, action) {
@@ -27,7 +28,7 @@ function reducer(state = initialState, action) {
       localStorage.setItem('notificationsEnabled', JSON.stringify(action.payload));
       if (action.payload === true) {
         console.log("Updating db with new notification settings")
-        updateUserData(state.userId, state.token, state.selectedDays, state.notificationTime);
+        updateUserData(state.userId, state.token, state.selectedDays, state.notificationTime, state.timezone);
       } else if (action.payload === false) {
         disableNotification(state.userId);
       }
@@ -36,14 +37,14 @@ function reducer(state = initialState, action) {
       localStorage.setItem('selectedDays', JSON.stringify(action.payload));
       if (state.notificationsEnabled === true) {
         console.log("Updating db with new selected days");
-        updateUserData(state.userId, state.token, action.payload, state.notificationTime);
+        updateUserData(state.userId, state.token, action.payload, state.notificationTime, state.timezone);
       }
       return { ...state, selectedDays: action.payload };
     case 'SET_NOTIFICATION_TIME':
       localStorage.setItem('notificationTime', action.payload);
       if (state.notificationsEnabled === true) {
         console.log("Updating db with new notification time")
-        updateUserData(state.userId, state.token, state.selectedDays, action.payload);
+        updateUserData(state.userId, state.token, state.selectedDays, action.payload, state.timezone);
       }
       return { ...state, notificationTime: action.payload };
     case 'SET_APPEARANCE':

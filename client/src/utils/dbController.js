@@ -33,7 +33,7 @@ const getNextNotification = (selectedDays, notificationTime) => {
   return new Date(now.getFullYear(), now.getMonth(), now.getDate() + (7 - currentDay + nextDay), hours, minutes);
 }
 
-export function updateUserData(userId, token, selectedDays, notificationTime) {
+export function updateUserData(userId, token, selectedDays, notificationTime, timezone) {
   const db = getFirestore();
   const nextNotification = getNextNotification(selectedDays, notificationTime);
   const data = {
@@ -44,7 +44,8 @@ export function updateUserData(userId, token, selectedDays, notificationTime) {
     preferences: {
       // 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
       days: selectedDays,
-      time: notificationTime
+      time: notificationTime,
+      timezone: timezone,
     }
   };
   return new Promise(async (resolve, reject) => {
