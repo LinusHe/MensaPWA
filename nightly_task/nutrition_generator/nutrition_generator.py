@@ -2,7 +2,7 @@ import openai
 import os
 import json
 
-def generate_chat_completion(title, current_date, safe_title, script_dir, output_dir):
+def generate_nutrition_completion(title, current_date, safe_title, script_dir, output_dir):
     print(f"Generating chat completion for item '{title}'")
     
     # Read the system prompt from file
