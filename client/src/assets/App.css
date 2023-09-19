@@ -37,14 +37,21 @@
   margin-bottom: var(--navBarHeight) !important;
 }
 
-[data-rsbs-content],
+/* [data-rsbs-content],
 [data-rsbs-scroll] {
   overflow: visible;
+} */
+[data-rsbs-header] {
+  box-shadow: none;
 }
 
 [data-rsbs-overlay] {
   max-width: 600px;
   margin: 0 auto;
+
+}
+
+[data-rsbs-content] {
   padding: 0 0 calc(env(safe-area-inset-bottom) + 1rem) 0;
 }
 

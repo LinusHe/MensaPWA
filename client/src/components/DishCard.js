@@ -15,7 +15,7 @@ import BioIcon from 'mdi-material-ui/Tree';
 import AlcoholIcon from 'mdi-material-ui/GlassCocktail';
 import DefaultIcon from 'mdi-material-ui/Food';
 
-const DishCard = ({ dishImage, category, title, chat_completion, prices, selections }) => {
+const DishCard = ({ dishImage, category, title, chat_completion, prices, selections, additives, allergens }) => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const selectedPriceType = useSelector(state => state.selectedPriceType);
@@ -129,7 +129,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
                         />
                     );
                 })}
-                <DishDetail open={open} onDismiss={onDismiss} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, prices, selections, selectionMap }} />
+                <DishDetail open={open} onDismiss={onDismiss} handleClose={handleClose} dish={{ imageSrc, category, title, additional_title_lines, chat_completion, prices, selections, selectionMap, additives, allergens }} />
             </Grid>
         </Grid >
     );

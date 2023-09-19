@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Divider, Grid, Typography, Button, Select, Switch, MenuItem, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
 import { useSnackbar, closeSnackbar } from 'notistack';
 import packageJson from '../../package.json';
 import { useTheme } from '@mui/material/styles';
+import InstallInstructions from './InstallInstructions';
 
 // Notification Stuff
 import { requestPermissionAndToken } from '../utils/pushNotification';
@@ -22,7 +23,47 @@ function Settings() {
   const notificationTime = useSelector(state => state.notificationTime);
 
   const appearance = useSelector(state => state.appearance);
+  const veganFirst = useSelector(state => state.veganFirst);
   const version = packageJson.version;
+
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [installButtonDisplay, setInstallButtonDisplay] = useState('none');
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    // Check if the app is not installed and it's an iOS device
+    if (!window.navigator.standalone && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      setInstallButtonDisplay('block');
+    }
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setInstallButtonDisplay('block');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      setInstallButtonDisplay('none');
+    });
+  }, []);
+
+  const installApp = async () => {
+
+    if (!window.navigator.standalone && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      // alert('To install the app on your iOS device, tap on the share button and then "Add to Home Screen".');
+      setOpen(true);
+    }
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      setDeferredPrompt(null);
+      setInstallButtonDisplay('none');
+    }
+  };
 
   const handlePriceTypeChange = (event) => {
     dispatch({ type: 'SET_PRICE_TYPE', payload: event.target.value });
@@ -65,8 +106,7 @@ function Settings() {
 
   function handleSnackbarButtonClick(action, key) {
     if (action === "installPWA") {
-      // Code to install the PWA...
-      alert("TODO Install PWA Dialog")
+      setOpen(true);
     } else if (action === "contactUs") {
       // Code to contact us...
     }
@@ -81,6 +121,10 @@ function Settings() {
     console.log("changed", event.target.value)
     console.log("timestamp", timeToTimeStamp(event.target.value))
     dispatch({ type: 'SET_NOTIFICATION_TIME', payload: event.target.value });
+  };
+
+  const handleVeganFirstChange = (event) => {
+    dispatch({ type: 'SET_VEGAN_FIRST', payload: event.target.checked });
   };
 
   const handleAppearance = (event) => {
@@ -136,14 +180,51 @@ function Settings() {
             Einstellungen
           </Typography>
         </Grid>
-        <Grid item xs={12} sx={{ mb: 2 }}>
+        <Grid item xs={12} sx={{ mb: 1 }}>
           <Typography variant="p" fontWeight="regular" textTransform="uppercase">
             Einstellungen der Mensa App
           </Typography>
         </Grid>
       </Grid>
 
+      <InstallInstructions open={open} onDismiss={() => setOpen(false)} />
+
       <Grid item xs={12} sx={{ overflow: 'auto', px: 2, maxHeight: 'calc(100vh - 144px)' }}>
+        <div style={{ display: installButtonDisplay }}>
+          <Grid item xs={12} textAlign={"left"}>
+            <Grid container direction="row" alignItems="center" justifyContent={'space-between'} flexWrap={'nowrap'}>
+              <Grid item>
+                <Grid container direction="column" alignItems="left">
+                  <Grid item>
+
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="h6" fontWeight="bold" sx={{ pt: 1 }}>
+                      Als App installieren
+                    </Typography>
+                    <Typography variant="body1" sx={{ pb: 1 }}>
+                      Mensa Mate deinem Homescree hinzufügen
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={installApp}
+                >
+                  Installieren
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12} sx={{ my: 2 }}>
+            <Divider />
+          </Grid>
+        </div>
+
         <Grid item xs={12} textAlign={"left"}>
           <Grid container direction="row" justifyContent="center" alignItems="center">
             <Grid item xs={6}>
@@ -270,9 +351,33 @@ function Settings() {
         </Grid>
 
         <Grid item xs={12} textAlign={"left"}>
-          <Typography variant="h6" fontWeight="bold" sx={{ pt: 1 }}>
-            Kontakt
-          </Typography>
+          <Grid container direction="row" alignItems="center" justifyContent={'space-between'} flexWrap={'nowrap'}>
+            <Grid item>
+              <Grid container direction="column" alignItems="left">
+                <Grid item>
+                  <Typography variant="h6" fontWeight="bold" sx={{ pt: 1 }}>
+                    Veggie zuerst
+                  </Typography>
+                  <Typography variant="body1" sx={{ pb: 1 }}>
+                    Vegetarische und vegane Gerichte im Speiseplan zuerst anzeigen
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Switch
+                checked={veganFirst}
+                onChange={handleVeganFirstChange}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12} sx={{ my: 2 }}>
+          <Divider />
+        </Grid>
+
+        <Grid item xs={12} textAlign={"left"}>
           <Grid container direction="row" alignItems="center" justifyContent={'space-between'} flexWrap={'nowrap'}>
             <Grid item>
               <Grid container direction="column" alignItems="left">
@@ -280,6 +385,9 @@ function Settings() {
 
                 </Grid>
                 <Grid item>
+                  <Typography variant="h6" fontWeight="bold" sx={{ pt: 1 }}>
+                    Kontakt
+                  </Typography>
                   <Typography variant="body1" sx={{ pb: 1 }}>
                     Bei Fragen oder Feedback kannst du uns kontaktieren
                   </Typography>
@@ -307,7 +415,7 @@ function Settings() {
           </Button>
         </Grid>
       </Grid >
-    </Grid>
+    </Grid >
   )
 }
 

@@ -12,6 +12,7 @@ const initialState = {
   notificationTime: localStorage.getItem('notificationTime') || "11:00",
   appearance: localStorage.getItem('appearance') || 'light',
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  veganFirst: JSON.parse(localStorage.getItem('veganFirst')) || false,
 };
 // userId, token, selectedDays, notificationTime
 function reducer(state = initialState, action) {
@@ -58,6 +59,9 @@ function reducer(state = initialState, action) {
     case 'SET_APPEARANCE':
       localStorage.setItem('appearance', action.payload);
       return { ...state, appearance: action.payload };
+    case 'SET_VEGAN_FIRST':
+      localStorage.setItem('veganFirst', JSON.stringify(action.payload));
+      return { ...state, veganFirst: action.payload };
     default:
       return state;
   }
