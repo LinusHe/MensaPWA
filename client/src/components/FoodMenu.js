@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
-
 // Import necessary libraries and components
 import React, { useState, useEffect } from 'react';
-import { Grow, Fade, Typography, Grid, Skeleton, Tabs, Tab, Chip } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { ToggleButton, Fab, Grow, Fade, Typography, Grid, Skeleton, Tabs, Tab, Chip } from '@mui/material';
 import DishCard from './DishCard';
 import { useSnackbar } from 'notistack';
 import { useTheme } from '@mui/material/styles';
+import VeganIcon from 'mdi-material-ui/Leaf';
 
 // Main FoodMenu component
 function FoodMenu() {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   // Define state variables
   const [dishes, setDishes] = useState([]);
@@ -19,6 +20,8 @@ function FoodMenu() {
   const [value, setValue] = useState(0);
   const [data, setData] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const initialVeganFirst = useSelector(state => state.veganFirst);
+const [veganFirst, setVeganFirst] = useState(initialVeganFirst);
 
   const dates = Array.from({ length: 5 }, (_, i) => {
     const date = new Date();
@@ -33,6 +36,7 @@ function FoodMenu() {
   });
 
   useEffect(() => {
+    console.log(veganFirst)
     const timer = setTimeout(() => {
       setShowSkeleton(true);
     }, 500);
@@ -41,6 +45,20 @@ function FoodMenu() {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        if (veganFirst) {
+          data.sort((a, b) => {
+            const aIsVeganOrVegetarian = a.selections && (a.selections.includes('vegan') || a.selections.includes('vegetarian'));
+            const bIsVeganOrVegetarian = b.selections && (b.selections.includes('vegan') || b.selections.includes('vegetarian'));
+            if (aIsVeganOrVegetarian && !bIsVeganOrVegetarian) {
+              return -1;
+            }
+            if (!aIsVeganOrVegetarian && bIsVeganOrVegetarian) {
+              return 1;
+            }
+            return 0;
+          });
+        }
+        console.log(...data)
         setDishes(data);
         clearTimeout(timer);
         setShowSkeleton(false);
@@ -85,7 +103,14 @@ function FoodMenu() {
         setShowSkeleton(true);
       });
     return () => clearTimeout(timer);
-  }, []);
+  }, [veganFirst]);
+
+  const handleVeganFirstChange = () => {
+    const newVeganFirst = !veganFirst;
+    setVeganFirst(newVeganFirst);
+    dispatch({ type: 'SET_VEGAN_FIRST', payload: newVeganFirst });
+    enqueueSnackbar(newVeganFirst ? 'Vegetarische und vegane Gerichte werden zuerst angezeigt.' : 'Sortierung aufgehoben', { variant: newVeganFirst ? 'success' : 'info' });
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -96,6 +121,17 @@ function FoodMenu() {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        if (veganFirst) {
+          data.sort((a, b) => {
+            if (['vegan', 'vegetarian'].includes(a.category) && !['vegan', 'vegetarian'].includes(b.category)) {
+              return -1;
+            }
+            if (!['vegan', 'vegetarian'].includes(a.category) && ['vegan', 'vegetarian'].includes(b.category)) {
+              return 1;
+            }
+            return 0;
+          });
+        }
         setDishes(data);
         setShowSkeleton(false);
       })
@@ -132,13 +168,25 @@ function FoodMenu() {
       className='fullHeight'
       sx={{ overflow: 'hidden', width: '100%', maxWidth: '720px', mx: 'auto' }}
     >
-      <Grid item xs={12} sx={{ flexGrow: 1 }}>
-        <Typography sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }} variant="screenHeading">
+      <Grid container justifyContent="space-between" alignItems="center" sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }}>
+        <Typography variant="screenHeading">
           Speiseplan
         </Typography>
-        {/* <Typography variant="p" fontWeight="regular" textTransform="uppercase">
-          Heutige Gerichte
-        </Typography> */}
+        <ToggleButton
+          value="check"
+          selected={veganFirst}
+          onChange={handleVeganFirstChange}
+          sx={{
+            borderRadius: '50%',
+            color: veganFirst ? theme.palette.food.vegan : undefined,
+            borderColor: veganFirst ? `${theme.palette.food.vegan}60` : undefined,
+            '&.Mui-selected': {
+              color: theme.palette.food.vegan,
+            },
+          }}
+        >
+          <VeganIcon />
+        </ToggleButton>
       </Grid>
 
       <Grid item xs={12} sx={{ overflow: 'auto', maxHeight: 'calc(100vh - 144px)' }}> {/* Adjust the maxHeight value as needed */}

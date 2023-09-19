@@ -23,6 +23,7 @@ function Settings() {
   const notificationTime = useSelector(state => state.notificationTime);
 
   const appearance = useSelector(state => state.appearance);
+  const veganFirst = useSelector(state => state.veganFirst);
   const version = packageJson.version;
 
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -120,6 +121,10 @@ function Settings() {
     console.log("changed", event.target.value)
     console.log("timestamp", timeToTimeStamp(event.target.value))
     dispatch({ type: 'SET_NOTIFICATION_TIME', payload: event.target.value });
+  };
+
+  const handleVeganFirstChange = (event) => {
+    dispatch({ type: 'SET_VEGAN_FIRST', payload: event.target.checked });
   };
 
   const handleAppearance = (event) => {
@@ -337,6 +342,33 @@ function Settings() {
                   <MenuItem value="system">Systemstandard</MenuItem>
                 </Select>
               </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12} sx={{ my: 2 }}>
+          <Divider />
+        </Grid>
+
+        <Grid item xs={12} textAlign={"left"}>
+          <Grid container direction="row" alignItems="center" justifyContent={'space-between'} flexWrap={'nowrap'}>
+            <Grid item>
+              <Grid container direction="column" alignItems="left">
+                <Grid item>
+                  <Typography variant="h6" fontWeight="bold" sx={{ pt: 1 }}>
+                    Veggie zuerst
+                  </Typography>
+                  <Typography variant="body1" sx={{ pb: 1 }}>
+                    Vegetarische und vegane Gerichte im Speiseplan zuerst anzeigen
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Switch
+                checked={veganFirst}
+                onChange={handleVeganFirstChange}
+              />
             </Grid>
           </Grid>
         </Grid>
