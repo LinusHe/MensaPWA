@@ -2,7 +2,7 @@
 // Import necessary libraries and components
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ToggleButton, Fab, Grow, Fade, Typography, Grid, Skeleton, Tabs, Tab, Chip } from '@mui/material';
+import { ToggleButton, Grow, Fade, Typography, Grid, Skeleton, Tabs, Tab, Chip } from '@mui/material';
 import DishCard from './DishCard';
 import { useSnackbar } from 'notistack';
 import { useTheme } from '@mui/material/styles';
@@ -21,7 +21,7 @@ function FoodMenu() {
   const [data, setData] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const initialVeganFirst = useSelector(state => state.veganFirst);
-const [veganFirst, setVeganFirst] = useState(initialVeganFirst);
+  const [veganFirst, setVeganFirst] = useState(initialVeganFirst);
 
   const dates = Array.from({ length: 5 }, (_, i) => {
     const date = new Date();
@@ -293,6 +293,8 @@ const [veganFirst, setVeganFirst] = useState(initialVeganFirst);
                           chat_completion={dish.chat_completion} // Join the selections array into a string
                           prices={dish.prices} // Use the student price as an example
                           selections={dish.selections} // Use the chat completion as an example
+                          additives={dish.additives}
+                          allergens={dish.allergens}
                         />
                       </div>
                       {/* </Grow> */}

@@ -13,6 +13,8 @@ today = date.today()
 
 # Create a set to store the unique selections
 selections_set = set()
+allergens_set = set()
+additives_set = set()
 
 # Loop over the next 14 days
 for i in range(30):
@@ -36,10 +38,28 @@ for i in range(30):
             if 'selections' in item and item['selections'] is not None:
                 # Add the selections to the set
                 selections_set.update(item['selections'])
+            # Check if the item has an allergens property and it is not None
+            if 'allergens' in item and item['allergens'] is not None:
+                # Add the allergens to the set
+                allergens_set.update(item['allergens'])
+
+            # Check if the item has an additives property and it is not None
+            if 'additives' in item and item['additives'] is not None:
+                # Add the additives to the set
+                additives_set.update(item['additives'])
 
 # Convert the set to a list
 selections_list = list(selections_set)
+allergens_list = list(allergens_set)
+additives_list = list(additives_set)
 
 # Write the selections list to a JSON file in the output directory
 with open(os.path.join(output_dir, 'selections.json'), 'w', encoding='utf-8') as f:
     json.dump(selections_list, f, ensure_ascii=False, indent=4)
+
+# Write the allergens and additives lists to JSON files in the output directory
+with open(os.path.join(output_dir, 'allergens.json'), 'w', encoding='utf-8') as f:
+    json.dump(allergens_list, f, ensure_ascii=False, indent=4)
+
+with open(os.path.join(output_dir, 'additives.json'), 'w', encoding='utf-8') as f:
+    json.dump(additives_list, f, ensure_ascii=False, indent=4)
