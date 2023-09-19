@@ -41,7 +41,7 @@ function FoodMenu() {
       setShowSkeleton(true);
     }, 500);
     // Fetch the dishes for the first date when the component mounts
-    const url = `${process.env.PUBLIC_URL}/data/${dates[0]}/menu.json`;
+    const url = `${process.env.PUBLIC_URL}/data/${dates[value]}/menu.json`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -123,10 +123,12 @@ function FoodMenu() {
       .then((data) => {
         if (veganFirst) {
           data.sort((a, b) => {
-            if (['vegan', 'vegetarian'].includes(a.category) && !['vegan', 'vegetarian'].includes(b.category)) {
+            const aIsVeganOrVegetarian = a.selections && (a.selections.includes('vegan') || a.selections.includes('vegetarian'));
+            const bIsVeganOrVegetarian = b.selections && (b.selections.includes('vegan') || b.selections.includes('vegetarian'));
+            if (aIsVeganOrVegetarian && !bIsVeganOrVegetarian) {
               return -1;
             }
-            if (!['vegan', 'vegetarian'].includes(a.category) && ['vegan', 'vegetarian'].includes(b.category)) {
+            if (!aIsVeganOrVegetarian && bIsVeganOrVegetarian) {
               return 1;
             }
             return 0;
@@ -285,17 +287,17 @@ function FoodMenu() {
                     <Fade key={`${date}-${dish.id}-${i}`} in={true} timeout={800} style={{ width: '100%', transitionDelay: `${i * 50}ms` }}>
                       {/* <Grow timeout={500} key={`${date}-${dish.id}-${i}`} in={true} style={{ width: '100%', transitionDelay: `${i * 50}ms` }}> */}
                       <div>
-                        <DishCard
-                          // Use the dish id and index as part of the key
-                          dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
-                          category={dish.category}
-                          title={dish.title}
-                          chat_completion={dish.chat_completion} // Join the selections array into a string
-                          prices={dish.prices} // Use the student price as an example
-                          selections={dish.selections} // Use the chat completion as an example
-                          additives={dish.additives}
-                          allergens={dish.allergens}
-                        />
+                          <DishCard
+                            // Use the dish id and index as part of the key
+                            dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
+                            category={dish.category}
+                            title={dish.title}
+                            chat_completion={dish.chat_completion} // Join the selections array into a string
+                            prices={dish.prices} // Use the student price as an example
+                            selections={dish.selections} // Use the chat completion as an example
+                            additives={dish.additives}
+                            allergens={dish.allergens}
+                          />
                       </div>
                       {/* </Grow> */}
                     </Fade>
