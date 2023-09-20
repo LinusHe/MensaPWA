@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Paper, Typography, Grid, Fab, Link } from '@mui/material';
+import { Paper, Typography, Grid, Fab } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import FileCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTheme } from '@mui/material/styles';
 import { useSnackbar } from 'notistack';
-import CodeGuide from './CodeGuide';
 
 function FloorplanIndicator() {
   const theme = useTheme();
