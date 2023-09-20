@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Divider, Grid, Typography, Button, Select, Switch, MenuItem, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
+import { CircularProgress, Alert, AlertTitle, Divider, Grid, Typography, Button, Select, Switch, MenuItem, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
 import { useSnackbar, closeSnackbar } from 'notistack';
 import packageJson from '../../package.json';
 import { useTheme } from '@mui/material/styles';
@@ -29,6 +29,8 @@ function Settings() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [installButtonDisplay, setInstallButtonDisplay] = useState('none');
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [notificationData, setNotificationData] = useState(null);
 
   useEffect(() => {
     // Check if the app is not installed and it's an iOS device
@@ -44,6 +46,17 @@ function Settings() {
     window.addEventListener('appinstalled', () => {
       setInstallButtonDisplay('none');
     });
+
+    // Fetch the notification.json file
+    const date = new Date().toISOString().split('T')[0];
+    fetch(`${process.env.PUBLIC_URL}/data/${date}/notification.json`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.notification && data.notification.title && data.notification.body) {
+          setNotificationData(data);
+        }
+      })
+      .catch(error => console.error('Error:', error));
   }, []);
 
   const installApp = async () => {
@@ -69,32 +82,32 @@ function Settings() {
     dispatch({ type: 'SET_PRICE_TYPE', payload: event.target.value });
   };
 
-  const handleNotificationsToggle = (event) => {
+  const handleNotificationsToggle = async (event) => {
+    setLoading(true);
     if (event.target.checked) {
       if (token === null) {
-        requestPermissionAndToken()
-          .then((token) => {
-            dispatch({ type: 'SET_TOKEN', payload: token });
-            dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: true });
-            enqueueSnackbar('Benachrichtigungen aktiviert', { variant: 'success' });
-          })
-          .catch((error) => {
-            if (error.buttonAction) {
-              const action = (key) => (
-                <>
-                  <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => handleSnackbarButtonClick(error.buttonAction, key)}>
-                    {error.buttonText}
-                  </Button>
-                  <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => closeSnackbar()}>
-                    Schließen
-                  </Button>
-                </>
-              );
-              enqueueSnackbar(error.message, { variant: error.type, action });
-            }
-            else enqueueSnackbar(error.message, { variant: error.type });
-            dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: false });
-          });
+        try {
+          const token = await requestPermissionAndToken();
+          dispatch({ type: 'SET_TOKEN', payload: token });
+          dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: true });
+          enqueueSnackbar('Benachrichtigungen aktiviert', { variant: 'success' });
+        } catch (error) {
+          if (error.buttonAction) {
+            const action = (key) => (
+              <>
+                <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => handleSnackbarButtonClick(error.buttonAction, key)}>
+                  {error.buttonText}
+                </Button>
+                <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => closeSnackbar()}>
+                  Schließen
+                </Button>
+              </>
+            );
+            enqueueSnackbar(error.message, { variant: error.type, action });
+          }
+          else enqueueSnackbar(error.message, { variant: error.type });
+          dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: false });
+        }
       } else {
         dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: true });
         enqueueSnackbar('Benachrichtigungen aktiviert', { variant: 'success' });
@@ -102,6 +115,7 @@ function Settings() {
     } else {
       dispatch({ type: 'SET_NOTIFICATIONS_ENABLED', payload: false });
     }
+    setLoading(false);
   };
 
   function handleSnackbarButtonClick(action, key) {
@@ -273,10 +287,34 @@ function Settings() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item justifyContent="flex-end" sx={{ pl: 2 }}>
-              <Switch checked={notificationsEnabled} onChange={handleNotificationsToggle} />
-            </Grid>
+            {loading ? (
+              <Grid item justifyContent="flex-end" sx={{ pl: 4, pr: 2 }}>
+                <CircularProgress size={'1.5rem'} />
+              </Grid>
+            ) : (
+              <Grid item justifyContent="flex-end" sx={{ pl: 2 }}>
+                <Switch checked={notificationsEnabled} onChange={handleNotificationsToggle} />
+              </Grid>
+            )}
           </Grid>
+
+
+          {!notificationsEnabled && notificationData && (
+            <Grid item>
+              <Grid item sx={{ pt: 1, pb: 1 }}>
+                <Typography variant="body" fontStyle={'italic'} fontWeight="500" >
+                  Die heutige Benachrichtigung wäre:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Alert severity="info">
+                  <AlertTitle>{notificationData.notification.title}</AlertTitle>
+                  {notificationData.notification.body}
+                </Alert>
+              </Grid>
+            </Grid>
+          )}
+
 
           {notificationsEnabled && (
             <Grid item>
@@ -403,17 +441,72 @@ function Settings() {
         </Grid>
 
 
-        <Grid item xs={12} textAlign={"center"} sx={{ pt: 6, pb: 25, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-          <Typography variant="p" fontWeight="300" sx={{ pr: 1 }}>
-            App Version: {version}
-          </Typography>
-          <Typography fontWeight="400">
-            |
-          </Typography>
-          <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} onClick={updateCache}>
-            Suche nach Updates
-          </Button>
-        </Grid>
+        <div style={{ margin: '2rem 0 16rem' }}>
+          <Grid item xs={12} textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Typography variant="p" fontWeight="300" sx={{ pr: 1 }}>
+              App Version: {version}
+            </Typography>
+            <Typography fontWeight="400">
+              |
+            </Typography>
+            <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} onClick={updateCache}>
+              Suche nach Updates
+            </Button>
+          </Grid>
+          <Grid item xs={12} textAlign={"center"} sx={{ pt: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Typography variant="p" fontWeight="300">
+              Offizielle Webseite der Mensa:
+            </Typography>
+            <Grid item xs={12} textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.studentenwerk-leipzig.de/mensen-cafeterien/unsere-mensen-cafeterien/mensa-und-cafeteria-academica" target="_blank" rel="noopener noreferrer">
+                studentenwerk-leipzig.de
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} textAlign={"left"} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Alert sx={{ my: 1, maxWidth: '400px' }} severity="info" >
+              Diese App wird nicht offiziell vom Studentenwerk Leipzig oder der HTWK Leipzig unterstützt oder herausgegeben.
+            </Alert>
+            <Alert sx={{ my: 1, maxWidth: '400px' }} severity="warning" >
+              Diese App enthält KI generierte Bilder im Speiseplan und KI generierte Daten für Nährwertabschätzungen. Vertraue diesen Inhalten nicht blind.
+            </Alert>
+          </Grid>
+          <Grid item xs={12} textAlign={"center"} sx={{ pt: 2, pb: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Typography variant="p" fontWeight="300">
+              Entwickelt von
+            </Typography>
+            <Grid item xs={12} textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.linkedin.com/in/linus-herterich/" target="_blank" rel="noopener noreferrer">
+                Linus Herterich
+              </Button>
+              <Typography fontWeight="400">
+                &
+              </Typography>
+              <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.linkedin.com/in/jonas-gwozdz/" target="_blank" rel="noopener noreferrer">
+                Jonas Gwozdz
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Typography variant="p" fontWeight="300" sx={{ pr: 1 }}>
+              Hosting:
+            </Typography>
+            <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.heylinus.de/" target="_blank" rel="noopener noreferrer">
+              HeyLinus.de
+            </Button>
+          </Grid>
+          <Grid item xs={12} textAlign={"center"} sx={{ pt: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.heylinus.de/impressum" target="_blank" rel="noopener noreferrer">
+              Impressum
+            </Button>
+            <Typography fontWeight="400">
+              |
+            </Typography>
+            <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.heylinus.de/datenschutz" target="_blank" rel="noopener noreferrer">
+              Datenschutz
+            </Button>
+          </Grid>
+        </div>
       </Grid >
     </Grid >
   )
