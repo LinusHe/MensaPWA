@@ -1,19 +1,34 @@
 /* eslint-disable no-dupe-keys */
 
 import React, { useState } from 'react'
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
+import HelpIcon from 'mdi-material-ui/Help';
 import { useParams, Navigate } from 'react-router-dom';
-import Typography from '@mui/material/Typography';
 import FloorplanSelector from './FloorplanSelector';
 import FloorplanIndicator from './FloorplanIndicator';
 import { isValidCode } from '../utils/codeValidation';
 import { Helmet } from 'react-helmet-async';
+import { useTheme } from '@mui/material/styles';
+import CodeGuide from './CodeGuide';
+
 // import html2canvas from 'html2canvas';
 // import { saveAs } from 'file-saver';
 
 function Floorplan() {
+  const theme = useTheme();
   let { code } = useParams();
   const [invalidCode, setInvalidCode] = useState(false);
+
+  const [openCodeGuide, setOpenCodeGuide] = useState(false);
+
+  const handleOpenCodeGuide = () => {
+    setOpenCodeGuide(true);
+  };
+
+  const handleCloseCodeGuide = () => {
+    setOpenCodeGuide(false);
+  };
 
   React.useEffect(() => {
     if (code && !isValidCode(code)) {
@@ -72,14 +87,29 @@ function Floorplan() {
         className='fullHeight'
         sx={{ overflow: "hidden" }}
       >
-        <Grid item xs={12} sx={{ p: 2}}>
-          <Typography variant="screenHeading" sx={{ overflow: 'hidden', width: '100%', maxWidth: '720px', mx: 'auto' }}>
+        <Grid item xs={12} sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', mx: 'auto' }}>
+          <Typography variant="screenHeading" sx={{ fontSize: '2.5rem', pb: 0 }}>
             Sitzplatz{' '}
             <Typography component="span" variant="span" fontWeight="300">
               teilen
             </Typography>
           </Typography>
+          <IconButton
+            onClick={handleOpenCodeGuide}
+            sx={{
+              border: `1px solid ${theme.palette.btnBorder.main}`,
+              backgroundColor: 'background.paper',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.08)'
+            }}>
+            <HelpIcon />
+          </IconButton>
         </Grid>
+
+        <CodeGuide
+          open={openCodeGuide}
+          onDismiss={handleCloseCodeGuide}
+        />
+
         <Grid item xs={12} sx={{ height: '100vh', height: '-webkit-fill-available', overflow: 'hidden' }}>
           <FloorplanSelector code={code} />
         </Grid>

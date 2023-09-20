@@ -176,7 +176,7 @@ function Settings() {
     >
       <Grid item xs={12} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Typography variant="screenHeading">
+          <Typography variant="screenHeading" sx={{ fontSize: '2.5rem', pb: 0 }}>
             Einstellungen
           </Typography>
         </Grid>
@@ -198,7 +198,7 @@ function Settings() {
                   <Grid item>
 
                   </Grid>
-                  <Grid item>
+                  <Grid item sx={{ pr: 1 }}>
                     <Typography variant="h6" fontWeight="bold" sx={{ pt: 1 }}>
                       Als App installieren
                     </Typography>
