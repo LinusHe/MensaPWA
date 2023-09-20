@@ -171,7 +171,7 @@ function FoodMenu() {
       sx={{ overflow: 'hidden', width: '100%', maxWidth: '720px', mx: 'auto' }}
     >
       <Grid container justifyContent="space-between" alignItems="center" sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }}>
-        <Typography variant="screenHeading">
+        <Typography variant="screenHeading" sx={{ fontSize: '2.5rem', pb: 0 }}>
           Speiseplan
         </Typography>
         <ToggleButton
@@ -179,11 +179,22 @@ function FoodMenu() {
           selected={veganFirst}
           onChange={handleVeganFirstChange}
           sx={{
+            height: '42px',
+            width: '42px',
+            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.08)',
             borderRadius: '50%',
+            backgroundColor: 'background.paper',
+            '&:hover': {
+              backgroundColor: 'background.paper',
+            },
             color: veganFirst ? theme.palette.food.vegan : undefined,
             borderColor: veganFirst ? `${theme.palette.food.vegan}60` : undefined,
             '&.Mui-selected': {
               color: theme.palette.food.vegan,
+              backgroundColor: 'rgb(69 255 76 / 20%)',
+              '&:hover': {
+                backgroundColor: 'rgb(69 255 76 / 20%)',
+              }
             },
           }}
         >
@@ -287,17 +298,17 @@ function FoodMenu() {
                     <Fade key={`${date}-${dish.id}-${i}`} in={true} timeout={800} style={{ width: '100%', transitionDelay: `${i * 50}ms` }}>
                       {/* <Grow timeout={500} key={`${date}-${dish.id}-${i}`} in={true} style={{ width: '100%', transitionDelay: `${i * 50}ms` }}> */}
                       <div>
-                          <DishCard
-                            // Use the dish id and index as part of the key
-                            dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
-                            category={dish.category}
-                            title={dish.title}
-                            chat_completion={dish.chat_completion} // Join the selections array into a string
-                            prices={dish.prices} // Use the student price as an example
-                            selections={dish.selections} // Use the chat completion as an example
-                            additives={dish.additives}
-                            allergens={dish.allergens}
-                          />
+                        <DishCard
+                          // Use the dish id and index as part of the key
+                          dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
+                          category={dish.category}
+                          title={dish.title}
+                          chat_completion={dish.chat_completion} // Join the selections array into a string
+                          prices={dish.prices} // Use the student price as an example
+                          selections={dish.selections} // Use the chat completion as an example
+                          additives={dish.additives}
+                          allergens={dish.allergens}
+                        />
                       </div>
                       {/* </Grow> */}
                     </Fade>

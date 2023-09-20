@@ -49,6 +49,9 @@ const getDesignTokens = (mode) => ({
           shadow: {
             main: '#42468810',
           },
+          btnBorder: {
+            main: '#0000001A',
+          },
           food: {
             fishSeafood: '#3F51B5',
             vegetarian: '#8BC34A',
@@ -79,6 +82,9 @@ const getDesignTokens = (mode) => ({
           },
           shadow: {
             main: '#ffffff05',
+          },
+          btnBorder: {
+            main: '#ffffff53',
           },
           food: {
             fishSeafood: '#3F51B5',

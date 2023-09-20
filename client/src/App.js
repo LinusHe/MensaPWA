@@ -8,7 +8,6 @@ import Settings from './components/Settings';
 import { SnackbarProvider, closeSnackbar } from 'notistack';
 import './assets/App.css';
 import Button from '@mui/material/Button';
-// import CustomComponent from './components/CustomComponent';
 
 function App() {
   return (
@@ -26,7 +25,6 @@ function App() {
             <Route path="/menu" element={<FoodMenu />} ></Route>
             <Route path="/rush" element={<Capacity />} ></Route>
             <Route path="/settings" element={<Settings />} ></Route>
-            {/* <Route path="/:code" element={<CustomComponent />} /> */}
             <Route path="/:code" element={<Floorplan />} />
           </Routes>
           <NavigationBar></NavigationBar>

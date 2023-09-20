@@ -156,7 +156,7 @@ function CapacityIndicator() {
       sx={{ minHeight: 'calc((calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0))) - 80px)', width: '100%', maxWidth: '720px', mx: 'auto' }}
     >
       <Grid item xs={12} sx={{ p: 2, flexGrow: 0 }}>
-        <Typography variant="screenHeading">
+        <Typography variant="screenHeading" sx={{fontSize: '2.5rem', pb: 0}}>
           Ansturm
         </Typography>
         <Typography variant="p" fontWeight="regular" textTransform="uppercase">

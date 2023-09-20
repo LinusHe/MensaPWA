@@ -63,14 +63,32 @@ function FloorplanIndicator() {
   return (
     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)', backgroundColor: theme.palette.primary.dark, paddingBottom: 'calc(env(safe-area-inset-bottom) + ' + bottomPadding + 'px)', transition: 'padding 0.5s' }}>
       {/* // <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)', backgroundColor: theme.palette.primary.main, paddingBottom: bottomPadding + 'px', transition: 'padding 0.5s' }}> */}
-      <Grid container alignItems="center" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
+      <Grid container alignItems="center" justifyContent="center" sx={{ mt: 2.5, mb: 2.5 }}>
         <Grid item sx={{ mr: 2 }}>
-          <Typography variant="h6" color="white" fontWeight="bold" >
+          <Typography variant="h6" color="white" fontWeight="bold" sx={{ml:1, lineHeight: 1}} >
             Dein Sitzplatz:{' '}
             <Typography component="span" variant="span" fontWeight="300">
               {code}
             </Typography>
           </Typography>
+          {/* <Link
+            component="button"
+            variant="body2"
+            sx={{
+              color: 'rgb(255 255 255 / 80%)',
+              textDecorationColor: 'rgb(255 255 255 / 29%)',
+              fontStyle: 'italic',
+              display: 'flex',
+              alignItems: 'center',
+              fontWeight: '300',
+            }}
+            onClick={() => {
+              console.info("Was der Code bedeutet");
+            }}
+          >
+            <ArrowRightIcon sx={{ color: 'rgb(255 255 255 / 29%)', }} />
+            Was der Code bedeutet
+          </Link> */}
         </Grid>
         <Grid item>
           <Fab size="small" sx={{ bgcolor: 'background.paper' }} aria-label="share" onClick={shareUrl}>
