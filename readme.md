@@ -45,7 +45,11 @@ For deployment, the following additional environment variables are required and 
 * `GH_TOKEN`: This is a personal GitHub access token. It's used by the Semantic Release tool for automating version management and package publishing. It authenticates and authorizes the tool to commit to the repository, create tags, and create GitHub releases.
 
 ### Deployment
-The application is automatically deployed to a server defined in the environment variables whenever changes are pushed to the `prod` branch. This is done using a GitHub Actions pipeline defined in `.github/workflows/main.yml`. This setup requires a Traefik instance on the server.
+* The GitHub Actions workflow file ([`.github/workflows/main.yml`](.github/workflows/main.yml)) is responsible for deploying both the client and the nightly services to a Traefik server via SSH whenever changes are pushed to the `prod` branch. 
+* The Firebase service is deployed separately using the `firebase deploy` command inside the `firebase` directory. If you want to test this, you need to create your own firebase project. You can do this by visiting the [Firebase Console](https://console.firebase.google.com/u/0/). After creating your project, replace the `firebaseConfig` in the client in the following files:
+  * [`client/public/firebase-messaging-sw.js`](client/public/firebase-messaging-sw.js)
+  * [`client/src/index.js`](client/src/index.js)
+
 
 ## Authors
 
