@@ -39,8 +39,6 @@ jobs:
     - name: Build and Push Docker Images
       run: |
         export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-        export VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
-        export VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}
         docker-compose -f docker-compose.prod.yml build
         docker-compose -f docker-compose.prod.yml push
 
@@ -56,8 +54,6 @@ jobs:
           cd ~/MensaPWA
           git pull origin production
           export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-          export VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
-          export VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}
           cd client
           npm install
           export GH_TOKEN=${{ secrets.GH_TOKEN }}
