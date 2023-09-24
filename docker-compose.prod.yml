@@ -25,27 +25,6 @@ services:
       - "traefik.http.routers.mensapwarouter.tls=true"
       - "traefik.http.routers.mensapwarouter.tls.certresolver=production"
 
-  app:
-    restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile.app.prod
-    volumes:
-      - ./server:/app
-    working_dir: /app
-    environment:
-      - DB_URL=mongodb://db:27017/mydatabase
-      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
-      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
-    depends_on:
-      - db
-
-  db:
-    restart: unless-stopped
-    image: mongo:4.4
-    volumes:
-      - mongo-data:/data/db
-
   nightly:
     restart: unless-stopped
     environment:
