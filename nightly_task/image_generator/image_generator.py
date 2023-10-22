@@ -22,7 +22,7 @@ def generate_image(title, current_date, safe_title, script_dir, output_dir, imag
         image_response = openai.Image.create_edit(
           image=image_file,
           prompt=prompt_with_title,
-          size="256x256"
+          size="512x512"
         )
     if image_response:
         image_url = image_response["data"][0]["url"]
