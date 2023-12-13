@@ -11,7 +11,7 @@ import ImageClock from '../assets/CodeGuide/Clock.png';
 import ImageMid from '../assets/CodeGuide/Mid.png';
 import ImageExamples from '../assets/CodeGuide/Examples.png';
 
-import 'react-spring-bottom-sheet/dist/style.css'
+import 'react-spring-bottom-sheet/dist/style.css';
 
 const steps = [
   {
@@ -126,8 +126,8 @@ const CodeGuide = ({ open, onDismiss }) => {
               </Grid>
             )}
             {getStepContent(activeStep).content.map((text, index) => (
-              <Grid item xs={12}>
-                <Typography textAlign={'center'} key={index} pb={1}>{text}</Typography>
+              <Grid item xs={12} key={index}>
+                <Typography textAlign={'center'} pb={1}>{text}</Typography>
               </Grid>
             ))}
           </Grid>
