@@ -25,15 +25,19 @@ import '@fontsource/roboto';
 
 // Initialize firebase project
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
 const firebaseConfig = {
   apiKey: "AIzaSyD5aT5GwndtWGX8wJ4izKUIoW7zixOvydk",
   authDomain: "mensapwa-39cd9.firebaseapp.com",
   projectId: "mensapwa-39cd9",
   storageBucket: "mensapwa-39cd9.appspot.com",
   messagingSenderId: "501729068545",
-  appId: "1:501729068545:web:e8f6c4cb184c83ea40a200"
+  appId: "1:501729068545:web:e8f6c4cb184c83ea40a200",
+  measurementId: "G-E66SGZFP9C"
 };
-initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
+getAnalytics(firebaseApp);
 
 
 const Root = () => {
