@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import requests
 from PIL import Image
 from io import BytesIO
@@ -6,37 +6,50 @@ import os
 import json
 import logging
 
-def generate_image(title, current_date, safe_title, script_dir, output_dir, image_number):
+client = OpenAI()
+
+
+def generate_image(
+    title, current_date, safe_title, script_dir, output_dir, image_number
+):
     logging.info(f"Starting image generation for item '{image_number}'")
 
     # open prompt file and replace {{title}}
-    imagePromptFilePath = os.path.join(script_dir, 'image_generator', 'imagePrompt.txt')
+    imagePromptFilePath = os.path.join(script_dir, "image_generator", "imagePrompt.txt")
     with open(imagePromptFilePath, "r") as prompt_file:
         prompt_text = prompt_file.read()
         prompt_with_title = prompt_text.replace("{{title}}", title)
 
     logging.info(f"Generating image for item '{image_number}'")
     # Load the plate mask image and generate the image
-    plateMaskFilePath = os.path.join(script_dir, 'image_generator', 'plateMask.png')
+    plateMaskFilePath = os.path.join(script_dir, "image_generator", "plateMask.png")
     with open(plateMaskFilePath, "rb") as image_file:
-        image_response = openai.Image.create_edit(
-          image=image_file,
-          prompt=prompt_with_title,
-          size="512x512"
+        image_response = client.images.edit(
+            image=image_file,
+            prompt=prompt_with_title,
+            size="1024x1024",
         )
+    # Dalle 3
+    # image_response = client.images.generate(
+    #     model="dall-e-3",
+    #     prompt=prompt_with_title,
+    #     size="1024x1024",
+    #     quality="standard",
+    #     n=1,
+    # )
     if image_response:
-        image_url = image_response["data"][0]["url"]
+        image_url = image_response.data[0].url
         logging.info(f"Image generated: {image_url}")
 
         # Save the generated image to the same directory as the json file
         image_data = requests.get(image_url).content
         img = Image.open(BytesIO(image_data))
-        img.save(f'{output_dir}/{current_date}/{image_number}.jpg')
+        img.save(f"{output_dir}/{current_date}/{image_number}.jpg")
         logging.info(f"Image saved in {current_date}/{image_number}.jpg")
 
         # Save the image number to the corresponding entry in the json file
-        json_file_path = os.path.join(output_dir, f'{current_date}/menu.json')
-        with open(json_file_path, 'r+') as json_file:
+        json_file_path = os.path.join(output_dir, f"{current_date}/menu.json")
+        with open(json_file_path, "r+") as json_file:
             try:
                 logging.info(f"Loading JSON data from file: {json_file_path}")
                 data = json.load(json_file)
@@ -48,7 +61,7 @@ def generate_image(title, current_date, safe_title, script_dir, output_dir, imag
             for index, dish in enumerate(data):
                 if index == image_number:
                     logging.info(f"Updating imageUrl for item: {dish['title']}")
-                    dish['imageUrl'] = f'{image_number}.jpg'
+                    dish["imageUrl"] = f"{image_number}.jpg"
                     break
 
             # Write the updated data back to the JSON file
