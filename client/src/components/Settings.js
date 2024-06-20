@@ -455,6 +455,21 @@ function Settings() {
           </Grid>
           <Grid item xs={12} textAlign={"center"} sx={{ pt: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <Typography variant="p" fontWeight="300">
+              Weitere Studi-Projekte der HTWK:
+            </Typography>
+            <Grid item xs={12} textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.htwkalender.de/" target="_blank" rel="noopener noreferrer">
+                htwkalender.de
+              </Button>
+            </Grid>
+            <Grid item xs={12} textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Button variant="text" style={{ color: theme.palette.text.primary, fontWeight: '400' }} href="https://www.htwkarte.de/" target="_blank" rel="noopener noreferrer">
+                htwkarte.de
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} textAlign={"center"} sx={{ pt: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Typography variant="p" fontWeight="300">
               Offizielle Webseite der Mensa:
             </Typography>
             <Grid item xs={12} textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
