@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.8
+FROM python:3.11
 ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 
 # Set the timezone
