@@ -20,7 +20,7 @@ def generate_nutrition_completion(
     # Create a chat completion with the title of the dish as the content of the user message
     try:
         completion = client.chat.completions.create(
-            model="gpt-4-1106-preview",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": systemPrompt},
                 {"role": "user", "content": f"{title}"},
