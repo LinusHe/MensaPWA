@@ -24,6 +24,19 @@ function FloorplanSelector() {
   // Array to hold table elements
   let tables = [];
 
+
+  // For Legacy format (e.g. S1A, N2I, etc.)
+  if(checkForOldFormat(code)) {
+    console.log('Old format detected');
+    code = code + '-1';
+    console.log('New code: ' + code);
+  }
+
+  function checkForOldFormat (input) {
+    let regex = /^[A-Za-z][0-9]+[A-Za-z]$/i;
+    return regex.test(input);
+  }  
+
   // Function to handle zooming
   function zoomed(event, image) {
     const { transform } = event;
@@ -129,7 +142,7 @@ function FloorplanSelector() {
   function getLocationCode(id) {
     const segments = id.split("_");
     if (segments.length >= 2) {
-      let locationCode = segments[1];
+      let locationCode = segments[1] + "-" + segments[2];
       locationCode = locationCode.replace(/R/g, "S");
       locationCode = locationCode.replace(/L/g, "N");
       return locationCode;

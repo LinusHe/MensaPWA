@@ -20,7 +20,8 @@ const steps = [
       'Jeder Sitzplatz-Code besteht aus drei Stellen.',
       'Erste Stelle: Bereich der Mensa (N, M, S).',
       'Zweite Stelle: Position oder Etage (Zahl).',
-      'Dritte Stelle: Nähe zur Mitte oder Richtung (Buchstabe).'
+      'Dritte Stelle: Nähe zur Mitte oder Richtung (Buchstabe).',
+      'Vierte Stelle: Nummer des tisches mit "-" vorangestellt(Zahl). (Wichtig für Tische mit gleichen Codes)'
     ],
     image: ImageCodes
   },
@@ -54,10 +55,9 @@ const steps = [
   {
     heading: 'Beispiele',
     content: [
-      '"N12I": Nördlicher Bereich, 12 Uhr, innen.',
-      '"M2S": Mittlerer Bereich, 2. Etage, südlich.',
-      '"S7A": Südlicher Bereich, 7 Uhr, außen.',
-      'Beachte, dass unter einem Code auch mehrere Tische fallen können.'
+      '"N12I-1": Nördlicher Bereich, 12 Uhr, innen.',
+      '"M2S-2": Mittlerer Bereich, 2. Etage, südlich.',
+      '"S7A-3": Südlicher Bereich, 7 Uhr, außen.'
     ],
     image: ImageExamples
   }
