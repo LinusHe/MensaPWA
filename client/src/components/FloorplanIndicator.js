@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Paper, Typography, Grid, Fab } from '@mui/material';
@@ -27,12 +27,12 @@ function FloorplanIndicator() {
     const isFirefox = typeof InstallTrigger !== 'undefined'; // Check if browser is Firefox
 
     const shareData = {
-      title: 'Teile deinen Sitzplatz (' + code + ')',
-      text: 'Ich bin in der Mensa und sitze bei "' + code + '". \n' + window.location.href,
+      title: 'Teile deinen Sitzplatz (' + code?.substring(0, 3) + ')',
+      text: 'Ich bin in der Mensa und sitze bei "' + code?.substring(0, 3) + '". \n' + window.location.href,
     };
 
     const shareDataUrlOnly = {
-      title: 'Teile deinen Sitzplatz (' + code + ')',
+      title: 'Teile deinen Sitzplatz (' + code?.substring(0, 3) + ')',
       url: window.location.href
     };
 
@@ -40,7 +40,7 @@ function FloorplanIndicator() {
       if ((navigator.canShare && navigator.canShare(shareData)) && !isFirefox) {
         navigator.share(shareData)
           .then(() => ('URL shared successfully'))
-          .catch((err) => console.loge.log('Error: ' + err));
+          .catch((err) => console.log('Error: ' + err));
       } else if (navigator.canShare && navigator.canShare(shareDataUrlOnly)) {
         navigator.share(shareDataUrlOnly)
           .then(() => console.log('URL shared successfully without text'))
@@ -65,10 +65,10 @@ function FloorplanIndicator() {
       {/* // <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, borderRadius: '30px 30px 0 0', boxShadow: '0px -10px 20px 0 rgba(0, 0, 0, 0.1)', backgroundColor: theme.palette.primary.main, paddingBottom: bottomPadding + 'px', transition: 'padding 0.5s' }}> */}
       <Grid container alignItems="center" justifyContent="center" sx={{ mt: 2.5, mb: 2.5 }}>
         <Grid item sx={{ mr: 2 }}>
-          <Typography variant="h6" color="white" fontWeight="bold" sx={{ml:1, lineHeight: 1}} >
+          <Typography variant="h6" color="white" fontWeight="bold" sx={{ ml: 1, lineHeight: 1 }} >
             Dein Sitzplatz:{' '}
             <Typography component="span" variant="span" fontWeight="300">
-              {code}
+              {code?.substring(0, 3)}
             </Typography>
           </Typography>
           {/* <Link
@@ -97,7 +97,7 @@ function FloorplanIndicator() {
         </Grid>
       </Grid>
     </Paper>
-  )
+  );
 }
 
-export default FloorplanIndicator
+export default FloorplanIndicator;

@@ -21,7 +21,7 @@ const steps = [
       'Erste Stelle: Bereich der Mensa (N, M, S).',
       'Zweite Stelle: Position oder Etage (Zahl).',
       'Dritte Stelle: Nähe zur Mitte oder Richtung (Buchstabe).',
-      'Vierte Stelle: Nummer des tisches mit "-" vorangestellt(Zahl). (Wichtig für Tische mit gleichen Codes)'
+      'Links enthalten eine vierte Stelle, um Tische mit gleichen Codes zu unterscheiden.'
     ],
     image: ImageCodes
   },
