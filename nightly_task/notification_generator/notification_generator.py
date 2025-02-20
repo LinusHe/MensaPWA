@@ -32,7 +32,7 @@ def generate_notification_completion(current_date, script_dir, output_dir):
     for attempt in range(3):
         print(f"Attempt {attempt+1} to create chat completion...")
         completion = client.chat.completions.create(
-            model="gpt-4-1106-preview",
+            model="gpt-4o",
             response_format={"type": "json_object"},
             messages=[
                 {"role": "system", "content": systemPrompt},

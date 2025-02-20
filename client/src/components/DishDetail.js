@@ -1,19 +1,19 @@
-import React from 'react'
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { Chip, Grid, DialogTitle, DialogContent, Typography, IconButton, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { BottomSheet } from 'react-spring-bottom-sheet'
+import { BottomSheet } from 'react-spring-bottom-sheet';
 import { useTheme } from '@mui/material/styles';
 import emptyPlate from '../assets/emptyPlate.png';
 
-import 'react-spring-bottom-sheet/dist/style.css'
+import 'react-spring-bottom-sheet/dist/style.css';
 
 
 const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
   const theme = useTheme();
-  const nutritionValues = dish.chat_completion.match(/\d+/g);
-  const hasNutritionValues = nutritionValues && nutritionValues.length === 3;
+  const nutritionValues = dish?.chat_completion?.match(/\d+/g) || [];
+  const hasNutritionValues = nutritionValues.length === 3;
 
   const allergenMap = new Map([
     ['soy', 'Soja'],
@@ -64,7 +64,7 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
     e.target.onerror = null;
     // Replace the image source with an empty plate image
     e.target.src = emptyPlate;
-  }
+  };
 
   return (
     <BottomSheet
@@ -231,6 +231,6 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
       </DialogContent>
     </BottomSheet>
   );
-}
+};
 
-export default DishDetail
+export default DishDetail;

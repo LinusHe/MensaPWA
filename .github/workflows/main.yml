@@ -39,8 +39,8 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-          docker-compose -f docker-compose.prod.yml build
-          docker-compose -f docker-compose.prod.yml push
+          docker compose -f docker-compose.prod.yml build
+          docker compose -f docker-compose.prod.yml push
 
       - name: ssh deploy
         uses: easingthemes/ssh-deploy@v4.1.8
@@ -56,5 +56,5 @@ jobs:
             git clean -fd
             git pull origin production
             export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-            docker-compose -f docker-compose.prod.yml pull
-            docker-compose -f docker-compose.prod.yml up --build -d --remove-orphans
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up --build -d --remove-orphans

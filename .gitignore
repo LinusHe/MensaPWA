@@ -1,6 +1,7 @@
 # ignore global DS Store
 global-exclude .DS_Store
 .env
-logs
+!logs/cache_report.ipynb
+logs/nightly
 */.DS_Store
 .vscode
