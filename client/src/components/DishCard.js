@@ -14,6 +14,8 @@ import ChickenIcon from 'mdi-material-ui/FoodDrumstick';
 import BioIcon from 'mdi-material-ui/Tree';
 import AlcoholIcon from 'mdi-material-ui/GlassCocktail';
 import DefaultIcon from 'mdi-material-ui/Food';
+import CowIcon from 'mdi-material-ui/Cow';
+
 
 const DishCard = ({ dishImage, category, title, chat_completion, prices, selections, additives, allergens }) => {
     const theme = useTheme();
@@ -24,11 +26,12 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
         "fish/seafood": { color: "food.fishSeafood", label: "Fisch/Meeresfrüchte", icon: FishIcon },
         "vegetarian": { color: "food.vegetarian", label: "Vegetarisch", icon: VegetarianIcon },
         "pork": { color: "food.pork", label: "Schweinefleisch", icon: PorkIcon },
+        "beef": { color: "food.beef", label: "Rindfleisch", icon: CowIcon },
         "vegan": { color: "food.vegan", label: "Vegan", icon: VeganIcon },
         "chicken": { color: "food.chicken", label: "Huhn", icon: ChickenIcon },
         "bio": { color: "food.bio", label: "Bio", icon: BioIcon },
         "alcohol": { color: "food.alcohol", label: "Alkohol", icon: AlcoholIcon },
-        "default": { color: "food.default", label: "Andere", icon: DefaultIcon }
+        "default": { color: "food.default", label: "Andere", icon: DefaultIcon },
     };
 
     const handleOpen = () => {

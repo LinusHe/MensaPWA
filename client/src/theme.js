@@ -56,6 +56,7 @@ const getDesignTokens = (mode) => ({
             fishSeafood: '#3F51B5',
             vegetarian: '#8BC34A',
             pork: '#F44336',
+            beef: '#670D2F',
             vegan: '#4CAF50',
             chicken: '#FF9800',
             bio: '#00897B',
