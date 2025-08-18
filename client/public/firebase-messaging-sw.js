@@ -12,8 +12,6 @@ const firebaseConfig = {
   appId: "1:501729068545:web:e8f6c4cb184c83ea40a200"
 };
 
-console.log("Firebase config: ", firebaseConfig);
-
 firebase.initializeApp(firebaseConfig);
 
 // Retrieve firebase messaging
@@ -25,13 +23,14 @@ messaging.onBackgroundMessage(function (payload) {
   const notificationTitle = payload.data.title;
   const notificationOptions = {
     body: payload.data.body,
+    data: { link: payload.data.link }
     // more options, like icons, etc.
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
   // Prevent the browser from focusing the Notification's tab.
   event.notification.close();
 
@@ -40,7 +39,7 @@ self.addEventListener('notificationclick', function(event) {
 
   // Check if the current is open and focus if it is
   event.waitUntil(
-    clients.matchAll({type: 'window', includeUncontrolled: true}).then( windowClients => {
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
       for (let i = 0; i < windowClients.length; i++) {
         const client = windowClients[i];
         if (client.url === urlToOpen && 'focus' in client) {

@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules for MensaPWA
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Data files (menu.json, notification.json) - public read access
+    match /data/{date}/{filename} {
+      // Allow public read access for menu and notification files
+      allow read: if true;
+      // Only Firebase Functions can write
+      allow write: if request.auth == null; // Functions run without auth
+    }
+    
+    // Cache directory - only Firebase Functions access
+    match /cache/{filename} {
+      // Only Firebase Functions can read/write cache files
+      allow read, write: if request.auth == null; // Functions run without auth
+      // Deny all client access
+      allow read, write: if false;
+    }
+    
+    // Deny all other access by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

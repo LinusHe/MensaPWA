@@ -1,0 +1,13 @@
+filled white plate of menu "{{title}}" (category: {{category}}), high-quality, realistic top-down food photography on a clean white plate in soft natural daylight, large appetizing portion, no text.
+
+Dietary constraints based on selections: {{selections}}.
+- If vegan: strictly no animal products (no meat, fish, dairy, eggs, honey).
+- If vegetarian: no meat or fish.
+- If gluten-free: avoid breaded/battered or wheat-based items.
+- If lactose-free: avoid milk/cheese/cream.
+- If halal: no pork and no alcohol.
+
+Presentation guidelines:
+- Center the dish on the plate; minimal garnish consistent with constraints.
+- White background, subtle shadow; no utensils, no extra props, no beverages.
+- Make the dish clearly recognizable to its title.

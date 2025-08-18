@@ -3,23 +3,29 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
-    // match /{document=**} {
-    //   allow read, write: if request.time < timestamp.date(2023, 10, 15);
-    // }
-
-    // Einstellungen für Benachrichtigungen
+    // Per-user access for notification users
     match /notificationUsers/{userId} {
-      // Erlaube das Lesen und Schreiben, wenn die ID des Dokuments der Client-ID entspricht.
-      allow read, write, delete: if request.resource.data.userId == userId;
+      // allow unauthenticated writes if the payload's userId matches the doc id.
+      allow read: if true;
+      allow write: if (
+        (request.auth != null && request.auth.uid == userId) ||
+        (
+          request.auth == null &&
+          request.resource != null &&
+          request.resource.data.userId == userId &&
+          // Restrict which fields can be set without auth
+          request.resource.data.keys().hasOnly([
+            'enabled', 'userId', 'fcm_token', 'nextNotification', 'preferences'
+          ]) &&
+          request.resource.data.preferences.keys().hasOnly(['days', 'time', 'timezone'])
+        )
+      );
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Server-only image cache (no client access)
+    match /imagesCache/{cacheKey} {
+      allow read, write: if false;
     }
   }
 }
