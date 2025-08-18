@@ -29,12 +29,12 @@ This requires Node.js and npm to be installed on your machine.
 ### Infrastructure
 The application consists of the following services:
 * `client`: The React frontend of the application.
-* `nightly`: A Python-based backend service that performs tasks in the night such as generating preview images for the Mensa food and estimating the nutrition in the food, based on OpenAI.
+* `nightly`: Deprecated locally. The generation has moved to Firebase Functions. The `nightly` service is no longer started in local/dev/prod compose files.
 * `firebase`: Manages and sends push notifications to users, by using a cloud database and a cronjob service that runs a firebase messaging service.
 
 ### Environment Variables
 The following environment variables are required:
-* `OPENAI_API_KEY`: Can be obtained from https://platform.openai.com/account/api-keys. Needed to generate the AI images and nutrition estimation inside the nightly container.
+* `OPENAI_API_KEY`: Only needed if you run the deprecated `nightly` image manually. Not required for standard local/dev/prod usage anymore.
 
 For deployment, the following additional environment variables are required and are best stored in the repository:
 * `DOCKER_PASSWORD`: This is your Docker account password. It's needed to pull and push images from Docker Hub.
@@ -49,6 +49,14 @@ For deployment, the following additional environment variables are required and 
 * The Firebase service is deployed separately using the `firebase deploy` command inside the `firebase` directory. If you want to test this, you need to create your own firebase project. You can do this by visiting the [Firebase Console](https://console.firebase.google.com/u/0/). After creating your project, replace the `firebaseConfig` in the client in the following files:
   * [`client/public/firebase-messaging-sw.js`](client/public/firebase-messaging-sw.js)
   * [`client/src/index.js`](client/src/index.js)
+
+### Data Source Change
+The client now loads menus and images directly from Firebase Storage under `data/YYYY-MM-DD/`:
+
+- Menu JSON: `https://firebasestorage.googleapis.com/v0/b/<your-bucket>.firebasestorage.app/o/data%2FYYYY-MM-DD%2Fmenu.json?alt=media`
+- Dish images: `https://firebasestorage.googleapis.com/v0/b/<your-bucket>.firebasestorage.app/o/data%2FYYYY-MM-DD%2F<image>.jpg?alt=media`
+
+No local `public/data` folder is required anymore.
 
 
 ## Authors
