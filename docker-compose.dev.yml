@@ -17,18 +17,6 @@ services:
     ports:
       - "3000:3000"
 
-  nightly:
-    restart: unless-stopped
-    environment:
-      - OPENAI_API_KEY
-      - TZ=Europe/Berlin
-    build:
-      context: .
-      dockerfile: Dockerfile.nightly
-    volumes:
-      - ./logs/nightly:/app/logs
-      - public-data:/app/out
-
 volumes:
   mongo-data:
   public-data:

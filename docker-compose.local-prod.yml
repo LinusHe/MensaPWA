@@ -13,18 +13,6 @@ services:
       - "80:80"
       - "443:443"
 
-  nightly:
-    restart: unless-stopped
-    environment:
-      - OPENAI_API_KEY
-      - TZ=Europe/Berlin
-    build:
-      context: .
-      dockerfile: Dockerfile.nightly
-    volumes:
-      - ./logs/nightly:/app/logs
-      - public-data:/app/out
-
 volumes:
   mongo-data:
   public-data:
