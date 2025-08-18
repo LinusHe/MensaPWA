@@ -1,5 +1,5 @@
 // react imports
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './store';
@@ -26,6 +26,15 @@ import '@fontsource/roboto';
 // Initialize firebase project
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+
+// Silence verbose logs in production
+if (process.env.NODE_ENV === 'production') {
+  /* eslint-disable no-console */
+  ['log', 'info', 'debug'].forEach((methodName) => {
+    console[methodName] = () => { };
+  });
+  /* eslint-enable no-console */
+}
 
 const firebaseConfig = {
   apiKey: "AIzaSyD5aT5GwndtWGX8wJ4izKUIoW7zixOvydk",

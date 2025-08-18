@@ -11,6 +11,8 @@ services:
       dockerfile: Dockerfile.client.prod
     networks:
       - traefiknet
+    environment:
+      - NODE_ENV=production
     volumes:
       - ./client:/app
       - public-data:/app/public/data
