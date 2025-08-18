@@ -1,0 +1,19 @@
+[
+  {
+    "origin": [
+      "http://localhost:3000",
+      "https://mensa.heylinus.de",
+      "https://mensa.fsr.imn.htwk-leipzig.de/"
+    ],
+    "method": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "responseHeader": [
+      "Content-Type",
+      "Cache-Control"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]
