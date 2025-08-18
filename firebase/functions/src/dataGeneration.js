@@ -384,7 +384,7 @@ async function generateDishImage(dish) {
 
   } catch (err) {
     console.error(`Image generation (edits) failed for "${dish.title}":`, err);
-    return generateImageFallback(dish.title, buildImagePromptFromDish(dish));
+    return generateEmptyPlateImage();
   }
 }
 
@@ -514,6 +514,13 @@ async function fetchWithTimeout(url, { init = {}, timeoutMs = 10000, retry = 0 }
  */
 function isPlaceholderBuffer(buf) {
   try {
+    const emptyPlatePath = path.join(__dirname, '..', 'assets', 'emptyPlate.png');
+    if (fs.existsSync(emptyPlatePath)) {
+      const emptyPlate = fs.readFileSync(emptyPlatePath);
+      if (buf.length === emptyPlate.length && buf.equals(emptyPlate)) return true;
+    }
+  } catch { }
+  try {
     const plateMaskPath = path.join(__dirname, '..', 'assets', 'plateMask.png');
     if (fs.existsSync(plateMaskPath)) {
       const plate = fs.readFileSync(plateMaskPath);
@@ -534,13 +541,16 @@ function isPlaceholderBuffer(buf) {
  */
 async function generateEmptyPlateImage() {
   try {
+    const emptyPlatePath = path.join(__dirname, '..', 'assets', 'emptyPlate.png');
+    if (fs.existsSync(emptyPlatePath)) {
+      return fs.readFileSync(emptyPlatePath); // PNG
+    }
     const plateMaskPath = path.join(__dirname, '..', 'assets', 'plateMask.png');
     if (fs.existsSync(plateMaskPath)) {
       return fs.readFileSync(plateMaskPath); // PNG
-    } else {
-      console.warn('Plate mask not found, creating minimal placeholder');
-      return createMinimalPlateBuffer(); // PNG (1x1)
     }
+    console.warn('Empty plate asset not found, creating minimal placeholder');
+    return createMinimalPlateBuffer(); // PNG (1x1)
   } catch (error) {
     console.error('Failed to generate empty plate image:', error);
     return createMinimalPlateBuffer();
