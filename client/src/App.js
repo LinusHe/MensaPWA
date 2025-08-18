@@ -8,28 +8,30 @@ import Settings from './components/Settings';
 import { SnackbarProvider, closeSnackbar } from 'notistack';
 import './assets/App.css';
 import Button from '@mui/material/Button';
+import BottomSheetNotice from './components/BottomSheetNotice';
 
 function App() {
   return (
-      <div>
-        <SnackbarProvider
-          autoHideDuration={5000}
-          action={(snackbarId) => (
-            <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => closeSnackbar(snackbarId)}>
-              Schließen
-            </Button>
-          )}
-        >
-          <Routes>
-            <Route path="/" element={<Floorplan />} ></Route>
-            <Route path="/menu" element={<FoodMenu />} ></Route>
-            <Route path="/rush" element={<Capacity />} ></Route>
-            <Route path="/settings" element={<Settings />} ></Route>
-            <Route path="/:code" element={<Floorplan />} />
-          </Routes>
-          <NavigationBar></NavigationBar>
-        </SnackbarProvider>
-      </div>
+    <div>
+      <SnackbarProvider
+        autoHideDuration={5000}
+        action={(snackbarId) => (
+          <Button variant="text" sx={{ color: 'background.paper' }} onClick={() => closeSnackbar(snackbarId)}>
+            Schließen
+          </Button>
+        )}
+      >
+        <Routes>
+          <Route path="/" element={<Floorplan />} ></Route>
+          <Route path="/menu" element={<FoodMenu />} ></Route>
+          <Route path="/rush" element={<Capacity />} ></Route>
+          <Route path="/settings" element={<Settings />} ></Route>
+          <Route path="/:code" element={<Floorplan />} />
+        </Routes>
+        <BottomSheetNotice />
+        <NavigationBar></NavigationBar>
+      </SnackbarProvider>
+    </div>
   );
 }
 
