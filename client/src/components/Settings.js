@@ -49,7 +49,7 @@ function Settings() {
 
     // Fetch the notification.json file
     const date = new Date().toISOString().split('T')[0];
-    fetch(`${process.env.PUBLIC_URL}/data/${date}/notification.json`)
+    fetch(`https://firebasestorage.googleapis.com/v0/b/mensapwa-39cd9.firebasestorage.app/o/${encodeURIComponent(`data/${date}/notification.json`)}?alt=media`)
       .then(response => response.json())
       .then(data => {
         if (data.notification && data.notification.title && data.notification.body) {
@@ -132,8 +132,8 @@ function Settings() {
   };
 
   const handleTimeChange = async (event) => {
-    console.log("changed", event.target.value)
-    console.log("timestamp", timeToTimeStamp(event.target.value))
+    console.log("changed", event.target.value);
+    console.log("timestamp", timeToTimeStamp(event.target.value));
     dispatch({ type: 'SET_NOTIFICATION_TIME', payload: event.target.value });
   };
 
@@ -173,7 +173,7 @@ function Settings() {
     date.setHours(hours);
     date.setMinutes(minutes);
     return date.getTime();
-  }
+  };
 
 
   return (
@@ -524,7 +524,7 @@ function Settings() {
         </div>
       </Grid >
     </Grid >
-  )
+  );
 }
 
-export default Settings
+export default Settings;

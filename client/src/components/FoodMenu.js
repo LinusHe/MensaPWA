@@ -23,6 +23,8 @@ function FoodMenu() {
   const initialVeganFirst = useSelector(state => state.veganFirst);
   const [veganFirst, setVeganFirst] = useState(initialVeganFirst);
 
+  const firebaseBase = 'https://firebasestorage.googleapis.com/v0/b/mensapwa-39cd9.firebasestorage.app/o';
+
   const dates = Array.from({ length: 5 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() + i);
@@ -36,12 +38,12 @@ function FoodMenu() {
   });
 
   useEffect(() => {
-    console.log(veganFirst)
+    console.log(veganFirst);
     const timer = setTimeout(() => {
       setShowSkeleton(true);
     }, 500);
     // Fetch the dishes for the first date when the component mounts
-    const url = `${process.env.PUBLIC_URL}/data/${dates[value]}/menu.json`;
+    const url = `${firebaseBase}/${encodeURIComponent(`data/${dates[value]}/menu.json`)}?alt=media`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -58,12 +60,13 @@ function FoodMenu() {
             return 0;
           });
         }
-        console.log(...data)
+        console.log(...data);
         setDishes(data);
         clearTimeout(timer);
         setShowSkeleton(false);
       })
       .catch((error) => {
+        console.log(error);
         const day = new Date().getDay();
         if (day === 6 || day === 0) {
           const germanDay = day === 6 ? 'Samstag' : 'Sonntag';
@@ -75,7 +78,7 @@ function FoodMenu() {
         setShowSkeleton(true);
       });
     Promise.all(dates.map(date => {
-      const url = `${process.env.PUBLIC_URL}/data/${date}/menu.json`;
+      const url = `${firebaseBase}/${encodeURIComponent(`data/${date}/menu.json`)}?alt=media`;
       return fetch(url)
         .then(response => {
           if (!response.ok) {
@@ -115,7 +118,7 @@ function FoodMenu() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     const selectedDate = dates[newValue];
-    const url = `${process.env.PUBLIC_URL}/data/${selectedDate}/menu.json`;
+    const url = `${firebaseBase}/${encodeURIComponent(`data/${selectedDate}/menu.json`)}?alt=media`;
 
     // console.log('Fetching menu from:', url);
     fetch(url)
@@ -300,7 +303,7 @@ function FoodMenu() {
                       <div>
                         <DishCard
                           // Use the dish id and index as part of the key
-                          dishImage={`${process.env.PUBLIC_URL}/data/${date}/${dish.imageUrl}`} // Use the image number as the filename
+                          dishImage={`${firebaseBase}/${encodeURIComponent(`data/${date}/${dish.imageUrl}`)}?alt=media`} // Load from Firebase Storage
                           category={dish.category}
                           title={dish.title}
                           chat_completion={dish.chat_completion} // Join the selections array into a string

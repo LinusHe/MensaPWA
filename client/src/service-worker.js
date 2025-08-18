@@ -61,6 +61,17 @@ registerRoute(
   })
 );
 
+// Cache Firebase Storage images (jpg/jpeg/png)
+registerRoute(
+  ({ url }) => url.origin === 'https://firebasestorage.googleapis.com' && (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.png')),
+  new StaleWhileRevalidate({
+    cacheName: 'remote-images',
+    plugins: [
+      new ExpirationPlugin({ maxEntries: 100 }),
+    ],
+  })
+);
+
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
   ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/data'), // Customize this strategy as needed, e.g., by changing to CacheFirst.
@@ -69,6 +80,17 @@ registerRoute(
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used data are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
+// Cache Firebase Storage JSON (menu/notification)
+registerRoute(
+  ({ url }) => url.origin === 'https://firebasestorage.googleapis.com' && url.pathname.endsWith('.json'),
+  new StaleWhileRevalidate({
+    cacheName: 'remote-data',
+    plugins: [
       new ExpirationPlugin({ maxEntries: 50 }),
     ],
   })
