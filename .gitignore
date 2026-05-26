@@ -5,3 +5,5 @@ global-exclude .DS_Store
 logs/nightly
 */.DS_Store
 .vscode
+serviceAccountKey.json
+cache-admin/
