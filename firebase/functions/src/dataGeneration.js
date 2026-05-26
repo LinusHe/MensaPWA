@@ -33,10 +33,8 @@ const OPENAI_SETTINGS = {
   // Chat (used for nutrition + notifications)
   chatModel: process.env.OPENAI_CHAT_MODEL || 'gpt-4o',
   // Nutrition generation defaults
-  chatTemperatureNutrition: parseFloat(process.env.OPENAI_CHAT_TEMPERATURE_NUTRITION || '0.3'),
   chatMaxTokensNutrition: parseInt(process.env.OPENAI_CHAT_MAX_TOKENS_NUTRITION || '500', 10),
   // Notification generation defaults
-  chatTemperatureNotification: parseFloat(process.env.OPENAI_CHAT_TEMPERATURE_NOTIFICATION || '0.7'),
   chatMaxTokensNotification: parseInt(process.env.OPENAI_CHAT_MAX_TOKENS_NOTIFICATION || '300', 10),
   // Images
   imageModel: process.env.OPENAI_IMAGE_MODEL || 'dall-e-2',
@@ -310,7 +308,6 @@ async function generateNutritionForDish(title, systemPrompt) {
         { role: 'user', content: title },
       ],
       max_tokens: OPENAI_SETTINGS.chatMaxTokensNutrition,
-      temperature: OPENAI_SETTINGS.chatTemperatureNutrition,
     });
     return completion.choices && completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content || '';
   } catch (error) {
@@ -339,7 +336,6 @@ async function generateNotification(menu, systemPrompt) {
           { role: 'user', content: JSON.stringify(menu) },
         ],
         max_tokens: OPENAI_SETTINGS.chatMaxTokensNotification,
-        temperature: OPENAI_SETTINGS.chatTemperatureNotification,
       });
 
       const parsed = JSON.parse(completion.choices && completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content || '{}');
