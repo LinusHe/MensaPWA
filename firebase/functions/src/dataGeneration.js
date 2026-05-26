@@ -378,9 +378,23 @@ async function generateDishImage(dish) {
       return generateImageFallback(dish.title, fullPrompt);
     }
 
-    const plateMaskBuffer = fs.readFileSync(plateMaskPath);
-    // Use REST images/edits to apply mask-based edit
-    return await callImageEditWithMask(fullPrompt, plateMaskBuffer);
+    // Normalize mask to the API's working size and derive an opaque white
+    // reference image by flattening the same asset onto white — gives the
+    // model a clean white-on-white "ghost plate" instead of a dark reference.
+    const [w, h] = OPENAI_SETTINGS.imageSize.split('x').map((n) => parseInt(n, 10));
+    const rawMask = fs.readFileSync(plateMaskPath);
+    const plateMaskBuffer = await sharp(rawMask)
+      .resize(w, h, { fit: 'fill' })
+      .png()
+      .toBuffer();
+    const plateImageBuffer = await sharp(rawMask)
+      .resize(w, h, { fit: 'fill' })
+      .flatten({ background: '#ffffff' })
+      .png()
+      .toBuffer();
+
+    const rawBuffer = await callImageEditWithMask(fullPrompt, plateImageBuffer, plateMaskBuffer);
+    return await compositeWithPlateMask(rawBuffer, plateMaskBuffer);
 
   } catch (err) {
     console.error(`Image generation (edits) failed for "${dish.title}":`, err);
@@ -454,15 +468,14 @@ async function generateImageFallback(title, prompt) {
  * @param {Buffer} platePngBuffer
  * @return {Promise<Buffer>}
  */
-async function callImageEditWithMask(prompt, platePngBuffer) {
+async function callImageEditWithMask(prompt, imageBuffer, maskBuffer) {
   const form = new FormData();
   form.append('model', OPENAI_SETTINGS.imageModel);
   form.append('prompt', prompt);
   form.append('size', OPENAI_SETTINGS.imageSize);
-  const blob = new Blob([platePngBuffer], { type: 'image/png' });
-  // Use same PNG as base image and mask; transparent regions define editable area
-  form.append('image', blob, 'plate.png');
-  form.append('mask', blob, 'mask.png');
+  form.append('quality', OPENAI_SETTINGS.imageQuality);
+  form.append('image', new Blob([imageBuffer], { type: 'image/png' }), 'plate.png');
+  form.append('mask', new Blob([maskBuffer], { type: 'image/png' }), 'mask.png');
 
   const res = await fetch('https://api.openai.com/v1/images/edits', {
     method: 'POST',
@@ -485,6 +498,28 @@ async function callImageEditWithMask(prompt, platePngBuffer) {
     return Buffer.from(arr);
   }
   throw new Error('No image returned from images/edits');
+}
+
+/**
+ * Composite the original plate mask back over the generated image so that
+ * everything outside the transparent (editable) area is restored from the
+ * reference plate. gpt-image-1.x does not enforce strict masking, so this is
+ * what actually preserves rim, background, lighting and crop.
+ * @param {Buffer} generatedBuffer Raw image from OpenAI
+ * @param {Buffer} plateMaskBuffer Original plateMask.png (opaque rim/bg, transparent center)
+ * @return {Promise<Buffer>} Composited PNG
+ */
+async function compositeWithPlateMask(generatedBuffer, plateMaskBuffer) {
+  const meta = await sharp(plateMaskBuffer).metadata();
+  const width = meta.width || 1024;
+  const height = meta.height || 1024;
+  const baseAligned = await sharp(generatedBuffer)
+    .resize(width, height, { fit: 'cover' })
+    .toBuffer();
+  return await sharp(baseAligned)
+    .composite([{ input: plateMaskBuffer }])
+    .png()
+    .toBuffer();
 }
 
 /**
@@ -636,3 +671,9 @@ function loadPrompt(filename) {
     return '';
   }
 }
+
+exports._internal = {
+  generateDishImage,
+  buildImagePromptFromDish,
+  compositeWithPlateMask,
+};
