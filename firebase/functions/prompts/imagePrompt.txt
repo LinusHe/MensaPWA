@@ -1,13 +1,10 @@
-filled white plate of menu "{{title}}" (category: {{category}}), high-quality, realistic top-down food photography on a clean white plate in soft natural daylight, large appetizing portion, no text.
+Create a realistic top-down food photo for this cafeteria dish: "{{title}}".
 
-Dietary constraints based on selections: {{selections}}.
-- If vegan: strictly no animal products (no meat, fish, dairy, eggs, honey).
-- If vegetarian: no meat or fish.
-- If gluten-free: avoid breaded/battered or wheat-based items.
-- If lactose-free: avoid milk/cheese/cream.
-- If halal: no pork and no alcohol.
+Use the provided plate image only as a composition reference. Fill ONLY the editable masked area with food. Preserve the white plate rim, outer background, lighting, shadow, camera angle, crop, and image boundaries exactly. Do not add utensils, text, napkins, tableware, hands, drinks, logos, labels, decorative props, or extra objects. Keep all generated food fully inside the inner plate area, centered on the plate, with a natural cafeteria portion size. The food may touch the inner plate area but must not cover the rim.
 
-Presentation guidelines:
-- Center the dish on the plate; minimal garnish consistent with constraints.
-- White background, subtle shadow; no utensils, no extra props, no beverages.
-- Make the dish clearly recognizable to its title.
+Dietary constraints: {{selections}}.
+If vegan: no animal products. If vegetarian: no meat or fish. If halal: no pork or alcohol.
+
+Style: realistic, appetizing, clean cafeteria food photography, soft natural daylight, neutral white background, no text.
+
+Negative: text, logo, watermark, utensils, hands, extra plates, table props, food outside mask, covering plate rim, changed background, changed plate shape, cropped plate.
