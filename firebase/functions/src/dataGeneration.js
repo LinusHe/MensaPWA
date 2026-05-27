@@ -51,7 +51,7 @@ exports.generateDailyData = onSchedule({
   timeZone: 'Europe/Berlin',
   region: process.env.FUNCTION_REGION || 'europe-west3',
   memory: '1GiB',
-  timeoutSeconds: 3600, // 1 hour
+  timeoutSeconds: 1800, // 30 min (max for scheduled functions)
   maxInstances: 1,
 }, async (event) => {
   const bucketName = process.env.DATA_BUCKET;
