@@ -1,7 +1,7 @@
 /**
- * Unit tests for EnhancedImageCache's pure normalization logic.
- * Uses Node's built-in test runner (node:test) — no test framework required.
- * Constructor is skipped via Object.create() so admin/firestore is never touched.
+ * Unit tests for EnhancedImageCache's pure normalization + matching logic.
+ * Uses Node's built-in test runner. Constructor is skipped via Object.create
+ * so admin/firestore is never touched.
  */
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -9,11 +9,12 @@ const EnhancedImageCache = require('../src/enhancedCache');
 
 const cache = Object.create(EnhancedImageCache.prototype);
 
-test('normalizeString lowercases and collapses separators', () => {
-  assert.equal(
-    cache.normalizeString('Spaghetti | Bolognese / Käse, Tomaten'),
-    'spaghetti  bolognese  käse  tomaten'.replace(/\s+/g, ' ')
-  );
+// --- normalizeString ------------------------------------------------------
+
+test('normalizeString lowercases and collapses separators (incl. hyphens)', () => {
+  // Hyphens count as separators now.
+  const s = cache.normalizeString('Spaghetti | Bolognese / Käse-Tomaten, Senf');
+  assert.equal(s, 'spaghetti bolognese käse tomaten senf');
 });
 
 test('normalizeString returns empty for falsy input', () => {
@@ -21,6 +22,8 @@ test('normalizeString returns empty for falsy input', () => {
   assert.equal(cache.normalizeString(null), '');
   assert.equal(cache.normalizeString(undefined), '');
 });
+
+// --- cleanAndNormalizeTokens ---------------------------------------------
 
 test('cleanAndNormalizeTokens drops stopwords and short tokens', () => {
   const tokens = cache.cleanAndNormalizeTokens('spaghetti mit bolognese und käse');
@@ -32,10 +35,18 @@ test('cleanAndNormalizeTokens applies synonyms (frites -> pommes, chicken -> hä
   assert.deepEqual(tokens, ['hähnchen', 'pommes']);
 });
 
-test('cleanAndNormalizeTokens drops weight/numeric tokens', () => {
-  const tokens = cache.cleanAndNormalizeTokens('hähnchen 250g 500ml extra');
-  assert.deepEqual(tokens, ['hähnchen', 'extra']);
+test('cleanAndNormalizeTokens drops numeric weight tokens only when digit-prefixed', () => {
+  // 250g and 500ml are dropped; "honig" (also ends in g) is NOT — fixed bug.
+  const tokens = cache.cleanAndNormalizeTokens('hähnchen 250g 500ml honig');
+  assert.deepEqual(tokens, ['hähnchen', 'honig']);
 });
+
+test('cleanAndNormalizeTokens drops new descriptor stopwords', () => {
+  const tokens = cache.cleanAndNormalizeTokens('vegane bunte gegrillte knusprige currywurst');
+  assert.deepEqual(tokens, ['currywurst']);
+});
+
+// --- buildCanonicalKey ---------------------------------------------------
 
 test('buildCanonicalKey is order-independent', () => {
   const a = cache.buildCanonicalKey('Spaghetti Bolognese mit Käse');
@@ -45,8 +56,7 @@ test('buildCanonicalKey is order-independent', () => {
 });
 
 test('buildCanonicalKey deduplicates repeated tokens', () => {
-  const key = cache.buildCanonicalKey('Spaghetti Spaghetti Bolognese');
-  assert.equal(key, 'bolognese_spaghetti');
+  assert.equal(cache.buildCanonicalKey('Spaghetti Spaghetti Bolognese'), 'bolognese_spaghetti');
 });
 
 test('buildCanonicalKey returns empty for empty input', () => {
@@ -54,9 +64,19 @@ test('buildCanonicalKey returns empty for empty input', () => {
   assert.equal(cache.buildCanonicalKey(null), '');
 });
 
-test('buildOrderedKey preserves token order', () => {
-  const key = cache.buildOrderedKey('Hähnchen Crossies mit Tomaten-Paprika-Dip');
-  assert.equal(key.startsWith('hähnchen_crossies'), true);
+test('hyphenated and space-separated variants now collapse to same key', () => {
+  // This is the inversion of an earlier test — hyphens are now separators.
+  const hyphenated = cache.buildCanonicalKey('Tomaten-Paprika-Dip');
+  const spaced = cache.buildCanonicalKey('Tomaten Paprika Dip');
+  assert.equal(hyphenated, spaced);
+});
+
+// --- buildOrderedKey -----------------------------------------------------
+
+test('buildOrderedKey preserves token order and deduplicates', () => {
+  const key = cache.buildOrderedKey('Tomatensoße Schinken Tomatensoße Mozzarella');
+  // Dedupe should drop the second tomatensoße but keep ordering.
+  assert.equal(key, 'tomatensoße_schinken_mozzarella');
 });
 
 test('buildOrderedKey differs from canonical when order differs', () => {
@@ -68,6 +88,8 @@ test('buildOrderedKey differs from canonical when order differs', () => {
   assert.equal(canonical, canonical2);
 });
 
+// --- getCriticalTokens ---------------------------------------------------
+
 test('getCriticalTokens filters protein tokens', () => {
   const critical = cache.getCriticalTokens(['hähnchen', 'pommes', 'salat', 'käse']);
   assert.equal(critical.has('hähnchen'), true);
@@ -75,19 +97,65 @@ test('getCriticalTokens filters protein tokens', () => {
   assert.equal(critical.has('pommes'), false);
 });
 
-test('canonical key normalizes whitespace/case/separator variants to same key', () => {
-  // Both inputs use space-separated tokens (no hyphenation); should collapse
-  // case, separator (&, /, ,), and "Frites" synonym to identical keys.
-  const v1 = cache.buildCanonicalKey('Hähnchen Crossies mit Tomaten Paprika Dip, Steakhouse Frites');
-  const v2 = cache.buildCanonicalKey('HÄHNCHEN crossies MIT tomaten&paprika dip / steakhouse pommes');
-  assert.equal(v1, v2);
+test('getCriticalTokens surfaces critical tokens inside compounds', () => {
+  // "Hähnchenkeule" should surface hähnchen, "Seelachsfilet" should surface
+  // seelachs (substring detection).
+  const critical = cache.getCriticalTokens(['hähnchenkeule', 'seelachsfilet']);
+  assert.equal(critical.has('hähnchen'), true);
+  assert.equal(critical.has('seelachs'), true);
 });
 
-test('hyphenated tokens are kept as single tokens (documents current behavior)', () => {
-  // 'Tomaten-Paprika-Dip' becomes one token; the space-separated variant
-  // becomes three. Cache treats them as different — flagged so a future
-  // change to split on hyphens is a conscious choice, not a regression.
-  const hyphenated = cache.buildCanonicalKey('Tomaten-Paprika-Dip');
-  const spaced = cache.buildCanonicalKey('Tomaten Paprika Dip');
-  assert.notEqual(hyphenated, spaced);
+// --- buildCoreKey --------------------------------------------------------
+
+test('buildCoreKey returns null with fewer than 2 critical tokens', () => {
+  assert.equal(cache.buildCoreKey('Hähnchen mit Pommes'), null);
+  assert.equal(cache.buildCoreKey('Salat'), null);
+});
+
+test('buildCoreKey returns sorted critical-token fingerprint when >=2', () => {
+  const k = cache.buildCoreKey('Hähnchen mit Tofu und Brokkoli');
+  assert.equal(k, 'brokkoli+hähnchen+tofu');
+});
+
+test('buildCoreKey is order-independent', () => {
+  const a = cache.buildCoreKey('Tofu Hähnchen Curry');
+  const b = cache.buildCoreKey('Curry Hähnchen Tofu');
+  assert.equal(a, b);
+});
+
+// --- calculateSimilarity / side-dish filter ------------------------------
+
+test('calculateSimilarity ignores side-dish tokens', () => {
+  // Only the proteins should drive the score; "pommes" and "reis" are
+  // filtered out. Both strings reduce to {hähnchen}, so similarity = 100.
+  const sim = cache.calculateSimilarity('hähnchen pommes', 'hähnchen reis');
+  assert.equal(sim, 100);
+});
+
+// --- Levenshtein helper --------------------------------------------------
+
+test('levenshtein short-circuits when length diff exceeds limit', () => {
+  // "abc" vs "abcdefghij" — diff is 7 chars, limit 2 -> returns 3 (limit+1)
+  const d = EnhancedImageCache.levenshtein('abc', 'abcdefghij', 2);
+  assert.ok(d > 2);
+});
+
+test('levenshtein returns exact distance for small differences', () => {
+  assert.equal(EnhancedImageCache.levenshtein('brokkoli', 'brokkkoli', 2), 1);
+  assert.equal(EnhancedImageCache.levenshtein('käse', 'käse', 2), 0);
+});
+
+test('levenshtein returns over-limit when distance exceeds bound', () => {
+  const d = EnhancedImageCache.levenshtein('apfel', 'banane', 2);
+  assert.ok(d > 2);
+});
+
+// --- End-to-end: canonical key normalizes real variants -----------------
+
+test('canonical key collapses common cafeteria variants', () => {
+  const v1 = cache.buildCanonicalKey('Hähnchen Crossies mit Tomaten Paprika Dip, Steakhouse Frites');
+  const v2 = cache.buildCanonicalKey('HÄHNCHEN crossies MIT tomaten&paprika dip / steakhouse pommes');
+  const v3 = cache.buildCanonicalKey('Hähnchen Crossies mit Tomaten-Paprika-Dip | Steakhouse Pommes');
+  assert.equal(v1, v2);
+  assert.equal(v2, v3);
 });
