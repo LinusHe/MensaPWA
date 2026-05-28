@@ -8,3 +8,4 @@ logs/nightly
 serviceAccountKey.json
 cache-admin/
 firebase/functions/test-output/
+firebase/functions/cache-dump.json
