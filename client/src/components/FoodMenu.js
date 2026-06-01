@@ -23,7 +23,7 @@ function FoodMenu() {
   const initialVeganFirst = useSelector(state => state.veganFirst);
   const [veganFirst, setVeganFirst] = useState(initialVeganFirst);
 
-  const firebaseBase = 'https://firebasestorage.googleapis.com/v0/b/mensapwa-39cd9.firebasestorage.app/o';
+  const firebaseBase = process.env.REACT_APP_DATA_BASE || 'https://firebasestorage.googleapis.com/v0/b/mensapwa-39cd9.firebasestorage.app/o';
 
   const dates = Array.from({ length: 5 }, (_, i) => {
     const date = new Date();
