@@ -25,7 +25,7 @@ import '@fontsource/roboto';
 
 // Initialize firebase project
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported as analyticsIsSupported } from "firebase/analytics";
 
 // Silence verbose logs in production
 if (process.env.NODE_ENV === 'production') {
@@ -46,7 +46,11 @@ const firebaseConfig = {
   measurementId: "G-E66SGZFP9C"
 };
 const firebaseApp = initializeApp(firebaseConfig);
-getAnalytics(firebaseApp);
+// Analytics may be unavailable (insecure context, dev localhost, blocked
+// by extensions, etc.). Probe first; never crash app init on it.
+analyticsIsSupported()
+  .then((ok) => { if (ok) getAnalytics(firebaseApp); })
+  .catch(() => {});
 
 
 const Root = () => {
