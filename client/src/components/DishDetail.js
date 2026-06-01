@@ -96,7 +96,6 @@ const DishDetail = ({ open, handleClose, dish, onDismiss }) => {
               top: '-70px',
               left: '50%',
               transform: 'translateX(-50%)',
-              clipPath: 'circle(42% at center)',
               width: '192px',
               zIndex: 1,
             }}

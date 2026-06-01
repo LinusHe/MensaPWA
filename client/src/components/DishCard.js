@@ -55,8 +55,11 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
         e.target.src = emptyPlate;
     }
 
-    // Determine the source of the image based on the title or category of the dish
-    const imageSrc = title.toLowerCase().includes('smoothie') || category.toLowerCase().includes('smoothie') ? smoothieImage : dishImage;
+    // Smoothies use a static asset (we never want to OpenAI-generate them);
+    // the asset is pre-masked + shadowed to match composite plates, so no
+    // special CSS handling is needed.
+    const isSmoothie = title.toLowerCase().includes('smoothie') || category.toLowerCase().includes('smoothie');
+    const imageSrc = isSmoothie ? smoothieImage : dishImage;
 
     // Initialize an empty string for additional title
     let additional_title = '';
@@ -98,7 +101,7 @@ const DishCard = ({ dishImage, category, title, chat_completion, prices, selecti
         >
             <Grid item xs={3.5}>
                 <Grid container direction="column" justifyContent="center" alignItems="center">
-                    <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', clipPath: 'circle(42% at center)' }} />
+                    <img onError={handleError} src={imageSrc} alt={title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </Grid>
             </Grid>
             <Grid item xs={8.5} sx={{ pl: 2 }} alignSelf={'flex-start'}>
