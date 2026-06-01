@@ -12,8 +12,17 @@ const { OpenAI } = require('openai');
 const { saveJson, saveBuffer, replaceGermanUmlauts } = require('./helpers');
 const sharp = require('sharp');
 const EnhancedImageCache = require('./enhancedCache');
+const { atomize } = require('./atomize');
+const { compositeAtoms } = require('./compositeAtoms');
 const fs = require('fs');
 const path = require('path');
+
+const FULL_PLATE_MASK_PATH = path.join(__dirname, '..', 'assets', 'full-plate-mask.png');
+let _fullPlateMaskCache = null;
+function getFullPlateMask() {
+  if (!_fullPlateMaskCache) _fullPlateMaskCache = fs.readFileSync(FULL_PLATE_MASK_PATH);
+  return _fullPlateMaskCache;
+}
 
 const storage = new Storage();
 
@@ -76,8 +85,9 @@ exports.generateDailyData = onSchedule({
   await deleteOldDateFolders(bucket);
 
   const today = moment().tz('Europe/Berlin');
-  let totalCacheHits = 0;
-  let totalImagesGenerated = 0;
+  let totalAtomHits = 0;
+  let totalAtomGenerations = 0;
+  let totalDishesSkipped = 0;
 
   // Process next 5 days
   for (let i = 0; i < 5; i++) {
@@ -119,61 +129,43 @@ exports.generateDailyData = onSchedule({
     await saveJson(bucket, `${dir}/menu.json`, menu);
     console.log(`Saved menu.json with ${menu.length} dishes`);
 
-    // Generate images for each dish
+    // Generate images for each dish via the atomic pipeline:
+    //   atomize → per-atom cache lookup → compose at runtime with shadow.
     console.log('Processing dish images...');
     for (let idx = 0; idx < menu.length; idx++) {
       const dish = menu[idx];
-      // Numbered filenames in date folder: 1.jpg, 2.jpg, ...
       const imageFilename = `${idx + 1}.jpg`;
       const imagePath = `${dir}/${imageFilename}`;
 
       try {
-        // Check cache first
-        const cached = await imageCache.getCachedImage(dish.title);
-
-        if (cached) {
-          // Cache hit - copy existing image
-          totalCacheHits++;
-          console.log(`Cache hit (${cached.matchType}) for "${dish.title}" -> ${cached.filename}`);
-
-          // Write cached image as JPEG to current location (ensures small size + correct type)
-          await copyImageFromCache(bucket, cached.filename, imagePath);
-          dish.imageUrl = imageFilename;
-
-        } else {
-          // No cache hit - generate new image
-          totalImagesGenerated++;
-          console.log(`Generating new image for "${dish.title}"`);
-
-          const imageBuffer = await generateDishImage(dish); // likely PNG
-          const jpegBuffer = await convertToJpeg(imageBuffer);
-          await saveBuffer(bucket, imagePath, jpegBuffer, 'image/jpeg');
-          dish.imageUrl = imageFilename;
-
-          // Only cache non-placeholder images
-          if (!isPlaceholderBuffer(imageBuffer)) {
-            // Build cache filename from ordered key with umlauts replaced
-            let orderedKey = imageCache.buildOrderedKey(dish.title);
-            if (!orderedKey) {
-              orderedKey = dish.title
-                .toLowerCase()
-                .replace(/[^\w\-äöüß]+/g, '_')
-                .replace(/^_+|_+$/g, '');
-            }
-            const asciiKey = replaceGermanUmlauts(orderedKey);
-            const cacheFilename = `${asciiKey}.jpg`;
-            const cacheImagePath = `cache/${cacheFilename}`;
-            await saveBuffer(bucket, cacheImagePath, jpegBuffer, 'image/jpeg');
-            await imageCache.addToCache(dish.title, cacheFilename);
-            console.log(`Added "${dish.title}" to cache as ${cacheFilename}`);
-          } else {
-            console.log(`Skipping cache for placeholder image of "${dish.title}"`);
-          }
+        const { skip, atoms } = atomize(dish.title, dish.category);
+        if (skip) {
+          // Smoothie: the PWA renders a static collage, no image needed.
+          console.log(`Skipping image generation for "${dish.title}" (category: ${dish.category})`);
+          dish.imageUrl = null;
+          totalDishesSkipped++;
+          continue;
         }
 
+        // Collect each atom (cache hit or fresh OpenAI call).
+        const atomBuffers = [];
+        for (const atomTitle of atoms) {
+          const r = await getOrGenerateAtomBuffer(bucket, imageCache, atomTitle, dish);
+          if (r && r.buffer) {
+            atomBuffers.push(r.buffer);
+            if (r.hit) totalAtomHits++; else totalAtomGenerations++;
+          }
+        }
+        if (atomBuffers.length === 0) throw new Error('no atom buffers produced');
+
+        // Compose with shadow + transparent canvas, then JPEG-encode for
+        // the per-day file (smaller, the PWA card surface is white anyway).
+        const composite = await compositeAtoms(atomBuffers);
+        const jpegBuffer = await convertToJpeg(composite);
+        await saveBuffer(bucket, imagePath, jpegBuffer, 'image/jpeg');
+        dish.imageUrl = imageFilename;
       } catch (error) {
         console.error(`Error processing image for "${dish.title}":`, error);
-        // Fallback to empty plate
         const placeholderBuffer = await generateEmptyPlateImage();
         const jpegPlaceholder = await convertToJpeg(placeholderBuffer);
         await saveBuffer(bucket, imagePath, jpegPlaceholder, 'image/jpeg');
@@ -205,10 +197,13 @@ exports.generateDailyData = onSchedule({
   // Final cache statistics
   const finalStats = await imageCache.getCacheStats();
   console.log('\n=== Generation Summary ===');
-  console.log(`Cache hits: ${totalCacheHits}`);
-  console.log(`New images generated: ${totalImagesGenerated}`);
-  console.log(`Final cache size: ${finalStats.totalEntries} entries`);
-  console.log(`Cache hit rate: ${totalCacheHits / (totalCacheHits + totalImagesGenerated) * 100}%`);
+  const totalAtoms = totalAtomHits + totalAtomGenerations;
+  const hitRate = totalAtoms === 0 ? 0 : (totalAtomHits / totalAtoms) * 100;
+  console.log(`Atom hits: ${totalAtomHits}`);
+  console.log(`Atom generations (OpenAI calls): ${totalAtomGenerations}`);
+  console.log(`Dishes skipped (Smoothie): ${totalDishesSkipped}`);
+  console.log(`Atom cache size: ${finalStats.totalEntries} entries`);
+  console.log(`Atom hit rate: ${hitRate.toFixed(1)}%`);
 
   if (finalStats.topReused && finalStats.topReused.length > 0) {
     console.log('\nTop 3 most reused images:');
@@ -628,30 +623,6 @@ async function convertToJpeg(inputBuffer) {
 }
 
 /**
- * Copy an image from cache location to a new location in the bucket
- * @param {object} bucket GCS bucket object
- * @param {string} cachedFilename Original cached filename
- * @param {string} newPath New path for the image
- */
-async function copyImageFromCache(bucket, cachedFilename, newPath) {
-  try {
-    const sourceFile = bucket.file(`cache/${cachedFilename}`);
-    const [exists] = await sourceFile.exists();
-    if (!exists) throw new Error(`Source not found: cache/${cachedFilename}`);
-    const [buffer] = await sourceFile.download();
-    const jpegBuffer = await convertToJpeg(buffer);
-    await saveBuffer(bucket, newPath, jpegBuffer, 'image/jpeg');
-    console.log(`Wrote cached image as JPEG ${cachedFilename} -> ${newPath}`);
-  } catch (error) {
-    console.error(`Failed to copy cached image ${cachedFilename}:`, error);
-    // Fallback: generate empty plate
-    const placeholderBuffer = await generateEmptyPlateImage();
-    const jpegPlaceholder = await convertToJpeg(placeholderBuffer);
-    await saveBuffer(bucket, newPath, jpegPlaceholder, 'image/jpeg');
-  }
-}
-
-/**
  * Load a prompt file from the prompts directory
  * @param {string} filename Prompt filename
  * @return {string} Prompt content
@@ -668,8 +639,79 @@ function loadPrompt(filename) {
   }
 }
 
+/**
+ * Round-crop a raw OpenAI+plateMask buffer with the full-plate mask, so
+ * only the plate is opaque (corners go transparent). This is the shape
+ * we cache as an "atom" — composite-ready.
+ */
+async function roundCropToAtom(buf) {
+  const mask = await sharp(getFullPlateMask())
+    .resize(1024, 1024, { fit: 'fill' })
+    .toBuffer();
+  const resized = await sharp(buf)
+    .resize(1024, 1024, { fit: 'cover' })
+    .ensureAlpha()
+    .toBuffer();
+  return await sharp(resized)
+    .composite([{ input: mask, blend: 'dest-in' }])
+    .png()
+    .toBuffer();
+}
+
+/**
+ * Return an atom buffer for one slot of a dish, hitting the atom cache
+ * if possible, otherwise calling OpenAI and storing the result.
+ */
+async function getOrGenerateAtomBuffer(bucket, imageCache, atomTitle, parentDish) {
+  try {
+    const cached = await imageCache.getCachedImage(atomTitle);
+    if (cached && cached.filename) {
+      const file = bucket.file(cached.filename);
+      const [exists] = await file.exists();
+      if (exists) {
+        const [buf] = await file.download();
+        console.log(`Atom hit (${cached.matchType}): "${atomTitle}" -> ${cached.filename}`);
+        return { buffer: buf, hit: true };
+      }
+      console.warn(`Atom cache pointed at missing file ${cached.filename} for "${atomTitle}", regenerating`);
+    }
+  } catch (err) {
+    console.error(`Atom cache lookup failed for "${atomTitle}":`, err);
+  }
+
+  console.log(`Generating new atom for "${atomTitle}"`);
+  const rawBuf = await generateDishImage({
+    title: atomTitle,
+    category: parentDish.category || 'Gericht',
+    selections: parentDish.selections || [],
+  });
+  if (isPlaceholderBuffer(rawBuf)) {
+    console.warn(`Got placeholder for atom "${atomTitle}", not caching`);
+    return { buffer: rawBuf, hit: false };
+  }
+  const atomBuf = await roundCropToAtom(rawBuf);
+
+  // Persist with a filesystem-safe ascii filename based on the ordered key.
+  let orderedKey = imageCache.buildOrderedKey(atomTitle);
+  if (!orderedKey) {
+    orderedKey = atomTitle.toLowerCase().replace(/[^\w\-äöüß]+/g, '_').replace(/^_+|_+$/g, '');
+  }
+  const asciiKey = replaceGermanUmlauts(orderedKey);
+  const atomPath = `atoms/${asciiKey}.png`;
+  try {
+    await saveBuffer(bucket, atomPath, atomBuf, 'image/png');
+    await imageCache.addToCache(atomTitle, atomPath);
+    console.log(`Cached atom "${atomTitle}" -> ${atomPath}`);
+  } catch (err) {
+    console.error(`Failed to persist atom "${atomTitle}":`, err);
+  }
+  return { buffer: atomBuf, hit: false };
+}
+
 exports._internal = {
   generateDishImage,
   buildImagePromptFromDish,
   compositeWithPlateMask,
+  roundCropToAtom,
+  getOrGenerateAtomBuffer,
 };
