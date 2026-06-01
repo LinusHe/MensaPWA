@@ -1,11 +1,26 @@
-# ignore global DS Store
-global-exclude .DS_Store
+# macOS junk (recursive)
+.DS_Store
+
+# env files & secrets
 .env
-!logs/cache_report.ipynb
-logs/nightly
-*/.DS_Store
-.vscode
 serviceAccountKey.json
+
+# editor
+.vscode
+
+# legacy / cache-admin (local-only dev tool)
 cache-admin/
+
+# logs
+logs/nightly
+!logs/cache_report.ipynb
+
+# Firebase functions local-only tooling and artifacts (not in git)
 firebase/functions/test-output/
 firebase/functions/cache-dump.json
+firebase/functions/composite-tuner/
+firebase/functions/test-atomic-gen.js
+firebase/functions/analyze-atomic-cache.js
+
+# editor backup files
+*.orig
