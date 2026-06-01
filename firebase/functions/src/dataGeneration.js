@@ -302,7 +302,7 @@ async function generateNutritionForDish(title, systemPrompt) {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: title },
       ],
-      max_tokens: OPENAI_SETTINGS.chatMaxTokensNutrition,
+      max_completion_tokens: OPENAI_SETTINGS.chatMaxTokensNutrition,
     });
     return completion.choices && completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content || '';
   } catch (error) {
@@ -330,7 +330,7 @@ async function generateNotification(menu, systemPrompt) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: JSON.stringify(menu) },
         ],
-        max_tokens: OPENAI_SETTINGS.chatMaxTokensNotification,
+        max_completion_tokens: OPENAI_SETTINGS.chatMaxTokensNotification,
       });
 
       const parsed = JSON.parse(completion.choices && completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content || '{}');
