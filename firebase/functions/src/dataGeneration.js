@@ -41,15 +41,26 @@ function getOpenAIClient() {
 const OPENAI_SETTINGS = {
   // Chat (used for nutrition + notifications)
   chatModel: process.env.OPENAI_CHAT_MODEL || 'gpt-4o',
+  chatReasoningEffort: process.env.OPENAI_CHAT_REASONING_EFFORT || 'low',
   // Nutrition generation defaults
-  chatMaxTokensNutrition: parseInt(process.env.OPENAI_CHAT_MAX_TOKENS_NUTRITION || '500', 10),
+  chatMaxTokensNutrition: parseInt(process.env.OPENAI_CHAT_MAX_TOKENS_NUTRITION || (isReasoningChatModel(process.env.OPENAI_CHAT_MODEL) ? '1500' : '500'), 10),
   // Notification generation defaults
-  chatMaxTokensNotification: parseInt(process.env.OPENAI_CHAT_MAX_TOKENS_NOTIFICATION || '300', 10),
+  chatMaxTokensNotification: parseInt(process.env.OPENAI_CHAT_MAX_TOKENS_NOTIFICATION || (isReasoningChatModel(process.env.OPENAI_CHAT_MODEL) ? '1000' : '300'), 10),
   // Images
   imageModel: process.env.OPENAI_IMAGE_MODEL || 'dall-e-2',
   imageSize: process.env.OPENAI_IMAGE_SIZE || '1024x1024',
   imageQuality: process.env.OPENAI_IMAGE_QUALITY || 'medium',
 };
+
+/**
+ * GPT-5/o-series chat models spend part of the completion budget on reasoning.
+ * Keep older chat models free of reasoning-only parameters.
+ * @param {string} model OpenAI model name
+ * @return {boolean} Whether model uses reasoning-style chat params
+ */
+function isReasoningChatModel(model) {
+  return /^(gpt-5|o[1-9])/.test(model || '');
+}
 
 /**
  * Main scheduled function to generate daily data
@@ -303,6 +314,7 @@ async function generateNutritionForDish(title, systemPrompt) {
         { role: 'user', content: title },
       ],
       max_completion_tokens: OPENAI_SETTINGS.chatMaxTokensNutrition,
+      ...(isReasoningChatModel(chatModel) ? { reasoning_effort: OPENAI_SETTINGS.chatReasoningEffort } : {}),
     });
     return completion.choices && completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content || '';
   } catch (error) {
@@ -331,6 +343,7 @@ async function generateNotification(menu, systemPrompt) {
           { role: 'user', content: JSON.stringify(menu) },
         ],
         max_completion_tokens: OPENAI_SETTINGS.chatMaxTokensNotification,
+        ...(isReasoningChatModel(chatModel) ? { reasoning_effort: OPENAI_SETTINGS.chatReasoningEffort } : {}),
       });
 
       const parsed = JSON.parse(completion.choices && completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content || '{}');
